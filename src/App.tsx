@@ -1,6 +1,12 @@
+import Map from './components/map/Map';
+
 
 function App() {
-  return <></>;
+  return (
+   <div>
+      <Map />
+    </div>
+  );
 }
 
 export default App;
