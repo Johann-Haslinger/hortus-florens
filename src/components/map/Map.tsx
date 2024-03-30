@@ -1,22 +1,42 @@
-import React, { useState } from 'react'
-import { mapData } from './mapData'
-import Tile from './Tile'
+import FullScreenCanvas from './FullscreenCanvas';
+import tw from 'twin.macro';
+import styled from '@emotion/styled';
+import Player from '../player/Player';
+import { EntityPropsMapper } from '@leanscope/ecs-engine';
+import { IdentifierFacet, PositionFacet, TextTypeFacet } from '@leanscope/ecs-models';
+import TerrainTile from './TerrainTile';
+import TilesInitializationSystem from '../../systems/TilesInitializationSystem';
+import PlayerInitializationSystem from '../../systems/PlayerInitializationSystem';
+import { TERRAIN_TILES, VALID_TERRAIN_TILES } from '../../base/Constants';
+import ItemsInitializationSystem from '../../systems/ItemsInitializationSystem';
+
+const StyledMapContainer = styled.div`
+  ${tw`w-screen h-screen`}
+`;
 
 const Map = () => {
-  const [map, setMap] = useState<Tile[][]>(mapData)
-
   return (
-    <div  className="map" style={{ display: 'grid', gridTemplateColumns: `repeat(${map[0].length}, 50px)` }}>
-      {map.map((row, rowIndex) => (
-        <React.Fragment key={rowIndex}>
-          {row.map((tile, columnIndex) => (
-            <Tile key={tile.id} tile={tile} />
-          ))}
-        </React.Fragment>
-      ))}
-      
-    </div>
-  )
-}
+    <StyledMapContainer>
+      <FullScreenCanvas>
+        <EntityPropsMapper
+          query={(e) =>
+            e.get(TextTypeFacet)?.props.type !== undefined &&
+            [TERRAIN_TILES.GRASS, TERRAIN_TILES.WATER, TERRAIN_TILES.DIRT, TERRAIN_TILES.FARMLAND].includes(
+              e.get(TextTypeFacet)?.props.type as TERRAIN_TILES,
+            )
+          }
+          get={[[TextTypeFacet, PositionFacet, IdentifierFacet], []]}
+          onMatch={TerrainTile}
+        />
 
-export default Map
+        <EntityPropsMapper
+          query={(e) => e.get(TextTypeFacet)?.props.type === 'player'}
+          get={[[TextTypeFacet, PositionFacet], []]}
+          onMatch={Player}
+        />
+      </FullScreenCanvas>
+    </StyledMapContainer>
+  );
+};
+
+export default Map;
