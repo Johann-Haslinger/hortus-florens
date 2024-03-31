@@ -11,12 +11,7 @@ const checkCanMoveRight = (playerX: number, playerY: number, tiles: readonly Ent
     const tileTop = tile.get(PositionFacet)?.props.positionY! - TILE_SIZE / 2;
     const tileBottom = tile.get(PositionFacet)?.props.positionY! + TILE_SIZE / 2;
 
-    return (
-      playerX + TILE_SIZE / 2 >= tileLeft &&
-      playerX + TILE_SIZE / 2 <= tileRight &&
-      playerY >= tileTop &&
-      playerY <= tileBottom
-    );
+    return playerX + TILE_SIZE / 2 >= tileLeft && playerX + TILE_SIZE / 2 <= tileRight && playerY >= tileTop && playerY <= tileBottom;
   });
 
   if (playerTile) {
@@ -26,10 +21,9 @@ const checkCanMoveRight = (playerX: number, playerY: number, tiles: readonly Ent
 
     const nextTile = tilesInRow.find((tile) => tile.get(PositionFacet)?.props.positionX! > currentTileX);
 
-    if (nextTile && ((nextTile.get(TextTypeFacet)?.props.type as TERRAIN_TILES) == TERRAIN_TILES.WATER)) {
-       return false;
+    if (nextTile && (nextTile.get(TextTypeFacet)?.props.type as TERRAIN_TILES) == TERRAIN_TILES.WATER) {
+      return false;
     }
-
   }
 
   return true;
@@ -42,30 +36,25 @@ const checkCanMoveLeft = (playerX: number, playerY: number, tiles: readonly Enti
     const tileTop = tile.get(PositionFacet)?.props.positionY! - TILE_SIZE / 2;
     const tileBottom = tile.get(PositionFacet)?.props.positionY! + TILE_SIZE / 2;
 
-    return (
-      playerX - TILE_SIZE / 2 >= tileLeft &&
-      playerX - TILE_SIZE / 2 <= tileRight &&
-      playerY >= tileTop &&
-      playerY <= tileBottom
-    );
+    return playerX - TILE_SIZE / 2 >= tileLeft && playerX - TILE_SIZE / 2 <= tileRight && playerY >= tileTop && playerY <= tileBottom;
   });
 
   if (playerTile) {
     const currentTileY = playerTile.get(PositionFacet)?.props.positionY!;
     const currentTileX = playerTile.get(PositionFacet)?.props.positionX!;
-    const tilesInRow = tiles.filter((tile) => tile.get(PositionFacet)?.props.positionY === currentTileY).sort((a, b) => a.get(PositionFacet)?.props.positionX! - b.get(PositionFacet)?.props.positionX!);
+    const tilesInRow = tiles
+      .filter((tile) => tile.get(PositionFacet)?.props.positionY === currentTileY)
+      .sort((a, b) => a.get(PositionFacet)?.props.positionX! - b.get(PositionFacet)?.props.positionX!);
 
     const previousTile = tilesInRow.reverse().find((tile) => tile.get(PositionFacet)?.props.positionX! < currentTileX);
-    console.log(tilesInRow)
-console.log(previousTile?.get(TextTypeFacet)?.props.type as TERRAIN_TILES)
-    if (previousTile && ((previousTile.get(TextTypeFacet)?.props.type as TERRAIN_TILES) == TERRAIN_TILES.WATER)) {
-       return false;
+   
+    if (previousTile && (previousTile.get(TextTypeFacet)?.props.type as TERRAIN_TILES) == TERRAIN_TILES.WATER) {
+      return false;
     }
-  }k
+  }
 
   return true;
 };
-
 
 const PlayerSprite = (props: PositionProps & EntityProps) => {
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || ''));
@@ -87,15 +76,12 @@ const PlayerSprite = (props: PositionProps & EntityProps) => {
         movementRef.current[1] = speed;
       }
 
-      if (key === 'a'&& checkCanMoveLeft(positionX, positionY, tiles) == true ){
+      if (key === 'a' && checkCanMoveLeft(positionX, positionY, tiles) == true) {
         movementRef.current[0] = -speed;
       }
       if (key === 'd' && checkCanMoveRight(positionX, positionY, tiles) == true) {
-
         movementRef.current[0] = speed;
-
       }
-     
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
@@ -147,7 +133,7 @@ const PlayerSprite = (props: PositionProps & EntityProps) => {
       <boxGeometry args={[0.5, 0.5, 0.1]} />
       <meshBasicMaterial color="black" />
     </mesh>
-  )
-}
+  );
+};
 
-export default PlayerSprite
+export default PlayerSprite;

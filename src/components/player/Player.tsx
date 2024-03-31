@@ -17,6 +17,7 @@ const findPlayerTile = (playerX: number, playerY: number, tiles: readonly Entity
 };
 
 const handleHoeUse = (playerTile: Entity | undefined) => {
+  console.log(playerTile?.get(PositionFacet)?.props.positionX, playerTile?.get(PositionFacet)?.props.positionY);
   if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.GRASS) {
     playerTile.add(new TextTypeFacet({ type: TERRAIN_TILES.FARMLAND }));
   }

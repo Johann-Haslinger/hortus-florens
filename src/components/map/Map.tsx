@@ -19,12 +19,7 @@ const Map = () => {
     <StyledMapContainer>
       <FullScreenCanvas>
         <EntityPropsMapper
-          query={(e) =>
-            e.get(TextTypeFacet)?.props.type !== undefined &&
-            [TERRAIN_TILES.GRASS, TERRAIN_TILES.WATER, TERRAIN_TILES.DIRT, TERRAIN_TILES.FARMLAND].includes(
-              e.get(TextTypeFacet)?.props.type as TERRAIN_TILES,
-            )
-          }
+          query={(e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || '')}
           get={[[TextTypeFacet, PositionFacet, IdentifierFacet], []]}
           onMatch={TerrainTile}
         />

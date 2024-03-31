@@ -1,4 +1,4 @@
-export const TILE_SIZE = 0.8;
+export const TILE_SIZE = 0.9;
 export enum TileTypes {
   DIRT = 'dirt',
   GRASS = 'grass',
