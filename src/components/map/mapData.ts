@@ -12,7 +12,7 @@ export const mapData = [
     { id: '8', x: 7, y: 0, type: 'grass' },
     { id: '9', x: 0, y: 1, type: 'grass' },
     { id: '10', x: 1, y: 1, type: 'grass' },
-    { id: '11', x: 2, y: 1, type: 'grass' },
+    { id: '11', x: 2, y: 1, type: 'farmland' },
     { id: '12', x: 3, y: 1, type: 'grass' },
     { id: '13', x: 4, y: 1, type: 'grass' },
     { id: '14', x: 5, y: 1, type: 'grass' },
