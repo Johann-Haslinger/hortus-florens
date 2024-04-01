@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
-import { VALID_TERRAIN_TILES, TILE_SIZE, WALKABLE_TILES, TERRAIN_TILES } from '../../base/Constants';
+import { VALID_TERRAIN_TILES, TILE_SIZE, WALKABLE_TILES, } from '../../base/Constants';
+import { TERRAIN_TILES } from '../../types/enums';
 
 const checkCanMoveRight = (playerX: number, playerY: number, tiles: readonly Entity[]): boolean => {
   const playerTile = tiles.find((tile) => {

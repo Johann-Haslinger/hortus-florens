@@ -1,9 +1,10 @@
 import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
 import { PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import PlayerSprite from './PlayerSprite';
-import { ITEM_GROUPS, VALID_TERRAIN_TILES, TILE_SIZE, TOOL_NAMES, TERRAIN_TILES } from '../../base/Constants';
+import { VALID_TERRAIN_TILES, TILE_SIZE } from '../../base/Constants';
 import { useEffect, useState } from 'react';
 import { ItemGroupFacet, TitleFacet } from '../../app/GameFacets';
+import { TERRAIN_TILES, ITEM_GROUPS, TOOL_NAMES } from '../../types/enums';
 
 const findPlayerTile = (playerX: number, playerY: number, tiles: readonly Entity[]): Entity | undefined => {
   return tiles.find((tile) => {
@@ -41,9 +42,6 @@ const Player = (props: PositionProps & EntityProps) => {
             break;
           case TOOL_NAMES.AXE:
             console.log('axe');
-            break;
-          case TOOL_NAMES.PICKAXE:
-            console.log('pickaxe');
             break;
 
           default:

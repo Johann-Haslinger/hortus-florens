@@ -5,10 +5,12 @@ import PlayerInitializationSystem from './systems/PlayerInitializationSystem';
 import TilesInitializationSystem from './systems/TilesInitializationSystem';
 import Hotbar from './components/inventory/Hotbar';
 import Inventory from './components/inventory/Inventory';
+import StoryInitializationSystem from './systems/StoryInitializationSystem';
 
 function App() {
   return (
     <>
+      <StoryInitializationSystem />
       <ItemsInitializationSystem />
       <PlayerInitializationSystem />
       <TilesInitializationSystem />

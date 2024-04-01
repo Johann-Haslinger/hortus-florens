@@ -5,7 +5,9 @@ import tw from 'twin.macro';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { HOE_ICON_INVENTORY, AXE_ICON_INVENTORY } from '../../assets/items/inventory';
-
+import { useIsStoryCurrent } from '@leanscope/storyboarding';
+import { StoryGuid } from '../../types/enums';
+import { motion } from 'framer-motion';
 
 // bg-[rgb(189,156,114)]
 // border-[rgb(164,125,95)]
@@ -19,12 +21,14 @@ const StyledToolIcon = styled.img`
 `;
 
 const ToolIcon = (props: TitleProps & EntityProps) => {
-  const { title: name,  } = props;
+  const { title: name } = props;
 
-  return <StyledToolIconWrapper>
-    {name === 'axe' && <StyledToolIcon src={AXE_ICON_INVENTORY} />}
-    {name === 'hoe' && <StyledToolIcon src={HOE_ICON_INVENTORY} />}
-  </StyledToolIconWrapper>;
+  return (
+    <StyledToolIconWrapper>
+      {name === 'axe' && <StyledToolIcon src={AXE_ICON_INVENTORY} />}
+      {name === 'hoe' && <StyledToolIcon src={HOE_ICON_INVENTORY} />}
+    </StyledToolIconWrapper>
+  );
 };
 
 const StyledHotbarWrapper = styled.div`
@@ -33,13 +37,15 @@ const StyledHotbarWrapper = styled.div`
 
 const Hotbar = () => {
   const [tools] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === 'tools');
+  // const isHotbarVisible = useIsStoryCurrent(StoryGuid.PLAY_GAME);
+  const isHotbarVisible = true;
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const selectedTool = tools.find((e) => e.hasTag(Tags.SELECTED));
       const selectedToolOrder = selectedTool?.get(OrderFacet)?.props.orderIndex;
 
-      if (selectedTool && selectedToolOrder) {
+      if (selectedTool && selectedToolOrder && isHotbarVisible) {
         let newTool: Entity | undefined;
 
         if (e.key === 'ArrowLeft') {
@@ -66,15 +72,17 @@ const Hotbar = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [tools]);
+  }, [tools, isHotbarVisible]);
 
   return (
     <StyledHotbarWrapper>
-      <EntityPropsMapper
-        query={(e) => e.hasTag(Tags.SELECTED) && e.get(ItemGroupFacet)?.props.group === 'tools'}
-        get={[[TitleFacet], []]}
-        onMatch={ToolIcon}
-      />
+      <motion.div initial={{ opacity: 1, scale: 1 }} animate={{ opacity: isHotbarVisible ? 1 : 0, scale: isHotbarVisible ? 1 : 0.9 }}>
+        <EntityPropsMapper
+          query={(e) => e.hasTag(Tags.SELECTED) && e.get(ItemGroupFacet)?.props.group === 'tools'}
+          get={[[TitleFacet], []]}
+          onMatch={ToolIcon}
+        />
+      </motion.div>
     </StyledHotbarWrapper>
   );
 };

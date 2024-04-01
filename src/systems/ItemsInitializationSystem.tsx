@@ -2,7 +2,8 @@ import React from 'react';
 import { EntityCreator } from '@leanscope/ecs-engine';
 import { IdentifierFacet, OrderFacet, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { ItemGroupFacet, TitleFacet } from '../app/GameFacets';
-import { ITEM_GROUPS, TOOL_NAMES } from '../base/Constants';
+import { ITEM_GROUPS, TOOL_NAMES } from '../types/enums';
+
 
 const ItemsInitializationSystem = () => {
   return (

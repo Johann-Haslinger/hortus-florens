@@ -1,5 +1,5 @@
 import { IdentifierProps, PositionFacet, PositionProps, Tags, TextTypeFacet, TextTypeProps } from '@leanscope/ecs-models';
-import { TERRAIN_TILES, TILE_SIZE, VALID_TERRAIN_TILES } from '../../base/Constants';
+import {  TILE_SIZE, VALID_TERRAIN_TILES } from '../../base/Constants';
 import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
 import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
 import { useEffect, useRef, useState } from 'react';
@@ -73,6 +73,7 @@ import {
 import { Canvas, useLoader } from 'react-three-fiber';
 import * as THREE from 'three';
 import { Box } from '@react-three/drei';
+import { TERRAIN_TILES } from '../../types/enums';
 
 const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string => {
   const { positionX, positionY } = tile.get(PositionFacet)?.props!;
