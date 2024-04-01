@@ -70,15 +70,10 @@ export { default as FARMLAND_TILE_B_CORNER_TR } from './Farmland_b_corner_tr.png
 export { default as FARMLAND_TILE_B_CORNER_TLR } from './Farmland_b_corner_tlr.png';
 
 
-
 export { default as FARMLAND_TILE_CORNER_TLRBLR } from './Farmland_corner_tlrblr.png';
-
-
-
-
-
-
 export { default as FARMLAND_TILE_TL_CORNER_TL } from './Farmland_tl_corner_tl.png';
 export { default as FARMLAND_TILE_TR_CORNER_TR } from './Farmland_tr_corner_tr.png';
 export { default as FARMLAND_TILE_BL_CORNER_BL } from './Farmland_bl_corner_bl.png';
 export { default as FARMLAND_TILE_BR_CORNER_BR } from './Farmland_br_corner_br.png';
+
+export { default as FARMLAND_TILE_BLANK } from './Farmland_blank.png';

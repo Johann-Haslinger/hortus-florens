@@ -1,7 +1,7 @@
 import React from 'react';
 import { EntityCreator } from '@leanscope/ecs-engine';
 import { IdentifierFacet, StoryFacet, Tags } from '@leanscope/ecs-models';
-import { StoryGuid } from '../base/enums';
+import { STORY_GUID } from '../base/enums';
 
 const StoryInitializationSystem = () => {
   return (
@@ -10,8 +10,8 @@ const StoryInitializationSystem = () => {
         facetClasses={[StoryFacet]}
         facets={[
           new IdentifierFacet({
-            guid: StoryGuid.PLAY_GAME,
-            displayName: StoryGuid.PLAY_GAME,
+            guid: STORY_GUID.PLAY_GAME,
+            displayName: STORY_GUID.PLAY_GAME,
           }),
         ]}
         tags={[Tags.CURRENT]}
@@ -20,8 +20,8 @@ const StoryInitializationSystem = () => {
         facetClasses={[StoryFacet]}
         facets={[
           new IdentifierFacet({
-            guid: StoryGuid.PAUSE_GAME,
-            displayName: StoryGuid.PAUSE_GAME,
+            guid: STORY_GUID.PAUSE_GAME,
+            displayName: STORY_GUID.PAUSE_GAME,
           }),
         ]}
       />
@@ -29,8 +29,8 @@ const StoryInitializationSystem = () => {
         facetClasses={[StoryFacet]}
         facets={[
           new IdentifierFacet({
-            guid: StoryGuid.OBSERVING_INVENTORY,
-            displayName: StoryGuid.OBSERVING_INVENTORY,
+            guid: STORY_GUID.OBSERVING_INVENTORY,
+            displayName: STORY_GUID.OBSERVING_INVENTORY,
           }),
         ]}
       />

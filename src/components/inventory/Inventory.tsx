@@ -5,12 +5,12 @@ import { Entity, EntityProps, EntityPropsMapper, useEntities } from '@leanscope/
 import { ItemGroupFacet, TitleFacet, TitleProps } from '../../app/GameFacets';
 import { NameFacet, OrderFacet, Tags } from '@leanscope/ecs-models';
 import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
-import { ITEM_GROUPS, StoryGuid, TOOL_NAMES } from '../../base/enums';
+import { ITEM_GROUPS, SEED_NAMES, STORY_GUID, TOOL_NAMES } from '../../base/enums';
 import { useIsStoryCurrent } from '@leanscope/storyboarding';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
 import { motion } from 'framer-motion';
 import { AXE_ICON_INVENTORY, HOE_ICON_INVENTORY } from '../../assets/items/inventory';
-import { findInventoryIconForTool } from '../../helpers/functions';
+import { findInventoryIconForItem } from '../../helpers/functions';
 
 const StyledImportantItemSlot = styled.div<{ isSelected: boolean }>`
   ${tw`m-2.5   p-1 hover:p-[1px] hover:bg-opacity-10 transition-all size-[6.7rem] bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
@@ -21,7 +21,6 @@ const ImportantItemSlot = (props: { entity?: Entity }) => {
   const [isSelected] = useEntityHasTags(entity, Tags.SELECTED);
 
   const handleSelectTool = () => {
-
     entity?.addTag(Tags.SELECTED);
   };
 
@@ -33,49 +32,53 @@ const ImportantItemSlot = (props: { entity?: Entity }) => {
 };
 
 const StyledToolSlot = styled.div<{ isSelected: boolean }>`
-  ${tw`m-2 p-1 hover:p-[1px] hover:bg-opacity-10 transition-all size-20 bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
+  ${tw`m-2 p-1  hover:bg-opacity-10 transition-all size-20 bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
   ${({ isSelected }) => isSelected && tw`border-[rgb(189,156,114)] border-[3px]`}
 `;
 
 const ToolSlot = (props: { entity?: Entity }) => {
   const { entity } = props;
-  const [tools] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.TOOLS);
+  const [items] = useEntities((e) => e.has(ItemGroupFacet));
   const [isSelected] = useEntityHasTags(entity, Tags.SELECTED);
 
   const handleSelectTool = () => {
-    tools.forEach((tool) => tool.removeTag(Tags.SELECTED));
+    items.forEach((item) => item.removeTag(Tags.SELECTED));
     entity?.addTag(Tags.SELECTED);
   };
 
   return (
-    <StyledToolSlot onClick={handleSelectTool} isSelected={isSelected}>
-      {entity && (
-        <>
-         {findInventoryIconForTool(entity.get(TitleFacet)?.props.title as TOOL_NAMES)}
-        </>
-      )}
+    <StyledToolSlot onClick={handleSelectTool} isSelected={isSelected }>
+      {entity && <>{findInventoryIconForItem(entity.get(TitleFacet)?.props.title as TOOL_NAMES)}</>}
     </StyledToolSlot>
   );
 };
 
-const StyledCropSlot = styled.div<{ isSelected: boolean }>`
-  ${tw`m-1  p-1 hover:p-[1px] hover:bg-opacity-10 transition-all size-[3.9rem] bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-xl flex items-center justify-center`}
+const StyledNormalItem = styled.div<{ isSelected: boolean }>`
+  ${tw`m-1  p-1  hover:bg-opacity-10 transition-all size-[3.9rem] bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-xl flex items-center justify-center`}
+  ${({ isSelected }) => isSelected && tw`border-[rgb(189,156,114)] border-[3px]`}
 `;
 
-const CropSlot = (props: { entity?: Entity }) => {
+const StyledValueText = styled.p`
+  ${tw` absolute  text-xs ml-10 mt-10 font-bold italic text-white`}
+`;
+
+const NormalItem = (props: { entity?: Entity }) => {
   const { entity } = props;
-  const [crops] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.CROPS);
+  const title = entity?.get(TitleFacet)?.props.title;
+  const [items] = useEntities((e) => e.has(ItemGroupFacet));
   const [isSelected] = useEntityHasTags(entity, Tags.SELECTED);
+  const value = entity ? items.filter((e) => e.get(TitleFacet)?.props.title === title).length : 0;
 
   const handleSelectTool = () => {
-    crops.forEach((item) => item.removeTag(Tags.SELECTED));
+    items.forEach((item) => item.removeTag(Tags.SELECTED));
     entity?.addTag(Tags.SELECTED);
   };
 
   return (
-    <StyledCropSlot onClick={handleSelectTool} isSelected={false}>
-      {entity && <>{entity.get(TitleFacet)?.props.title}</>}
-    </StyledCropSlot>
+    <StyledNormalItem onClick={handleSelectTool} isSelected={isSelected && entity !== undefined}>
+       {entity && <>{findInventoryIconForItem(entity.get(TitleFacet)?.props.title as SEED_NAMES)}</>}
+      {value > 1 && <StyledValueText>{value}</StyledValueText>}
+    </StyledNormalItem>
   );
 };
 
@@ -91,7 +94,7 @@ const StyledBackgroundDimmer = styled.div<{ isVisible: boolean }>`
   ${tw`fixed top-0 transition-all left-0 w-full h-full bg-black  z-[400]`}
 `;
 
-const StyledCropsGrid = styled.div`
+const StyledNormalItemsGrid = styled.div`
   ${tw`grid h-fit mx-1.5 py-1.5 w-fit grid-cols-3`}
 `;
 
@@ -101,32 +104,25 @@ const StyledToolsGrid = styled.div`
 
 const Inventory = () => {
   const lsc = useContext(LeanScopeClientContext);
-  const isInventoryVisible = useIsStoryCurrent(StoryGuid.OBSERVING_INVENTORY);
+  const isInventoryVisible = useIsStoryCurrent(STORY_GUID.OBSERVING_INVENTORY);
   const inventoryRef = useRef<HTMLDivElement>(null);
   const [toolItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.TOOLS);
-  const [cropItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.CROPS);
+  const [normalItems] = useEntities((e) => {
+    const group = e.get(ItemGroupFacet)?.props.group;
+    return group == ITEM_GROUPS.CROPS || group == ITEM_GROUPS.SEEDS;
+  });
   const [importantItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.IMPORTANT_ITEMS);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (inventoryRef.current && !inventoryRef.current.contains(e.target as Node)) {
-        lsc.stories.transitTo(StoryGuid.PLAY_GAME);
-      }
-    };
-
-    window.addEventListener('click', handleClickOutside);
-
-    return () => {
-      window.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
+  const filteredItems = normalItems.filter((entity, index, self) => {
+    const title = entity?.get(TitleFacet)?.props.title;
+    return self.findIndex((e) => e?.get(TitleFacet)?.props.title === title) === index;
+  });
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isInventoryVisible) {
-        lsc.stories.transitTo(StoryGuid.PLAY_GAME);
+        lsc.stories.transitTo(STORY_GUID.PLAY_GAME);
       } else if (e.key === 'e') {
-        lsc.stories.transitTo(StoryGuid.OBSERVING_INVENTORY);
+        lsc.stories.transitTo(STORY_GUID.OBSERVING_INVENTORY);
       }
     };
 
@@ -147,11 +143,15 @@ const Inventory = () => {
           style={{ height: 'full', width: 'full' }}
         >
           <StyledInevntoryContainer ref={inventoryRef}>
-            <StyledCropsGrid>
+            <StyledNormalItemsGrid>
               {Array.from({ length: 15 }).map((_, i) => (
-                <CropSlot key={i} entity={cropItems[i] ? cropItems[i] : undefined} />
+                <NormalItem key={i} entity={filteredItems[i] ? filteredItems[i] : undefined} />
               ))}
-            </StyledCropsGrid>
+              {/* {Array.from({ length: normalItems.length }).map((_, i) => {
+                const item = normalItems.find((entity) => entity.get(TitleFacet)?.props.title === normalItems[i]?.get(TitleFacet)?.props.title);
+                return <NormalItem key={i} length={normalItems.filter((entity) => entity.get(TitleFacet)?.props.title === item?.get(TitleFacet)?.props.title).length} entity={item ? item : undefined} />;
+              })} */}
+            </StyledNormalItemsGrid>
             <StyledToolsGrid>
               {Array.from({ length: 4 }).map((_, i) => (
                 <ToolSlot key={i} entity={toolItems[i] ? toolItems[i] : undefined} />

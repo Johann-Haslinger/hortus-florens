@@ -1,10 +1,11 @@
 import { IdentifierProps, PositionFacet, PositionProps, Tags, TextTypeFacet, TextTypeProps } from '@leanscope/ecs-models';
-import {  TILE_SIZE, VALID_TERRAIN_TILES } from '../../base/constants';
+import { TILE_SIZE, VALID_TERRAIN_TILES } from '../../base/constants';
 import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
 import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
 import { useEffect, useRef, useState } from 'react';
 import { BufferGeometry, Material, Mesh, MeshBasicMaterial, NormalBufferAttributes, Object3DEventMap } from 'three';
 import { useFrame } from '@react-three/fiber';
+import React from 'react';
 import {
   GRASS_TILE_1,
   GRASS_TILE_2,
@@ -69,11 +70,14 @@ import {
   FARMLAND_TILE_B_CORNER_TL,
   FARMLAND_TILE_B_CORNER_TR,
   FARMLAND_TILE_B_CORNER_TLR,
+  FARMLAND_TILE_BLANK,
 } from '../../assets/tiles';
 import { Canvas, useLoader } from 'react-three-fiber';
 import * as THREE from 'three';
 import { Box } from '@react-three/drei';
-import { TERRAIN_TILES } from '../../base/enums';
+import { GAME_TAGS, TERRAIN_TILES } from '../../base/enums';
+import { TileCropFacet } from '../../app/GameFacets';
+import { WHEAT_SEED } from '../../assets/seeds';
 
 const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string => {
   const { positionX, positionY } = tile.get(PositionFacet)?.props!;
@@ -298,7 +302,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
         rightNeighborType === TERRAIN_TILES.FARMLAND &&
         topNeighborType === TERRAIN_TILES.FARMLAND &&
         bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-
         topRightNeighborType === TERRAIN_TILES.FARMLAND &&
         bottomRightNeighborType === TERRAIN_TILES.GRASS
       ) {
@@ -319,7 +322,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
         rightNeighborType === TERRAIN_TILES.GRASS &&
         topNeighborType === TERRAIN_TILES.FARMLAND &&
         bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-
         topLeftNeighborType === TERRAIN_TILES.GRASS &&
         bottomLeftNeighborType === TERRAIN_TILES.FARMLAND
       ) {
@@ -345,10 +347,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
       ) {
         return FARMLAND_TILE_R_CORNER_TLBL;
       }
-      
-     
-    
-
 
       if (
         leftNeighborType === TERRAIN_TILES.FARMLAND &&
@@ -415,7 +413,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
         rightNeighborType === TERRAIN_TILES.FARMLAND &&
         topNeighborType === TERRAIN_TILES.FARMLAND &&
         bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-
         topLeftNeighborType === TERRAIN_TILES.GRASS &&
         topRightNeighborType === TERRAIN_TILES.FARMLAND &&
         bottomLeftNeighborType === TERRAIN_TILES.FARMLAND &&
@@ -428,7 +425,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
         rightNeighborType === TERRAIN_TILES.FARMLAND &&
         topNeighborType === TERRAIN_TILES.FARMLAND &&
         bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-
         topLeftNeighborType === TERRAIN_TILES.FARMLAND &&
         topRightNeighborType === TERRAIN_TILES.GRASS &&
         bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
@@ -709,17 +705,49 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
 const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & EntityProps) => {
   const { positionX, positionY, type, entity } = props;
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || ''));
-
-  const texture = useLoader(THREE.TextureLoader, selectImageForTileType(entity, tiles));
+  const [isWaterd] = useEntityHasTags(entity, GAME_TAGS.WATERD);
+  const terrainTexture = useLoader(THREE.TextureLoader, selectImageForTileType(entity, tiles));
+  const blankFarmlandTexture = useLoader(THREE.TextureLoader, FARMLAND_TILE_BLANK);
+  const seedTexture = useLoader(THREE.TextureLoader, WHEAT_SEED);
   const meshRef = useRef<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>(null);
   const materialRef = useRef<MeshBasicMaterial>(null);
+  const seedRef =  useRef<MeshBasicMaterial>(null);
+  const textureRef = useRef<MeshBasicMaterial>(null);
 
-  useFrame(() => {});
+  const tileCropName = entity.get(TileCropFacet)?.props.tileCropName;
+  const growthStage = entity.get(TileCropFacet)?.props.growthStage;
+
+
+
+  useFrame(() => {
+    if (isWaterd && materialRef.current) {
+      materialRef.current.opacity = 0.5;
+    } else if (materialRef.current) {
+      materialRef.current.opacity = 0;
+    }
+    if (seedRef.current && entity.get(TileCropFacet)?.props.tileCropName) {
+      seedRef.current.opacity = 1;
+      
+    } else if (seedRef.current) {
+      
+      seedRef.current.opacity = 0;
+    }
+  });
+
+
 
   return (
-    <Box ref={meshRef} position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
-      <meshBasicMaterial ref={materialRef} map={texture} transparent />
-    </Box>
+    <>
+      <Box ref={meshRef} position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
+        <meshBasicMaterial map={terrainTexture} transparent />
+      </Box>
+      <Box position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
+        <meshBasicMaterial ref={seedRef} map={seedTexture}   alphaTest={0.5} transparent />
+      </Box>
+      <Box position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
+        <meshBasicMaterial ref={materialRef} color="blue" transparent />
+      </Box>
+    </>
   );
 };
 
