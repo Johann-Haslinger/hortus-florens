@@ -25,7 +25,7 @@ const ItemsInitializationSystem = () => {
         ]}
         tags={[]}
       />
-      <EntityCreator
+      {/* <EntityCreator
         facets={[
           new IdentifierFacet({ guid: 'item3' }),
           new ItemGroupFacet({ group: ITEM_GROUPS.TOOLS }),
@@ -33,7 +33,7 @@ const ItemsInitializationSystem = () => {
           new OrderFacet({ orderIndex: 3 }),
         ]}
         tags={[]}
-      />
+      /> */}
     </>
   );
 };

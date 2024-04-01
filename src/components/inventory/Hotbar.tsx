@@ -4,16 +4,31 @@ import { ItemGroupFacet, TitleFacet, TitleProps } from '../../app/GameFacets';
 import tw from 'twin.macro';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
+import { HOE_ICON_INVENTORY, AXE_ICON_INVENTORY } from '../../assets/items/inventory';
 
 
+// bg-[rgb(189,156,114)]
+// border-[rgb(164,125,95)]
+
+const StyledToolIconWrapper = styled.div`
+  ${tw` size-24 bg-[rgb(228,208,171)] border-[6px] backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
+`;
+
+const StyledToolIcon = styled.img`
+  ${tw` size-20`}
+`;
 
 const ToolIcon = (props: TitleProps & EntityProps) => {
-  const { title: name } = props;
-  return <div>{name}</div>;
+  const { title: name,  } = props;
+
+  return <StyledToolIconWrapper>
+    {name === 'axe' && <StyledToolIcon src={AXE_ICON_INVENTORY} />}
+    {name === 'hoe' && <StyledToolIcon src={HOE_ICON_INVENTORY} />}
+  </StyledToolIconWrapper>;
 };
 
 const StyledHotbarWrapper = styled.div`
-  ${tw`flex fixed z-[300] justify-center text-white items-center w-full h-16 bg-gray-800`}
+  ${tw`flex bottom-0 left-0 fixed z-[300] m-6  items-center w-full h-24 `}
 `;
 
 const Hotbar = () => {

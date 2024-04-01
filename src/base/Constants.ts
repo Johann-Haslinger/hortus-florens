@@ -8,8 +8,8 @@ export const WALKABLE_TILES = [TileTypes.GRASS, TileTypes.DIRT];
 
 export enum TOOL_NAMES {
   AXE = 'axe',
-  PICKAXE = 'pickaxe',
-  SHOVEL = 'shovel',
+  // PICKAXE = 'pickaxe',
+  // SHOVEL = 'shovel',
   HOE = 'hoe',
 }
 
