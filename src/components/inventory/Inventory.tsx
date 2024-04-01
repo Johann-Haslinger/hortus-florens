@@ -5,14 +5,15 @@ import { Entity, EntityProps, EntityPropsMapper, useEntities } from '@leanscope/
 import { ItemGroupFacet, TitleFacet, TitleProps } from '../../app/GameFacets';
 import { NameFacet, OrderFacet, Tags } from '@leanscope/ecs-models';
 import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
-import { ITEM_GROUPS, StoryGuid } from '../../types/enums';
+import { ITEM_GROUPS, StoryGuid, TOOL_NAMES } from '../../base/enums';
 import { useIsStoryCurrent } from '@leanscope/storyboarding';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
 import { motion } from 'framer-motion';
 import { AXE_ICON_INVENTORY, HOE_ICON_INVENTORY } from '../../assets/items/inventory';
+import { findInventoryIconForTool } from '../../helpers/functions';
 
 const StyledImportantItemSlot = styled.div<{ isSelected: boolean }>`
-  ${tw`m-2.5  border-[3px] p-1 hover:p-[1px] hover:bg-opacity-10 transition-all size-[6.7rem] bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
+  ${tw`m-2.5   p-1 hover:p-[1px] hover:bg-opacity-10 transition-all size-[6.7rem] bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
 `;
 
 const ImportantItemSlot = (props: { entity?: Entity }) => {
@@ -32,7 +33,8 @@ const ImportantItemSlot = (props: { entity?: Entity }) => {
 };
 
 const StyledToolSlot = styled.div<{ isSelected: boolean }>`
-  ${tw`m-2 border-[3px] p-1 hover:p-[1px] hover:bg-opacity-10 transition-all size-20 bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
+  ${tw`m-2 p-1 hover:p-[1px] hover:bg-opacity-10 transition-all size-20 bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
+  ${({ isSelected }) => isSelected && tw`border-[rgb(189,156,114)] border-[3px]`}
 `;
 
 const ToolSlot = (props: { entity?: Entity }) => {
@@ -46,11 +48,10 @@ const ToolSlot = (props: { entity?: Entity }) => {
   };
 
   return (
-    <StyledToolSlot onClick={handleSelectTool} isSelected={false}>
+    <StyledToolSlot onClick={handleSelectTool} isSelected={isSelected}>
       {entity && (
         <>
-          {entity.get(TitleFacet)?.props.title === 'axe' && <img src={AXE_ICON_INVENTORY} />}
-          {entity.get(TitleFacet)?.props.title === 'hoe' && <img src={HOE_ICON_INVENTORY} />}
+         {findInventoryIconForTool(entity.get(TitleFacet)?.props.title as TOOL_NAMES)}
         </>
       )}
     </StyledToolSlot>
@@ -58,7 +59,7 @@ const ToolSlot = (props: { entity?: Entity }) => {
 };
 
 const StyledCropSlot = styled.div<{ isSelected: boolean }>`
-  ${tw`m-1 border-[3px] p-1 hover:p-[1px] hover:bg-opacity-10 transition-all size-[3.9rem] bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
+  ${tw`m-1  p-1 hover:p-[1px] hover:bg-opacity-10 transition-all size-[3.9rem] bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-xl flex items-center justify-center`}
 `;
 
 const CropSlot = (props: { entity?: Entity }) => {

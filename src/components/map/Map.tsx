@@ -7,9 +7,9 @@ import { IdentifierFacet, PositionFacet, TextTypeFacet } from '@leanscope/ecs-mo
 import TerrainTile from './TerrainTile';
 import TilesInitializationSystem from '../../systems/TilesInitializationSystem';
 import PlayerInitializationSystem from '../../systems/PlayerInitializationSystem';
-import {  VALID_TERRAIN_TILES } from '../../base/Constants';
+import {  VALID_TERRAIN_TILES } from '../../base/constants';
 import ItemsInitializationSystem from '../../systems/ItemsInitializationSystem';
-import { TERRAIN_TILES } from '../../types/enums';
+import { TERRAIN_TILES } from '../../base/enums';
 
 const StyledMapContainer = styled.div`
   ${tw`w-screen h-screen`}

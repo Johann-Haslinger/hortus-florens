@@ -1,7 +1,7 @@
 import React from 'react';
 import { EntityCreator } from '@leanscope/ecs-engine';
 import { IdentifierFacet, StoryFacet, Tags } from '@leanscope/ecs-models';
-import { StoryGuid } from '../types/enums';
+import { StoryGuid } from '../base/enums';
 
 const StoryInitializationSystem = () => {
   return (

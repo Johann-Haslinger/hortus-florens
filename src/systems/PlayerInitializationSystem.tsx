@@ -6,7 +6,7 @@ const PlayerInitializationSystem = () => {
   return (
     <EntityCreator
       facets={[
-        new PositionFacet({ positionX: 0, positionY: 0, positionZ: 0 }),
+        new PositionFacet({ positionX: 3, positionY: 3, positionZ: 0 }),
         new TextTypeFacet({ type: 'player' }),
         new HealthFacet({ healthValue: [100, 100] }),
         new IdentifierFacet({ guid: 'player' }),

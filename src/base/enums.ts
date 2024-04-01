@@ -9,6 +9,7 @@ export enum TOOL_NAMES {
   // PICKAXE = 'pickaxe',
   // SHOVEL = 'shovel',
   HOE = 'hoe',
+  WATERING_CAN = 'watering_can',
 }
 
 export enum ITEM_GROUPS {
@@ -33,4 +34,9 @@ export enum TileTypes {
   DIRT = 'dirt',
   GRASS = 'grass',
   WATER = 'water',
+}
+
+export enum Tags {
+  LOCKED,
+  CURRENT
 }

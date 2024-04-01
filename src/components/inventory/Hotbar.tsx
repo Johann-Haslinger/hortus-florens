@@ -6,29 +6,21 @@ import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { HOE_ICON_INVENTORY, AXE_ICON_INVENTORY } from '../../assets/items/inventory';
 import { useIsStoryCurrent } from '@leanscope/storyboarding';
-import { StoryGuid } from '../../types/enums';
+import { StoryGuid, TOOL_NAMES } from '../../base/enums';
 import { motion } from 'framer-motion';
+import { findInventoryIconForTool } from '../../helpers/functions';
 
 // bg-[rgb(189,156,114)]
 // border-[rgb(164,125,95)]
 
 const StyledToolIconWrapper = styled.div`
-  ${tw` size-24 bg-[rgb(228,208,171)] border-[6px] backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
-`;
-
-const StyledToolIcon = styled.img`
-  ${tw` size-20`}
+  ${tw`p-1 size-24 bg-[rgb(228,208,171)] border-[6px] backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
 `;
 
 const ToolIcon = (props: TitleProps & EntityProps) => {
   const { title: name } = props;
 
-  return (
-    <StyledToolIconWrapper>
-      {name === 'axe' && <StyledToolIcon src={AXE_ICON_INVENTORY} />}
-      {name === 'hoe' && <StyledToolIcon src={HOE_ICON_INVENTORY} />}
-    </StyledToolIconWrapper>
-  );
+  return <StyledToolIconWrapper>{findInventoryIconForTool(name as TOOL_NAMES)}</StyledToolIconWrapper>;
 };
 
 const StyledHotbarWrapper = styled.div`

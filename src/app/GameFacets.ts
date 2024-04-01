@@ -1,5 +1,5 @@
-import { Facet } from '../base/Facet';
-import { ITEM_GROUPS } from '../types/enums';
+import { Facet } from '../base/facet';
+import { ITEM_GROUPS } from '../base/enums';
 
 export interface TypeProps {
   typeName: string;

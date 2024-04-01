@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
-import { VALID_TERRAIN_TILES, TILE_SIZE, WALKABLE_TILES, } from '../../base/Constants';
-import { TERRAIN_TILES } from '../../types/enums';
+import { VALID_TERRAIN_TILES, TILE_SIZE, WALKABLE_TILES, } from '../../base/constants';
+import { TERRAIN_TILES } from '../../base/enums';
 
 const checkCanMoveRight = (playerX: number, playerY: number, tiles: readonly Entity[]): boolean => {
   const playerTile = tiles.find((tile) => {
@@ -132,7 +132,7 @@ const PlayerSprite = (props: PositionProps & EntityProps) => {
   return (
     <mesh position={[positionX, positionY, 0]}>
       <boxGeometry args={[0.5, 0.5, 0.1]} />
-      <meshBasicMaterial color="black" />
+      <meshBasicMaterial  color="rgb(164,125,95)" />
     </mesh>
   );
 };
