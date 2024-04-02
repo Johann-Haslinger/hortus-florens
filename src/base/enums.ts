@@ -7,6 +7,7 @@ export enum STORY_GUID {
 export enum GAME_TAGS {
   WATERD = 'watered',
   PLAYER = 'player',
+  GAME_OBJECT = 'game_object',
   NPC = 'npc',
   ITEM = 'item',
   TILE = 'tile',
@@ -66,3 +67,8 @@ export enum TILE_TYPES {
   WATER = 'water',
 }
 
+export enum ENVIRONMENT_OBJECTS  {
+  TREE = 'tree',
+  ROCK = 'rock',
+  BUSH = 'bush',
+}

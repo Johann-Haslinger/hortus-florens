@@ -2,7 +2,7 @@ export const mapData = [
     { id: '22', x: -1, y: 2, type: 'grass' },
     { id: '23', x: -1, y: 3, type: 'grass' },
     { id: '24', x: -1, y: 4, type: 'grass' },
-    { id: '1', x: 0, y: 0, type: 'grass' },
+  
     { id: '2', x: 1, y: 0, type: 'grass' },
     { id: '3', x: 2, y: 0, type: 'grass' },
     { id: '4', x: 3, y: 0, type: 'grass' },
@@ -12,7 +12,7 @@ export const mapData = [
     { id: '8', x: 7, y: 0, type: 'grass' },
     { id: '9', x: 0, y: 1, type: 'grass' },
     { id: '10', x: 1, y: 1, type: 'grass' },
-    { id: '11', x: 2, y: 1, type: 'farmland' },
+    { id: '11', x: 2, y: 1, type: 'grass' },
     { id: '12', x: 3, y: 1, type: 'grass' },
     { id: '13', x: 4, y: 1, type: 'grass' },
     { id: '14', x: 5, y: 1, type: 'grass' },
@@ -64,6 +64,6 @@ export const mapData = [
     { id: '60', x: 3, y: 7, type: 'grass' },
     { id: '61', x: 4, y: 7, type: 'grass' },
     { id: '62', x: 5, y: 7, type: 'grass' },
-    { id: '63', x: 6, y: 7, type: 'grass' },
-    { id: '64', x: 7, y: 7, type: 'grass' },
+
+  
 ];

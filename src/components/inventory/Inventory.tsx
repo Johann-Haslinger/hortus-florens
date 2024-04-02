@@ -47,7 +47,7 @@ const ToolSlot = (props: { entity?: Entity }) => {
   };
 
   return (
-    <StyledToolSlot onClick={handleSelectTool} isSelected={isSelected }>
+    <StyledToolSlot onClick={handleSelectTool} isSelected={isSelected}>
       {entity && <>{findInventoryIconForItem(entity.get(TitleFacet)?.props.title as TOOL_NAMES)}</>}
     </StyledToolSlot>
   );
@@ -58,8 +58,9 @@ const StyledNormalItem = styled.div<{ isSelected: boolean }>`
   ${({ isSelected }) => isSelected && tw`border-[rgb(189,156,114)] border-[3px]`}
 `;
 
-const StyledValueText = styled.p`
-  ${tw` absolute  text-xs ml-10 mt-10 font-bold italic text-white`}
+const StyledValueText = styled.p<{ isSelected: boolean }>`
+  ${tw` absolute transition-all text-xs font-bold italic text-white`}
+  ${({ isSelected }) => isSelected ? tw` ml-10 mt-10` : tw` ml-11 mt-11`}
 `;
 
 const NormalItem = (props: { entity?: Entity }) => {
@@ -76,8 +77,8 @@ const NormalItem = (props: { entity?: Entity }) => {
 
   return (
     <StyledNormalItem onClick={handleSelectTool} isSelected={isSelected && entity !== undefined}>
-       {entity && <>{findInventoryIconForItem(entity.get(TitleFacet)?.props.title as SEED_NAMES)}</>}
-      {value > 1 && <StyledValueText>{value}</StyledValueText>}
+      {entity && <>{findInventoryIconForItem(entity.get(TitleFacet)?.props.title as SEED_NAMES)}</>}
+      {value > 1 && <StyledValueText isSelected={isSelected}>{value}</StyledValueText>}
     </StyledNormalItem>
   );
 };

@@ -1,11 +1,11 @@
+import React from 'react';
 import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
 import { PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
-import PlayerSprite from './PlayerSprite';
-import { VALID_TERRAIN_TILES, TILE_SIZE } from '../../base/constants';
 import { useContext, useEffect, useState } from 'react';
-import { ItemGroupFacet, TileCropFacet, TitleFacet } from '../../app/GameFacets';
-import { TERRAIN_TILES, ITEM_GROUPS, TOOL_NAMES, GAME_TAGS, SEED_NAMES, CROP_NAMES } from '../../base/enums';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
+import { TimeFacet, ItemGroupFacet, TitleFacet, HealthFacet, TileCropFacet } from '../app/GameFacets';
+import { TILE_SIZE, VALID_TERRAIN_TILES } from '../base/constants';
+import { TERRAIN_TILES, GAME_TAGS, TOOL_NAMES, SEED_NAMES, ITEM_GROUPS } from '../base/enums';
 
 const findPlayerTile = (playerX: number, playerY: number, tiles: readonly Entity[]): Entity | undefined => {
   return tiles.find((tile) => {
@@ -45,20 +45,23 @@ const handleToolUse = (playerTile: Entity | undefined, toolName: TOOL_NAMES) => 
 };
 
 const handleSeedUse = (playerTile: Entity | undefined, seedName: SEED_NAMES, handleRemoveEntity: (itemGroup: SEED_NAMES) => void) => {
-  handleRemoveEntity(seedName);
+  const hasTileSeed = playerTile?.get(TileCropFacet)?.props.tileCropName !== undefined;
+  console.log('hasTileSeed', hasTileSeed);
 
-  if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.FARMLAND) {
-    console.log('seedName', seedName);
+  if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.FARMLAND && !hasTileSeed) {
     playerTile.add(new TileCropFacet({ tileCropName: seedName, growthStage: 0 }));
+    handleRemoveEntity(seedName);
   }
 };
 
-const Player = (props: PositionProps & EntityProps) => {
-  const { positionX, positionY } = props;
+const PlayerActionSystem = () => {
   const lsc = useContext(LeanScopeClientContext);
   const [playerTile, setPlayerTile] = useState<Entity | undefined>(undefined);
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || ''));
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
+  const [playerEntity] = useEntity((e) => e.has(HealthFacet));
+  const positionX = playerEntity?.get(PositionFacet)?.props.positionX;
+  const positionY = playerEntity?.get(PositionFacet)?.props.positionY;
 
   const [selectedItem] = useEntity((e) => e.has(ItemGroupFacet) && e.hasTag(Tags.SELECTED));
   const selectedItemName = selectedItem?.get(TitleFacet)?.props.title;
@@ -101,9 +104,12 @@ const Player = (props: PositionProps & EntityProps) => {
   }, [selectedItem, playerTile]);
 
   useEffect(() => {
-    setPlayerTile(findPlayerTile(positionX, positionY, tiles));
+    if (positionX !== undefined && positionY !== undefined) {
+      setPlayerTile(findPlayerTile(positionX, positionY, tiles));
+    }
   }, [positionX, positionY, tiles]);
 
-  return <PlayerSprite {...props} />;
+  return <></>;
 };
-export default Player;
+
+export default PlayerActionSystem;

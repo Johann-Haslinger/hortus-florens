@@ -63,4 +63,13 @@ export class TileCropFacet extends Facet<TileCropProps> {
   }
 }
 
+export interface TimeProps {
+  time: number;
+}
+
+export class TimeFacet extends Facet<TimeProps> {
+  constructor(props: TimeProps) {
+    super(props);
+  }
+}
 

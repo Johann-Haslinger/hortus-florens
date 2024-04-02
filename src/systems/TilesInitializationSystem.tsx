@@ -1,6 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
 import { mapData } from '../components/map/mapData';
+import { ENVIRONMENT_OBJECTS } from '../base/enums';
+import { v4 } from 'uuid';
 
 const TilesInitializationSystem = () => {
   const lsc = useContext(LeanScopeClientContext);
@@ -19,6 +21,27 @@ const TilesInitializationSystem = () => {
         });
       });
     }
+    lsc.entities.create({
+      positionX: 6,
+      positionY: 6,
+      positionZ: 0,
+      type: ENVIRONMENT_OBJECTS.TREE,
+      guid: v4(),
+    });
+    lsc.entities.create({
+      positionX: 4,
+      positionY: 7,
+      positionZ: 0,
+      type: ENVIRONMENT_OBJECTS.TREE,
+      guid: v4(),
+    });
+    lsc.entities.create({
+      positionX: 5,
+      positionY: 5,
+      positionZ: 0,
+      type: ENVIRONMENT_OBJECTS.TREE,
+      guid: v4(),
+    });
 
     return () => {
       if (lsc) {

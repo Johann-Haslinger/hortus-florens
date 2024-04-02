@@ -6,10 +6,12 @@ import TilesInitializationSystem from './systems/TilesInitializationSystem';
 import Hotbar from './components/inventory/Hotbar';
 import Inventory from './components/inventory/Inventory';
 import StoryInitializationSystem from './systems/StoryInitializationSystem';
+import GameEntitiesInitializationSystem from './systems/GameEntitiesInitializationSystem';
 
 function App() {
   return (
     <>
+      <GameEntitiesInitializationSystem />
       <StoryInitializationSystem />
       <ItemsInitializationSystem />
       <PlayerInitializationSystem />

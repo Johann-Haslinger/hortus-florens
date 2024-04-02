@@ -76,8 +76,8 @@ import { Canvas, useLoader } from 'react-three-fiber';
 import * as THREE from 'three';
 import { Box } from '@react-three/drei';
 import { GAME_TAGS, TERRAIN_TILES } from '../../base/enums';
-import { TileCropFacet } from '../../app/GameFacets';
-import { WHEAT_SEED } from '../../assets/seeds';
+import { TimeFacet } from '../../app/GameFacets';
+import { FARMLAND_WATERD, WHEAT_SEED } from '../../assets/seeds';
 
 const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string => {
   const { positionX, positionY } = tile.get(PositionFacet)?.props!;
@@ -707,34 +707,31 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || ''));
   const [isWaterd] = useEntityHasTags(entity, GAME_TAGS.WATERD);
   const terrainTexture = useLoader(THREE.TextureLoader, selectImageForTileType(entity, tiles));
-  const blankFarmlandTexture = useLoader(THREE.TextureLoader, FARMLAND_TILE_BLANK);
+  const waterdFarmlandTexture = useLoader(THREE.TextureLoader, FARMLAND_WATERD);
+
   const seedTexture = useLoader(THREE.TextureLoader, WHEAT_SEED);
   const meshRef = useRef<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>(null);
   const materialRef = useRef<MeshBasicMaterial>(null);
-  const seedRef =  useRef<MeshBasicMaterial>(null);
+  const seedRef = useRef<MeshBasicMaterial>(null);
   const textureRef = useRef<MeshBasicMaterial>(null);
 
-  const tileCropName = entity.get(TileCropFacet)?.props.tileCropName;
-  const growthStage = entity.get(TileCropFacet)?.props.growthStage;
-
-
+  const tileCropName = entity.get(TimeFacet)?.props.tileCropName;
+  const growthStage = entity.get(TimeFacet)?.props.growthStage;
 
   useFrame(() => {
     if (isWaterd && materialRef.current) {
-      materialRef.current.opacity = 0.5;
+      materialRef.current.opacity = 1;
     } else if (materialRef.current) {
       materialRef.current.opacity = 0;
     }
-    if (seedRef.current && entity.get(TileCropFacet)?.props.tileCropName) {
+    if (seedRef.current && materialRef.current && entity.get(TimeFacet)?.props.tileCropName) {
       seedRef.current.opacity = 1;
-      
-    } else if (seedRef.current) {
-      
+
+    } else if (seedRef.current && materialRef.current ) {
       seedRef.current.opacity = 0;
+
     }
   });
-
-
 
   return (
     <>
@@ -742,10 +739,10 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
         <meshBasicMaterial map={terrainTexture} transparent />
       </Box>
       <Box position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
-        <meshBasicMaterial ref={seedRef} map={seedTexture}   alphaTest={0.5} transparent />
+        <meshBasicMaterial map={waterdFarmlandTexture} ref={materialRef} transparent />
       </Box>
       <Box position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
-        <meshBasicMaterial ref={materialRef} color="blue" transparent />
+        <meshBasicMaterial ref={seedRef} map={seedTexture} alphaTest={0.5} transparent />
       </Box>
     </>
   );

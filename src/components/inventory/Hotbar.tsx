@@ -1,4 +1,4 @@
-import { Entity, EntityProps, EntityPropsMapper, useEntities } from '@leanscope/ecs-engine';
+import { Entity, EntityProps, EntityPropsMapper, useEntities, useEntity } from '@leanscope/ecs-engine';
 import { NameFacet, OrderFacet, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { ItemGroupFacet, TitleFacet, TitleProps } from '../../app/GameFacets';
 import tw from 'twin.macro';
@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { HOE_ICON_INVENTORY, AXE_ICON_INVENTORY } from '../../assets/items/inventory';
 import { useIsStoryCurrent } from '@leanscope/storyboarding';
-import { STORY_GUID, TOOL_NAMES } from '../../base/enums';
+import { ITEM_GROUPS, STORY_GUID, TOOL_NAMES } from '../../base/enums';
 import { motion } from 'framer-motion';
 import { findInventoryIconForItem } from '../../helpers/functions';
 
@@ -17,10 +17,24 @@ const StyledSelectedIconWrappper = styled.div`
   ${tw`p-1 size-24 bg-[rgb(228,208,171)] border-[6px] backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
 `;
 
-const SelectedItemIcon = (props: TitleProps & EntityProps) => {
-  const { title: name } = props;
+const StyledValueText = styled.p`
+  ${tw` absolute  text-base mt-[3.7rem] ml-[3.7rem] font-bold italic text-white`}
+`;
 
-  return <StyledSelectedIconWrappper>{findInventoryIconForItem(name as TOOL_NAMES)}</StyledSelectedIconWrappper>;
+
+const SelectedItemIcon = (props: { entity?: Entity }) => {
+  const { entity } = props;
+  const [items] = useEntities((e) => e.has(ItemGroupFacet));
+
+  const title = entity?.get(TitleFacet)?.props.title;
+  const value = entity ? items.filter((e) => e.get(TitleFacet)?.props.title === title).length : 0;
+
+
+  return (
+    <StyledSelectedIconWrappper>
+      {entity && findInventoryIconForItem(title as TOOL_NAMES)} {value > 1 && <StyledValueText>{value}</StyledValueText>}
+    </StyledSelectedIconWrappper>
+  );
 };
 
 const StyledHotbarWrapper = styled.div`
@@ -29,33 +43,51 @@ const StyledHotbarWrapper = styled.div`
 
 const Hotbar = () => {
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
-  const [tools] = useEntities((e) => e.has(ItemGroupFacet) && e.get(ItemGroupFacet)?.props.group === 'tools');
+  const [tools] = useEntities((e) => e.has(ItemGroupFacet) && e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.TOOLS);
+  const [selectedItem] = useEntity((e) => e.has(Tags.SELECTED) && e.has(ItemGroupFacet));
   const isHotbarVisible = true;
+
+  useEffect(() => {
+    console.log('selectedItem', selectedItem);
+  }, [selectedItem]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const selectedItem = items.find((e) => e.hasTag(Tags.SELECTED));
       const selectedItemOrder = selectedItem?.get(OrderFacet)?.props.orderIndex;
 
-      if (selectedItem && isHotbarVisible) {
-        let newTool: Entity | undefined;
+      let newTool: Entity | undefined;
 
-        if (e.key === 'ArrowLeft') {
-          newTool = tools.find((e) => e.get(OrderFacet)?.props.orderIndex === (selectedItemOrder || 2) - 1);
+      if (e.key === 'ArrowLeft') {
+        console.log(selectedItemOrder);
+        if (selectedItemOrder !== undefined) {
+          newTool = tools.find((e) => e.get(OrderFacet)?.props.orderIndex === selectedItemOrder - 1);
           if (!newTool) {
-            newTool = tools.find((e) => e.get(OrderFacet)?.props.orderIndex === items.length);
+            newTool = tools.find(
+              (e) =>
+                e.get(OrderFacet)?.props.orderIndex ===
+                items.filter((item) => item.get(ItemGroupFacet)?.props.group == ITEM_GROUPS.TOOLS).length,
+            );
           }
-        } else if (e.key === 'ArrowRight') {
-          newTool = tools.find((e) => e.get(OrderFacet)?.props.orderIndex === (selectedItemOrder || 0) + 1);
+        } else {
+          console.log('no order');
+          newTool = tools.find((e) => e.get(OrderFacet)?.props.orderIndex === 1);
+        }
+      } else if (e.key === 'ArrowRight') {
+        if (selectedItemOrder !== undefined) {
+          newTool = tools.find((e) => e.get(OrderFacet)?.props.orderIndex === selectedItemOrder + 1);
           if (!newTool) {
             newTool = tools.find((e) => e.get(OrderFacet)?.props.orderIndex === 1);
           }
+        } else {
+          newTool = tools.find((e) => e.get(OrderFacet)?.props.orderIndex === 1);
         }
+      }
 
-        if (newTool) {
-          selectedItem.removeTag(Tags.SELECTED);
-          newTool.addTag(Tags.SELECTED);
-        }
+      if (newTool) {
+        selectedItem?.removeTag(Tags.SELECTED);
+        console.log('new tool', newTool);
+        newTool.addTag(Tags.SELECTED);
       }
     };
 
@@ -64,16 +96,12 @@ const Hotbar = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [items, isHotbarVisible]);
+  }, [items]);
 
   return (
     <StyledHotbarWrapper>
       <motion.div initial={{ opacity: 1, scale: 1 }} animate={{ opacity: isHotbarVisible ? 1 : 0, scale: isHotbarVisible ? 1 : 0.9 }}>
-        <EntityPropsMapper
-          query={(e) => e.hasTag(Tags.SELECTED) && e.has(ItemGroupFacet)}
-          get={[[TitleFacet], []]}
-          onMatch={SelectedItemIcon}
-        />
+        <SelectedItemIcon entity={selectedItem} />
       </motion.div>
     </StyledHotbarWrapper>
   );
