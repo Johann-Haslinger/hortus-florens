@@ -14,6 +14,8 @@ import PlayerActionSystem from '../../systems/PlayerActionSystem';
 import PlayerSprite from '../player/PlayerSprite';
 import DayNightCicleSystem from '../../systems/DayNightCicleSystem';
 import TimeDisplayer from './TimeDisplayer';
+import CropGrowingSystem from '../../systems/CropGrowingSystem';
+import { TileCropFacet } from '../../app/GameFacets';
 
 const StyledMapContainer = styled.div`
   ${tw`w-screen h-screen`}
@@ -22,13 +24,14 @@ const StyledMapContainer = styled.div`
 const Map = () => {
   return (
     <StyledMapContainer>
+      <CropGrowingSystem />
       <DayNightCicleSystem />
       <PlayerActionSystem />
       <TimeDisplayer />
       <FullScreenCanvas>
         <EntityPropsMapper
           query={(e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || '')}
-          get={[[TextTypeFacet, PositionFacet, IdentifierFacet], []]}
+          get={[[TextTypeFacet, PositionFacet, IdentifierFacet, TileCropFacet], []]}
           onMatch={TerrainTile}
         />
         <EntityPropsMapper

@@ -46,10 +46,9 @@ const handleToolUse = (playerTile: Entity | undefined, toolName: TOOL_NAMES) => 
 
 const handleSeedUse = (playerTile: Entity | undefined, seedName: SEED_NAMES, handleRemoveEntity: (itemGroup: SEED_NAMES) => void) => {
   const hasTileSeed = playerTile?.get(TileCropFacet)?.props.tileCropName !== undefined;
-  console.log('hasTileSeed', hasTileSeed);
 
   if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.FARMLAND && !hasTileSeed) {
-    playerTile.add(new TileCropFacet({ tileCropName: seedName, growthStage: 0 }));
+    playerTile.add(new TileCropFacet({ tileCropName: seedName, growthStage: 1 }));
     handleRemoveEntity(seedName);
   }
 };
@@ -59,13 +58,15 @@ const PlayerActionSystem = () => {
   const [playerTile, setPlayerTile] = useState<Entity | undefined>(undefined);
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || ''));
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
-  const [playerEntity] = useEntity((e) => e.has(HealthFacet));
+  const [playerEntity] = useEntity((e) => e.has(HealthFacet) && e.has(PositionFacet));
   const positionX = playerEntity?.get(PositionFacet)?.props.positionX;
   const positionY = playerEntity?.get(PositionFacet)?.props.positionY;
 
   const [selectedItem] = useEntity((e) => e.has(ItemGroupFacet) && e.hasTag(Tags.SELECTED));
   const selectedItemName = selectedItem?.get(TitleFacet)?.props.title;
   const selectedItemGroup = selectedItem?.get(ItemGroupFacet)?.props.group;
+
+
 
   const handleRemoveSelectedItem = (itemTitle: SEED_NAMES) => {
     const sameItems = items.filter((item) => item.get(TitleFacet)?.props.title === itemTitle);

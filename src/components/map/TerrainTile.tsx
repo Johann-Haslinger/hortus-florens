@@ -75,9 +75,9 @@ import {
 import { Canvas, useLoader } from 'react-three-fiber';
 import * as THREE from 'three';
 import { Box } from '@react-three/drei';
-import { GAME_TAGS, TERRAIN_TILES } from '../../base/enums';
-import { TimeFacet } from '../../app/GameFacets';
-import { FARMLAND_WATERD, WHEAT_SEED } from '../../assets/seeds';
+import { CROP_NAMES, GAME_TAGS, SEED_NAMES, TERRAIN_TILES } from '../../base/enums';
+import { TileCropFacet, TileCropProps } from '../../app/GameFacets';
+import { FARMLAND_WATERD, WHEAT_CROP_STATE_1, WHEAT_CROP_STATE_2, WHEAT_CROP_STATE_3 } from '../../assets/crops';
 
 const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string => {
   const { positionX, positionY } = tile.get(PositionFacet)?.props!;
@@ -702,21 +702,40 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
   return GRASS_TILE_1;
 };
 
-const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & EntityProps) => {
-  const { positionX, positionY, type, entity } = props;
+const selectCropImage = (tileCropName: SEED_NAMES, growthStage: 1 | 2 | 3): string => {
+  switch (tileCropName) {
+    case SEED_NAMES.WHEAT_SEED:
+      switch (growthStage) {
+        case 1:
+          return WHEAT_CROP_STATE_1;
+        case 2:
+          return WHEAT_CROP_STATE_2;
+        case 3:
+          return WHEAT_CROP_STATE_3;
+        default:
+          return WHEAT_CROP_STATE_1;
+      }
+    default:
+      return WHEAT_CROP_STATE_1;
+  }
+};
+
+const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & EntityProps & TileCropProps) => {
+  const { positionX, positionY, type, entity, tileCropName, growthStage } = props;
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || ''));
   const [isWaterd] = useEntityHasTags(entity, GAME_TAGS.WATERD);
   const terrainTexture = useLoader(THREE.TextureLoader, selectImageForTileType(entity, tiles));
-  const waterdFarmlandTexture = useLoader(THREE.TextureLoader, FARMLAND_WATERD);
+  const waterdFarmlandTexture = useLoader(
+    THREE.TextureLoader, FARMLAND_WATERD
+  );
 
-  const seedTexture = useLoader(THREE.TextureLoader, WHEAT_SEED);
+
+  const seedTexture =  useLoader(THREE.TextureLoader,  selectCropImage(tileCropName as SEED_NAMES, growthStage as 1 | 2 | 3));
   const meshRef = useRef<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>(null);
   const materialRef = useRef<MeshBasicMaterial>(null);
   const seedRef = useRef<MeshBasicMaterial>(null);
   const textureRef = useRef<MeshBasicMaterial>(null);
 
-  const tileCropName = entity.get(TimeFacet)?.props.tileCropName;
-  const growthStage = entity.get(TimeFacet)?.props.growthStage;
 
   useFrame(() => {
     if (isWaterd && materialRef.current) {
@@ -724,12 +743,10 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
     } else if (materialRef.current) {
       materialRef.current.opacity = 0;
     }
-    if (seedRef.current && materialRef.current && entity.get(TimeFacet)?.props.tileCropName) {
+    if (seedRef.current && materialRef.current && entity.get(TileCropFacet)?.props.tileCropName) {
       seedRef.current.opacity = 1;
-
-    } else if (seedRef.current && materialRef.current ) {
+    } else if (seedRef.current && materialRef.current) {
       seedRef.current.opacity = 0;
-
     }
   });
 
