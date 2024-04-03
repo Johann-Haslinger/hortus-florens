@@ -65,6 +65,7 @@ export class TileCropFacet extends Facet<TileCropProps> {
 
 export interface TimeProps {
   time: number;
+  day: number
 }
 
 export class TimeFacet extends Facet<TimeProps> {

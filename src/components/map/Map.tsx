@@ -1,21 +1,21 @@
 import FullScreenCanvas from './FullscreenCanvas';
 import tw from 'twin.macro';
 import styled from '@emotion/styled';
-import { EntityPropsMapper } from '@leanscope/ecs-engine';
+import { EntityPropsMapper, SystemCreator } from '@leanscope/ecs-engine';
 import { IdentifierFacet, PositionFacet, TextTypeFacet } from '@leanscope/ecs-models';
 import TerrainTile from './TerrainTile';
 import TilesInitializationSystem from '../../systems/TilesInitializationSystem';
 import PlayerInitializationSystem from '../../systems/PlayerInitializationSystem';
-import {  VALID_ENVITONMENT_OBJECTS_TILES, VALID_TERRAIN_TILES } from '../../base/constants';
+import { VALID_ENVITONMENT_OBJECTS_TILES, VALID_TERRAIN_TILES } from '../../base/constants';
 import ItemsInitializationSystem from '../../systems/ItemsInitializationSystem';
 import { ENVIRONMENT_OBJECTS, TERRAIN_TILES } from '../../base/enums';
 import EnvironmentObjectTile from './EnvironmentObjectTile';
 import PlayerActionSystem from '../../systems/PlayerActionSystem';
 import PlayerSprite from '../player/PlayerSprite';
-import DayNightCicleSystem from '../../systems/DayNightCicleSystem';
+import TimeCicleSystem from '../../systems/TimeCicleSystem';
 import TimeDisplayer from './TimeDisplayer';
-import CropGrowingSystem from '../../systems/CropGrowingSystem';
 import { TileCropFacet } from '../../app/GameFacets';
+import CropGrowingSystem from '../../systems/CropGrowingSystem';
 
 const StyledMapContainer = styled.div`
   ${tw`w-screen h-screen`}
@@ -24,10 +24,12 @@ const StyledMapContainer = styled.div`
 const Map = () => {
   return (
     <StyledMapContainer>
-      <CropGrowingSystem />
-      <DayNightCicleSystem />
+     
+      <TimeCicleSystem />
       <PlayerActionSystem />
       <TimeDisplayer />
+      <CropGrowingSystem />
+      {/* <SystemCreator systemClass={CropGrowingSystem} /> */}
       <FullScreenCanvas>
         <EntityPropsMapper
           query={(e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || '')}

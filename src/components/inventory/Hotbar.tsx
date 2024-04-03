@@ -26,13 +26,14 @@ const SelectedItemIcon = (props: { entity?: Entity }) => {
   const { entity } = props;
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
 
+const itemGroup = entity?.get(ItemGroupFacet)?.props.group;
   const title = entity?.get(TitleFacet)?.props.title;
   const value = entity ? items.filter((e) => e.get(TitleFacet)?.props.title === title).length : 0;
 
 
   return (
     <StyledSelectedIconWrappper>
-      {entity && findInventoryIconForItem(title as TOOL_NAMES)} {value > 1 && <StyledValueText>{value}</StyledValueText>}
+      {entity && findInventoryIconForItem(title as TOOL_NAMES,itemGroup as ITEM_GROUPS)} {value > 1 && <StyledValueText>{value}</StyledValueText>}
     </StyledSelectedIconWrappper>
   );
 };
@@ -47,9 +48,7 @@ const Hotbar = () => {
   const [selectedItem] = useEntity((e) => e.has(Tags.SELECTED) && e.has(ItemGroupFacet));
   const isHotbarVisible = true;
 
-  useEffect(() => {
-    console.log('selectedItem', selectedItem);
-  }, [selectedItem]);
+
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

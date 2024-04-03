@@ -9,7 +9,7 @@ import { START_TIME } from '../base/constants';
 const GameEntitiesInitializationSystem = () => {
   return (
     <>
-      <EntityCreator facets={[new IdentifierFacet({ guid: v4() }), new TimeFacet({ time: START_TIME })]} tags={[GAME_TAGS.GAME_OBJECT]} />
+      <EntityCreator facets={[new IdentifierFacet({ guid: v4() }), new TimeFacet({ time: START_TIME, day: 0 })]} tags={[GAME_TAGS.GAME_OBJECT]} />
     </>
   );
 };

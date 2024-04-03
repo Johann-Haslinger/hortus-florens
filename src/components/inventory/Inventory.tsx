@@ -5,7 +5,7 @@ import { Entity, EntityProps, EntityPropsMapper, useEntities } from '@leanscope/
 import { ItemGroupFacet, TitleFacet, TitleProps } from '../../app/GameFacets';
 import { NameFacet, OrderFacet, Tags } from '@leanscope/ecs-models';
 import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
-import { ITEM_GROUPS, SEED_NAMES, STORY_GUID, TOOL_NAMES } from '../../base/enums';
+import { CROP_NAMES, ITEM_GROUPS, SEED_NAMES, STORY_GUID, TOOL_NAMES } from '../../base/enums';
 import { useIsStoryCurrent } from '@leanscope/storyboarding';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
 import { motion } from 'framer-motion';
@@ -48,7 +48,7 @@ const ToolSlot = (props: { entity?: Entity }) => {
 
   return (
     <StyledToolSlot onClick={handleSelectTool} isSelected={isSelected}>
-      {entity && <>{findInventoryIconForItem(entity.get(TitleFacet)?.props.title as TOOL_NAMES)}</>}
+      {entity && <>{findInventoryIconForItem(entity.get(TitleFacet)?.props.title as TOOL_NAMES, ITEM_GROUPS.TOOLS)}</>}
     </StyledToolSlot>
   );
 };
@@ -66,9 +66,10 @@ const StyledValueText = styled.p<{ isSelected: boolean }>`
 const NormalItem = (props: { entity?: Entity }) => {
   const { entity } = props;
   const title = entity?.get(TitleFacet)?.props.title;
+  const itemGroup = entity?.get(ItemGroupFacet)?.props.group;
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
   const [isSelected] = useEntityHasTags(entity, Tags.SELECTED);
-  const value = entity ? items.filter((e) => e.get(TitleFacet)?.props.title === title).length : 0;
+  const value = entity ? items.filter((e) => e.get(TitleFacet)?.props.title === title && e.get(ItemGroupFacet)?.props.group == itemGroup).length : 0;
 
   const handleSelectTool = () => {
     items.forEach((item) => item.removeTag(Tags.SELECTED));
@@ -77,7 +78,7 @@ const NormalItem = (props: { entity?: Entity }) => {
 
   return (
     <StyledNormalItem onClick={handleSelectTool} isSelected={isSelected && entity !== undefined}>
-      {entity && <>{findInventoryIconForItem(entity.get(TitleFacet)?.props.title as SEED_NAMES)}</>}
+      {entity && <>{findInventoryIconForItem(title as SEED_NAMES | CROP_NAMES,itemGroup as ITEM_GROUPS )}</>}
       {value > 1 && <StyledValueText isSelected={isSelected}>{value}</StyledValueText>}
     </StyledNormalItem>
   );
@@ -115,7 +116,8 @@ const Inventory = () => {
   const [importantItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.IMPORTANT_ITEMS);
   const filteredItems = normalItems.filter((entity, index, self) => {
     const title = entity?.get(TitleFacet)?.props.title;
-    return self.findIndex((e) => e?.get(TitleFacet)?.props.title === title) === index;
+    const itemGroup = entity?.get(ItemGroupFacet)?.props.group;
+    return self.findIndex((e) => e?.get(TitleFacet)?.props.title === title && e.get(ItemGroupFacet)?.props.group == itemGroup) === index;
   });
 
   useEffect(() => {

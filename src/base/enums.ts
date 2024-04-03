@@ -38,8 +38,8 @@ export enum CROP_NAMES {
 }
 
 export enum SEED_NAMES {
-  WHEAT_SEED = 'wheat',
-  CARROT_SEED = 'carrot',
+  WHEAT_SEED = 'wheat_seed',
+  CARROT_SEED = 'carrot_seed',
 }
 
 export enum ITEM_GROUPS {

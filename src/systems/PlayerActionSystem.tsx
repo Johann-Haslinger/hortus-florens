@@ -1,11 +1,13 @@
 import React from 'react';
 import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
-import { PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
+import { IdentifierFacet, PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { useContext, useEffect, useState } from 'react';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
 import { TimeFacet, ItemGroupFacet, TitleFacet, HealthFacet, TileCropFacet } from '../app/GameFacets';
-import { TILE_SIZE, VALID_TERRAIN_TILES } from '../base/constants';
-import { TERRAIN_TILES, GAME_TAGS, TOOL_NAMES, SEED_NAMES, ITEM_GROUPS } from '../base/enums';
+import { MAX_CROP_GROWTH_STAGE, TILE_SIZE, VALID_TERRAIN_TILES } from '../base/constants';
+import { TERRAIN_TILES, GAME_TAGS, TOOL_NAMES, SEED_NAMES, ITEM_GROUPS, CROP_NAMES } from '../base/enums';
+import { ILeanScopeClient } from '@leanscope/api-client/interfaces';
+import { v4 } from 'uuid';
 
 const findPlayerTile = (playerX: number, playerY: number, tiles: readonly Entity[]): Entity | undefined => {
   return tiles.find((tile) => {
@@ -42,15 +44,36 @@ const handleToolUse = (playerTile: Entity | undefined, toolName: TOOL_NAMES) => 
     default:
       break;
   }
+  
 };
 
 const handleSeedUse = (playerTile: Entity | undefined, seedName: SEED_NAMES, handleRemoveEntity: (itemGroup: SEED_NAMES) => void) => {
   const hasTileSeed = playerTile?.get(TileCropFacet)?.props.tileCropName !== undefined;
 
   if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.FARMLAND && !hasTileSeed) {
-    playerTile.add(new TileCropFacet({ tileCropName: seedName, growthStage: 1 }));
+    playerTile.add(new TileCropFacet({ tileCropName: seedName, growthStage: 2 }));
     handleRemoveEntity(seedName);
   }
+};
+
+const handleTryReapCrop = (playerTile: Entity | undefined, lsc: ILeanScopeClient): boolean => {
+  if (playerTile && playerTile.get(TileCropFacet)?.props.growthStage === MAX_CROP_GROWTH_STAGE) {
+    switch (playerTile.get(TileCropFacet)?.props.tileCropName) {
+      case SEED_NAMES.WHEAT_SEED:
+        const level2Entity = new Entity();
+        lsc.engine.addEntity(level2Entity);
+        level2Entity.addComponent(new IdentifierFacet({ guid: v4() }));
+        level2Entity.addComponent(new TitleFacet({ title: CROP_NAMES.WHEAT }));
+        level2Entity.addComponent(new ItemGroupFacet({ group: ITEM_GROUPS.CROPS }))
+        break;
+
+      default:
+        break;
+    }
+    playerTile.remove(TileCropFacet);
+    return true;
+  }
+  return false
 };
 
 const PlayerActionSystem = () => {
@@ -66,8 +89,6 @@ const PlayerActionSystem = () => {
   const selectedItemName = selectedItem?.get(TitleFacet)?.props.title;
   const selectedItemGroup = selectedItem?.get(ItemGroupFacet)?.props.group;
 
-
-
   const handleRemoveSelectedItem = (itemTitle: SEED_NAMES) => {
     const sameItems = items.filter((item) => item.get(TitleFacet)?.props.title === itemTitle);
     const notSelectedItems = sameItems.filter((item) => !item.hasTag(Tags.SELECTED));
@@ -82,6 +103,9 @@ const PlayerActionSystem = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === ' ') {
+        if (handleTryReapCrop(playerTile, lsc)) {
+          return;
+        }
         switch (selectedItemGroup) {
           case ITEM_GROUPS.TOOLS:
             handleToolUse(playerTile, selectedItemName as TOOL_NAMES);

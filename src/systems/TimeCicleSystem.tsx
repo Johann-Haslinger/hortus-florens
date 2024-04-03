@@ -1,18 +1,18 @@
-import { useEntity } from '@leanscope/ecs-engine';
+import { UpdateOnRenderSystem, useEntity } from '@leanscope/ecs-engine';
 import React, { useEffect } from 'react';
 import { TimeFacet } from '../app/GameFacets';
 import { TIME_SPEED } from '../base/constants';
 
-const DayNightCicleSystem = () => {
+const TimeCicleSystem = () => {
   const [timeEntity] = useEntity((e) => e.has(TimeFacet));
   const time = timeEntity?.get(TimeFacet)?.props.time;
 
   useEffect(() => {
     if ((time || 0) >= 24) {
-      timeEntity?.add(new TimeFacet({ time: 0 }));
+      timeEntity?.add(new TimeFacet({ time: 0, day: (timeEntity?.get(TimeFacet)?.props.day || 0) + 1}));
     }
     const interval = setInterval(() => {
-      timeEntity?.add(new TimeFacet({ time: (time || 0) + 0.1 }));
+      timeEntity?.add(new TimeFacet({ time: (time || 0) + 0.1, day: timeEntity?.get(TimeFacet)?.props.day || 0}));
     }, TIME_SPEED * 100);
 
     return () => {
@@ -23,4 +23,5 @@ const DayNightCicleSystem = () => {
   return <></>;
 };
 
-export default DayNightCicleSystem;
+
+export default TimeCicleSystem

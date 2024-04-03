@@ -702,7 +702,7 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
   return GRASS_TILE_1;
 };
 
-const selectCropImage = (tileCropName: SEED_NAMES, growthStage: 1 | 2 | 3): string => {
+const selectCropImage = (tileCropName: SEED_NAMES, growthStage: number): string => {
   switch (tileCropName) {
     case SEED_NAMES.WHEAT_SEED:
       switch (growthStage) {
@@ -730,7 +730,7 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
   );
 
 
-  const seedTexture =  useLoader(THREE.TextureLoader,  selectCropImage(tileCropName as SEED_NAMES, growthStage as 1 | 2 | 3));
+  const seedTexture =  useLoader(THREE.TextureLoader,  selectCropImage(tileCropName as SEED_NAMES, growthStage));
   const meshRef = useRef<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>(null);
   const materialRef = useRef<MeshBasicMaterial>(null);
   const seedRef = useRef<MeshBasicMaterial>(null);

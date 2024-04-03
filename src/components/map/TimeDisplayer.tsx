@@ -33,13 +33,14 @@ time >=  17 && time < 18 ? (time - 17 )/ 1.4 : time >= 18  && time < 19 ? 1 / 1.
 
 const TimeDisplayer = () => {
   const [timeEntity] = useEntity((e) => e.has(TimeFacet));
-  const time = timeEntity?.get(TimeFacet)?.props.time || 0;
-  const timeColor = getDayTimeColor(time || 0);
+  const currentTime = timeEntity?.get(TimeFacet)?.props.time || 0;
+  const currentDay = timeEntity?.get(TimeFacet)?.props.day || 0;
+  const timeColor = getDayTimeColor(currentTime || 0);
 
   return (
     <>
-      <StyledScreenOverlay color={timeColor} opcity={getDayTimeOpcity(time)} />
-      <StyledTimeDisplayer>Time: {Math.round(time)}</StyledTimeDisplayer>
+      <StyledScreenOverlay color={timeColor} opcity={getDayTimeOpcity(currentTime)} />
+      <StyledTimeDisplayer>Time: {Math.round(currentTime)}, Day: {currentDay} </StyledTimeDisplayer>
     </>
   );
 };

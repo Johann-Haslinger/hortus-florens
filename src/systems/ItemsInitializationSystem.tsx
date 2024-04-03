@@ -43,11 +43,19 @@ const ItemsInitializationSystem = () => {
         ]}
         tags={[]}
       />
-       <EntityCreator
+      <EntityCreator
         facets={[
           new IdentifierFacet({ guid: v4() }),
           new ItemGroupFacet({ group: ITEM_GROUPS.SEEDS }),
           new TitleFacet({ title: SEED_NAMES.WHEAT_SEED }),
+        ]}
+        tags={[]}
+      />
+      <EntityCreator
+        facets={[
+          new IdentifierFacet({ guid: v4() }),
+          new ItemGroupFacet({ group: ITEM_GROUPS.CROPS }),
+          new TitleFacet({ title: CROP_NAMES.WHEAT }),
         ]}
         tags={[]}
       />

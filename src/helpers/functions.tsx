@@ -1,21 +1,34 @@
-import { AXE_ICON_INVENTORY, HOE_ICON_INVENTORY, WHEAT_SEED_ICON_INVENTORY } from "../assets/items/inventory";
-import { SEED_NAMES, TOOL_NAMES } from "../base/enums";
+import { AXE_ICON_INVENTORY, HOE_ICON_INVENTORY, WHEAT_ICON_INVENTORY, WHEAT_SEED_ICON_INVENTORY } from '../assets/items/inventory';
+import { CROP_NAMES, ITEM_GROUPS, SEED_NAMES, TOOL_NAMES } from '../base/enums';
 
-export const findInventoryIconForItem = (toolName: TOOL_NAMES | SEED_NAMES) => {
-  switch (toolName) {
-
-    // Tools
-    case TOOL_NAMES.AXE:
-      return <img src={AXE_ICON_INVENTORY} />;
-    case TOOL_NAMES.HOE:
-      return <img src={HOE_ICON_INVENTORY} />;
-    case TOOL_NAMES.WATERING_CAN:
-      return "W";
-
-    // Seeds
-    case SEED_NAMES.WHEAT_SEED:
-      return <img src={WHEAT_SEED_ICON_INVENTORY} />;
+export const findInventoryIconForItem = (toolName: TOOL_NAMES | SEED_NAMES | CROP_NAMES, itemGroup: ITEM_GROUPS) => {
+  switch (itemGroup) {
+    case ITEM_GROUPS.TOOLS:
+      switch (toolName) {
+        case TOOL_NAMES.AXE:
+          return <img src={AXE_ICON_INVENTORY} alt="axe" />;
+        case TOOL_NAMES.HOE:
+          return <img src={HOE_ICON_INVENTORY} alt="hoe" />;
+        case TOOL_NAMES.WATERING_CAN:
+          return "W";
+        default:
+          return null;
+      }
+    case ITEM_GROUPS.SEEDS:
+      switch (toolName) {
+        case SEED_NAMES.WHEAT_SEED:
+          return <img src={WHEAT_SEED_ICON_INVENTORY} alt="wheat seed" />;
+        default:
+          return null;
+      }
+    case ITEM_GROUPS.CROPS:
+      switch (toolName) {
+        case CROP_NAMES.WHEAT:
+          return <img src={WHEAT_ICON_INVENTORY} alt="wheat" />;
+        default:
+          return null;
+      }
     default:
-      return '';
+      return null;
   }
-}
+};
