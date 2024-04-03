@@ -2,7 +2,7 @@ import React from 'react';
 import { EntityCreator } from '@leanscope/ecs-engine';
 import { IdentifierFacet, OrderFacet, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { ItemGroupFacet, TitleFacet } from '../app/GameFacets';
-import { CROP_NAMES, ITEM_GROUPS, SEED_NAMES, TOOL_NAMES } from '../base/enums';
+import { CROP_NAMES, FRUIT_NAMES, ITEM_GROUPS, SEED_NAMES, TOOL_NAMES } from '../base/enums';
 import { v4 } from 'uuid';
 
 const ItemsInitializationSystem = () => {
@@ -56,6 +56,22 @@ const ItemsInitializationSystem = () => {
           new IdentifierFacet({ guid: v4() }),
           new ItemGroupFacet({ group: ITEM_GROUPS.CROPS }),
           new TitleFacet({ title: CROP_NAMES.WHEAT }),
+        ]}
+        tags={[]}
+      />
+      <EntityCreator
+        facets={[
+          new IdentifierFacet({ guid: v4() }),
+          new ItemGroupFacet({ group: ITEM_GROUPS.FRUITS }),
+          new TitleFacet({ title: FRUIT_NAMES.APPLE }),
+        ]}
+        tags={[]}
+      />
+       <EntityCreator
+        facets={[
+          new IdentifierFacet({ guid: v4() }),
+          new ItemGroupFacet({ group: ITEM_GROUPS.FRUITS }),
+          new TitleFacet({ title: FRUIT_NAMES.APPLE }),
         ]}
         tags={[]}
       />

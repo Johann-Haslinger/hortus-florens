@@ -1,4 +1,4 @@
-import { CROP_NAMES, ITEM_GROUPS, SEED_NAMES } from '../base/enums';
+import { CROP_NAMES, FRUIT_NAMES, ITEM_GROUPS, SEED_NAMES, TREE_NAMES } from '../base/enums';
 import { Facet } from '../base/facet';
 
 export interface TypeProps {
@@ -51,7 +51,6 @@ export class ItemGroupFacet extends Facet<ItemGroupProps> {
   }
 }
 
-
 export interface TileCropProps {
   tileCropName: SEED_NAMES;
   growthStage: number;
@@ -63,9 +62,20 @@ export class TileCropFacet extends Facet<TileCropProps> {
   }
 }
 
+export interface TreeFruitProps {
+  fruitName: FRUIT_NAMES;
+  growthStage: number;
+}
+
+export class TreeFruitFacet extends Facet<TreeFruitProps> {
+  constructor(props: TreeFruitProps) {
+    super(props);
+  }
+}
+
 export interface TimeProps {
   time: number;
-  day: number
+  day: number;
 }
 
 export class TimeFacet extends Facet<TimeProps> {
@@ -73,4 +83,3 @@ export class TimeFacet extends Facet<TimeProps> {
     super(props);
   }
 }
-

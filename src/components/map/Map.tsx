@@ -14,8 +14,9 @@ import PlayerActionSystem from '../../systems/PlayerActionSystem';
 import PlayerSprite from '../player/PlayerSprite';
 import TimeCicleSystem from '../../systems/TimeCicleSystem';
 import TimeDisplayer from './TimeDisplayer';
-import { TileCropFacet } from '../../app/GameFacets';
+import { TileCropFacet, TreeFruitFacet } from '../../app/GameFacets';
 import CropGrowingSystem from '../../systems/CropGrowingSystem';
+import EnironmentObjectsInitializationSystem from '../../systems/EnironmentObjectsInitializationSystem';
 
 const StyledMapContainer = styled.div`
   ${tw`w-screen h-screen`}
@@ -24,7 +25,7 @@ const StyledMapContainer = styled.div`
 const Map = () => {
   return (
     <StyledMapContainer>
-     
+      <EnironmentObjectsInitializationSystem />
       <TimeCicleSystem />
       <PlayerActionSystem />
       <TimeDisplayer />
@@ -38,7 +39,7 @@ const Map = () => {
         />
         <EntityPropsMapper
           query={(e) => VALID_ENVITONMENT_OBJECTS_TILES.includes((e.get(TextTypeFacet)?.props.type as ENVIRONMENT_OBJECTS) || '')}
-          get={[[TextTypeFacet, PositionFacet, IdentifierFacet], []]}
+          get={[[TextTypeFacet, PositionFacet, IdentifierFacet, TreeFruitFacet], []]}
           onMatch={EnvironmentObjectTile}
         />
 

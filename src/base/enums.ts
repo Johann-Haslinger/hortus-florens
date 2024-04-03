@@ -6,19 +6,10 @@ export enum STORY_GUID {
 
 export enum GAME_TAGS {
   WATERD = 'watered',
+  CUT = 'cut',
   PLAYER = 'player',
   GAME_OBJECT = 'game_object',
-  NPC = 'npc',
-  ITEM = 'item',
-  TILE = 'tile',
-  TOOL = 'tool',
-  WEAPON = 'weapon',
-  FOOD = 'food',
-  CROP = 'crop',
-  CLOTHING = 'clothing',
-  POTION = 'potion',
-  MATERIAL = 'material',
-  IMPORTANT_ITEM = 'important_item',
+
 }
 
 export enum TOOL_NAMES {
@@ -37,6 +28,23 @@ export enum CROP_NAMES {
   BLUEBERRY = 'blueberry',
 }
 
+export enum FRUIT_NAMES {
+  APPLE = 'apple',
+  CHERRY = 'cherry',
+  PEACH = 'peach',
+  ORANGE = 'orange',
+}
+
+export enum TREE_NAMES {
+  OAK = 'oak',
+  PINE = 'pine',
+  PALM = 'palm',
+  APPLE = 'apple',
+  CHERRY = 'cherry',
+  PEACH = 'peach',
+  ORANGE = 'orange',
+}
+
 export enum SEED_NAMES {
   WHEAT_SEED = 'wheat_seed',
   CARROT_SEED = 'carrot_seed',
@@ -47,9 +55,7 @@ export enum ITEM_GROUPS {
   FOOD = 'food',
   CROPS = 'crops',
   SEEDS = 'seeds',
-  CLOTHING = 'clothing',
-  POTION = 'potion',
-  MATERIALS = 'materials',
+  FRUITS = 'fruits',
   IMPORTANT_ITEMS = 'important_items', 
 }
 
@@ -72,3 +78,4 @@ export enum ENVIRONMENT_OBJECTS  {
   ROCK = 'rock',
   BUSH = 'bush',
 }
+
