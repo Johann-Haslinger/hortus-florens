@@ -9,19 +9,21 @@ const TilesInitializationSystem = () => {
 
   useEffect(() => {
     if (lsc) {
-      mapData.forEach((tile) => {
-        lsc.entities.create({
-          positionX: tile.x,
-          positionY: tile.y,
-          positionZ: 0,
+      mapData.reverse().forEach((row, y) => {
+        row.forEach(
+          (tile, x) =>
+            tile.terrainType !== '' &&
+            lsc.entities.create({
+              positionX: x,
+              positionY: mapData.length - y,
+              positionZ: 0,
 
-          type: tile.type,
-          guid: tile.id,
-          // tags: [Tags.SELECTED],
-        });
+              type: tile.terrainType,
+              guid: v4(),
+            }),
+        );
       });
     }
-   
 
     return () => {
       if (lsc) {

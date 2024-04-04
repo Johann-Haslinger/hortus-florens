@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
-import { VALID_TERRAIN_TILES, TILE_SIZE, WALKABLE_TILES, } from '../../base/constants';
+import { VALID_TERRAIN_TILES, TILE_SIZE, WALKABLE_TILES, PLAYER_SPEED } from '../../base/constants';
 import { TERRAIN_TILES } from '../../base/enums';
 
 const checkCanMoveRight = (playerX: number, playerY: number, tiles: readonly Entity[]): boolean => {
@@ -48,7 +48,7 @@ const checkCanMoveLeft = (playerX: number, playerY: number, tiles: readonly Enti
       .sort((a, b) => a.get(PositionFacet)?.props.positionX! - b.get(PositionFacet)?.props.positionX!);
 
     const previousTile = tilesInRow.reverse().find((tile) => tile.get(PositionFacet)?.props.positionX! < currentTileX);
-   
+
     if (previousTile && (previousTile.get(TextTypeFacet)?.props.type as TERRAIN_TILES) == TERRAIN_TILES.WATER) {
       return false;
     }
@@ -62,7 +62,7 @@ const PlayerSprite = (props: PositionProps & EntityProps) => {
 
   const { entity, positionX, positionY } = props;
   const previousPositionRef = useRef([1, 1]);
-  const speed = 0.1;
+
   const smoothness = 0.2;
   const movementRef = useRef([0, 0]);
 
@@ -71,17 +71,17 @@ const PlayerSprite = (props: PositionProps & EntityProps) => {
       const { key } = event;
 
       if (key === 's') {
-        movementRef.current[1] = -speed;
+        movementRef.current[1] = -PLAYER_SPEED;
       }
       if (key === 'w') {
-        movementRef.current[1] = speed;
+        movementRef.current[1] = PLAYER_SPEED;
       }
 
       if (key === 'a' && checkCanMoveLeft(positionX, positionY, tiles) == true) {
-        movementRef.current[0] = -speed;
+        movementRef.current[0] = -PLAYER_SPEED;
       }
       if (key === 'd' && checkCanMoveRight(positionX, positionY, tiles) == true) {
-        movementRef.current[0] = speed;
+        movementRef.current[0] = PLAYER_SPEED;
       }
     };
 
@@ -132,7 +132,7 @@ const PlayerSprite = (props: PositionProps & EntityProps) => {
   return (
     <mesh position={[positionX, positionY, 0]}>
       <boxGeometry args={[0.5, 0.5, 0.1]} />
-      <meshBasicMaterial  color="rgb(164,125,95)" />
+      <meshBasicMaterial color="rgb(164,125,95)" />
     </mesh>
   );
 };

@@ -4,7 +4,14 @@ import { IdentifierFacet, PositionFacet, PositionProps, Tags, TextTypeFacet } fr
 import { useContext, useEffect, useState } from 'react';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
 import { TimeFacet, ItemGroupFacet, TitleFacet, HealthFacet, TileCropFacet, TreeFruitFacet } from '../app/GameFacets';
-import { INITIAL_CROP_GROWTH_STAGE, MAX_CROP_GROWTH_STAGE, MAX_TREE_FRUIT_GROWTH_STAGE, TILE_SIZE, VALID_TERRAIN_TILES } from '../base/constants';
+import {
+  INITIAL_CROP_GROWTH_STAGE,
+  INITIAL_FRUIT_GROWTH_STAGE,
+  MAX_CROP_GROWTH_STAGE,
+  MAX_TREE_FRUIT_GROWTH_STAGE,
+  TILE_SIZE,
+  VALID_TERRAIN_TILES,
+} from '../base/constants';
 import { TERRAIN_TILES, GAME_TAGS, TOOL_NAMES, SEED_NAMES, ITEM_GROUPS, CROP_NAMES, ENVIRONMENT_OBJECTS, FRUIT_NAMES } from '../base/enums';
 import { ILeanScopeClient } from '@leanscope/api-client/interfaces';
 import { v4 } from 'uuid';
@@ -42,28 +49,19 @@ const handleAxeUse = (lsc: ILeanScopeClient) => {
     const treeEntity = treeEntities.find((tree) => {
       const treeLeft = tree.get(PositionFacet)?.props.positionX! - TILE_SIZE;
       const treeRight = tree.get(PositionFacet)?.props.positionX! + TILE_SIZE;
-      const treeTop = tree.get(PositionFacet)?.props.positionY! - TILE_SIZE*2;
+      const treeTop = tree.get(PositionFacet)?.props.positionY! - TILE_SIZE * 2;
       const treeBottom = tree.get(PositionFacet)?.props.positionY! + TILE_SIZE;
-    console.log("bottom", treeBottom,treeTop, "player",  positionY,)
 
       return positionX >= treeLeft && positionX <= treeRight && positionY >= treeTop && positionY <= treeBottom;
     });
-  
-    console.log("tree", treeEntity)
 
     if (treeEntity) {
-      if (treeEntity.get(TreeFruitFacet)?.props.growthStage === MAX_TREE_FRUIT_GROWTH_STAGE) {
-        for (let i = 0; i < 3; i++) {
-          const appleItemEntity = new Entity();
-          lsc.engine.addEntity(appleItemEntity);
-          appleItemEntity.addComponent(new IdentifierFacet({ guid: v4() }));
-          appleItemEntity.addComponent(new TitleFacet({ title: FRUIT_NAMES.APPLE }));
-          appleItemEntity.addComponent(new ItemGroupFacet({ group: ITEM_GROUPS.FRUITS }));
-        }
-        
+      if (treeEntity.hasTag(GAME_TAGS.HITED)) {
+        treeEntity.remove(TreeFruitFacet);
+        treeEntity.addTag(GAME_TAGS.CUT);
+      } else {
+        treeEntity.addTag(GAME_TAGS.HITED);
       }
-      treeEntity.remove(TreeFruitFacet)
-      treeEntity.addTag(GAME_TAGS.CUT);
     }
   }
 };
@@ -116,6 +114,52 @@ const handleTryReapCrop = (playerTile: Entity | undefined, lsc: ILeanScopeClient
   return false;
 };
 
+const removeHits = (lsc: ILeanScopeClient) => {
+  const hitedTrees = lsc.engine.entities.filter((e) => e.hasTag(GAME_TAGS.HITED));
+  hitedTrees.forEach((tree) => {
+    tree.removeTag(GAME_TAGS.HITED);
+  });
+};
+
+const handleTryReapFruit = (selectedTool: TOOL_NAMES, lsc: ILeanScopeClient): boolean => {
+  const treeEntities = lsc.engine.entities.filter((e) => e.get(TextTypeFacet)?.props.type === ENVIRONMENT_OBJECTS.TREE);
+  const playerEntity = lsc.engine.entities.find((e) => e.has(HealthFacet) && e.has(PositionFacet));
+  const positionX = playerEntity?.get(PositionFacet)?.props.positionX;
+  const positionY = playerEntity?.get(PositionFacet)?.props.positionY;
+
+  if (positionX && positionY) {
+    const treeEntity = treeEntities.find((tree) => {
+      const treeLeft = tree.get(PositionFacet)?.props.positionX! - TILE_SIZE;
+      const treeRight = tree.get(PositionFacet)?.props.positionX! + TILE_SIZE;
+      const treeTop = tree.get(PositionFacet)?.props.positionY! - TILE_SIZE * 2;
+      const treeBottom = tree.get(PositionFacet)?.props.positionY! + TILE_SIZE;
+
+      return positionX >= treeLeft && positionX <= treeRight && positionY >= treeTop && positionY <= treeBottom;
+    });
+
+    if (treeEntity && treeEntity.get(TreeFruitFacet)?.props.growthStage === MAX_TREE_FRUIT_GROWTH_STAGE) {
+      switch (treeEntity.get(TreeFruitFacet)?.props.fruitName) {
+        case FRUIT_NAMES.APPLE:
+          for (let i = 0; i < 3; i++) {
+            const appleItemEntity = new Entity();
+            lsc.engine.addEntity(appleItemEntity);
+            appleItemEntity.addComponent(new IdentifierFacet({ guid: v4() }));
+            appleItemEntity.addComponent(new TitleFacet({ title: FRUIT_NAMES.APPLE }));
+            appleItemEntity.addComponent(new ItemGroupFacet({ group: ITEM_GROUPS.FRUITS }));
+          }
+          break;
+
+        default:
+          break;
+      }
+
+      treeEntity.add(new TreeFruitFacet({ growthStage: INITIAL_FRUIT_GROWTH_STAGE, fruitName: FRUIT_NAMES.APPLE }));
+      if (selectedTool !== TOOL_NAMES.AXE) return true;
+    }
+  }
+  return false;
+};
+
 const PlayerActionSystem = () => {
   const lsc = useContext(LeanScopeClientContext);
   const [playerTile, setPlayerTile] = useState<Entity | undefined>(undefined);
@@ -146,6 +190,9 @@ const PlayerActionSystem = () => {
         if (handleTryReapCrop(playerTile, lsc)) {
           return;
         }
+        if (handleTryReapFruit(selectedItemName as TOOL_NAMES, lsc)) {
+          return;
+        }
         switch (selectedItemGroup) {
           case ITEM_GROUPS.TOOLS:
             handleToolUse(playerTile, selectedItemName as TOOL_NAMES, lsc);
@@ -160,6 +207,9 @@ const PlayerActionSystem = () => {
             break;
         }
       }
+      setTimeout(() => {
+        removeHits(lsc);
+      }, 8000);
     };
 
     window.addEventListener('keydown', handleKeyDown);

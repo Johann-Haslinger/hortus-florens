@@ -43,7 +43,11 @@ const ToolSlot = (props: { entity?: Entity }) => {
 
   const handleSelectTool = () => {
     items.forEach((item) => item.removeTag(Tags.SELECTED));
-    entity?.addTag(Tags.SELECTED);
+   if (entity?.hasTag(Tags.SELECTED)) {
+      entity.removeTag(Tags.SELECTED);
+    } else {
+      entity?.addTag(Tags.SELECTED);
+    }
   };
 
   return (
@@ -75,7 +79,11 @@ const NormalItem = (props: { entity?: Entity }) => {
 
   const handleSelectTool = () => {
     items.forEach((item) => item.removeTag(Tags.SELECTED));
-    entity?.addTag(Tags.SELECTED);
+    if (entity?.hasTag(Tags.SELECTED)) {
+      entity.removeTag(Tags.SELECTED);
+    } else {
+      entity?.addTag(Tags.SELECTED);
+    }
   };
 
   return (
