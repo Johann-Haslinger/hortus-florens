@@ -748,6 +748,11 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
     } else if (seedRef.current && materialRef.current) {
       seedRef.current.opacity = 0;
     }
+    if (entity.has(GAME_TAGS.PLAYER_TILE) && materialRef.current) {
+      materialRef.current.opacity =1
+      materialRef.current.color = new THREE.Color(0x00ff00);
+
+    }
   });
 
   return (

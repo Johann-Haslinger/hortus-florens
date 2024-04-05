@@ -15,7 +15,7 @@ const FullScreenCanvas: React.FC<PropsWithChildren> = ({ children }) => {
       }}
     >
       {children}
-      <perspectiveCamera position={[0, 0, 5]} />
+      <perspectiveCamera position={[0, 0, 2]} />
     </Canvas>
   );
 };

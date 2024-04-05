@@ -3,7 +3,8 @@ import { useFrame } from '@react-three/fiber';
 import { PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
 import { VALID_TERRAIN_TILES, TILE_SIZE, WALKABLE_TILES, PLAYER_SPEED } from '../../base/constants';
-import { TERRAIN_TILES } from '../../base/enums';
+import { GAME_TAGS, TERRAIN_TILES } from '../../base/enums';
+import { Box } from '@react-three/drei';
 
 const checkCanMoveRight = (playerX: number, playerY: number, tiles: readonly Entity[]): boolean => {
   const playerTile = tiles.find((tile) => {
@@ -126,14 +127,32 @@ const PlayerSprite = (props: PositionProps & EntityProps) => {
 
     entity.add(new PositionFacet({ positionX: smoothX, positionY: smoothY, positionZ: 0 }));
 
+    const playerTile = tiles.find((tile) => {
+      const tileLeft = tile.get(PositionFacet)?.props.positionX! - TILE_SIZE / 2;
+      const tileRight = tile.get(PositionFacet)?.props.positionX! + TILE_SIZE / 2;
+      const tileTop = tile.get(PositionFacet)?.props.positionY! - TILE_SIZE / 2;
+      const tileBottom = tile.get(PositionFacet)?.props.positionY! + TILE_SIZE / 2;
+
+      const correctFactor = 1.12;
+      const playerX = smoothX * correctFactor
+      const playerY = smoothY * correctFactor
+
+      return playerX >= tileLeft && playerX <= tileRight && playerY >= tileTop && playerY <= tileBottom;
+    });
+    console.log(playerTile?.get(PositionFacet)?.props.positionY, positionY);
+
+    tiles.forEach((tile) => {
+      tile.removeTag(GAME_TAGS.PLAYER_TILE);
+    });
+    playerTile?.addTag(GAME_TAGS.PLAYER_TILE);
+
     previousPositionRef.current = [smoothX, smoothY];
   });
 
   return (
-    <mesh position={[positionX, positionY, 0]}>
-      <boxGeometry args={[0.5, 0.5, 0.1]} />
-      <meshBasicMaterial color="rgb(164,125,95)" />
-    </mesh>
+    <Box args={[TILE_SIZE / 2, TILE_SIZE / 2, 0]} position={[positionX, positionY, 0]}>
+      <meshBasicMaterial depthTest={true} transparent color={'black'} />
+    </Box>
   );
 };
 

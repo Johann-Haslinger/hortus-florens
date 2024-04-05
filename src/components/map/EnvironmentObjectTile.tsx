@@ -114,9 +114,9 @@ const EnvironmentObjectTile = (props: IdentifierProps & TextTypeProps & Position
 
       <group visible={false} ref={fruitRef}>
         {[
-          [positionX * TILE_SIZE - TILE_SIZE / 2, positionY * TILE_SIZE, 0],
-          [positionX * TILE_SIZE + TILE_SIZE / 3, positionY * TILE_SIZE + TILE_SIZE / 6, 0],
-          [positionX * TILE_SIZE, positionY * TILE_SIZE + TILE_SIZE / 1.4, 0],
+          [positionX * TILE_SIZE - TILE_SIZE / 2.5, positionY * TILE_SIZE + TILE_SIZE / 12 , 0],
+          [positionX * TILE_SIZE + TILE_SIZE / 3, positionY * TILE_SIZE + TILE_SIZE / 12 , 0],
+          [positionX * TILE_SIZE, positionY * TILE_SIZE + TILE_SIZE / 1.5, 0],
         ].map((position, idx) => (
           <Box key={idx} position={new THREE.Vector3(position[0], position[1], position[2])} args={[TILE_SIZE / 2, TILE_SIZE / 2, 0]}>
             <meshBasicMaterial transparent map={fruitTexture} />

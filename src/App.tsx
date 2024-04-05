@@ -11,10 +11,10 @@ import GameEntitiesInitializationSystem from './systems/GameEntitiesInitializati
 function App() {
   return (
     <>
+     <PlayerInitializationSystem />
       <GameEntitiesInitializationSystem />
       <StoryInitializationSystem />
       <ItemsInitializationSystem />
-      <PlayerInitializationSystem />
       <TilesInitializationSystem />
       <Hotbar />
       <Inventory />

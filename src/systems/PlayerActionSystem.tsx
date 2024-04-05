@@ -12,20 +12,9 @@ import {
   TILE_SIZE,
   VALID_TERRAIN_TILES,
 } from '../base/constants';
-import { TERRAIN_TILES, GAME_TAGS, TOOL_NAMES, SEED_NAMES, ITEM_GROUPS, CROP_NAMES, ENVIRONMENT_OBJECTS, FRUIT_NAMES } from '../base/enums';
+import { TERRAIN_TILES, GAME_TAGS, TOOL_NAMES, SEED_NAMES, ITEM_GROUPS, CROP_NAMES, ENVIRONMENT_OBJECTS, FRUIT_NAMES, OTHER_ITEM_NAMES } from '../base/enums';
 import { ILeanScopeClient } from '@leanscope/api-client/interfaces';
 import { v4 } from 'uuid';
-
-const findPlayerTile = (playerX: number, playerY: number, tiles: readonly Entity[]): Entity | undefined => {
-  return tiles.find((tile) => {
-    const tileLeft = tile.get(PositionFacet)?.props.positionX! - TILE_SIZE / 2;
-    const tileRight = tile.get(PositionFacet)?.props.positionX! + TILE_SIZE / 2;
-    const tileTop = tile.get(PositionFacet)?.props.positionY! - TILE_SIZE / 2;
-    const tileBottom = tile.get(PositionFacet)?.props.positionY! + TILE_SIZE / 2;
-
-    return playerX >= tileLeft && playerX <= tileRight && playerY >= tileTop && playerY <= tileBottom;
-  });
-};
 
 const handleHoeUse = (playerTile: Entity | undefined) => {
   if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.GRASS) {
@@ -160,9 +149,30 @@ const handleTryReapFruit = (selectedTool: TOOL_NAMES, lsc: ILeanScopeClient): bo
   return false;
 };
 
+const handleTryPickUpWeeds = (playerTile: Entity | undefined, lsc: ILeanScopeClient): boolean => {
+  const weedEntities = lsc.engine.entities.filter((e) => e.get(TextTypeFacet)?.props.type === ENVIRONMENT_OBJECTS.WEED);
+  const weedEntityOnPlayerPosition = weedEntities.find(
+    (e) =>
+      e.get(PositionFacet)?.props.positionX === playerTile?.get(PositionFacet)?.props.positionX &&
+      e.get(PositionFacet)?.props.positionY === playerTile?.get(PositionFacet)?.props.positionY,
+  );
+
+  if (weedEntityOnPlayerPosition) {
+    const newWeedItemEntity = new Entity();
+    lsc.engine.addEntity(newWeedItemEntity);
+    newWeedItemEntity.addComponent(new IdentifierFacet({ guid: v4() }));
+    newWeedItemEntity.addComponent(new TitleFacet({ title: OTHER_ITEM_NAMES.WEED }));
+    newWeedItemEntity.addComponent(new ItemGroupFacet({ group: ITEM_GROUPS.OTHER }));
+
+    lsc.engine.removeEntity(weedEntityOnPlayerPosition);
+    return true;
+  }
+  return false;
+};
+
 const PlayerActionSystem = () => {
   const lsc = useContext(LeanScopeClientContext);
-  const [playerTile, setPlayerTile] = useState<Entity | undefined>(undefined);
+  const [playerTile] = useEntity((e) => e.has(PositionFacet) && e.has(GAME_TAGS.PLAYER_TILE));
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || ''));
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
   const [playerEntity] = useEntity((e) => e.has(HealthFacet) && e.has(PositionFacet));
@@ -187,6 +197,9 @@ const PlayerActionSystem = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === ' ') {
+        if (handleTryPickUpWeeds(playerTile, lsc)) {
+          return;
+        }
         if (handleTryReapCrop(playerTile, lsc)) {
           return;
         }
@@ -217,12 +230,6 @@ const PlayerActionSystem = () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [selectedItem, playerTile]);
-
-  useEffect(() => {
-    if (positionX !== undefined && positionY !== undefined) {
-      setPlayerTile(findPlayerTile(positionX, positionY, tiles));
-    }
-  }, [positionX, positionY, tiles]);
 
   return <></>;
 };

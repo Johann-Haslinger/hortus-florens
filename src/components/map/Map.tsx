@@ -6,7 +6,7 @@ import { IdentifierFacet, PositionFacet, TextTypeFacet } from '@leanscope/ecs-mo
 import TerrainTile from './TerrainTile';
 import TilesInitializationSystem from '../../systems/TilesInitializationSystem';
 import PlayerInitializationSystem from '../../systems/PlayerInitializationSystem';
-import { VALID_ENVITONMENT_OBJECTS_TILES, VALID_TERRAIN_TILES } from '../../base/constants';
+import { TILE_SIZE, VALID_ENVITONMENT_OBJECTS_TILES, VALID_TERRAIN_TILES } from '../../base/constants';
 import ItemsInitializationSystem from '../../systems/ItemsInitializationSystem';
 import { ENVIRONMENT_OBJECTS, TERRAIN_TILES } from '../../base/enums';
 import EnvironmentObjectTile from './EnvironmentObjectTile';
@@ -23,14 +23,17 @@ const StyledMapContainer = styled.div`
 `;
 
 const Map = () => {
+
   return (
     <StyledMapContainer>
+     
       <EnironmentObjectsInitializationSystem />
-      <TimeCicleSystem />
-      <PlayerActionSystem />
-      <TimeDisplayer />
       <CropGrowingSystem />
       {/* <SystemCreator systemClass={CropGrowingSystem} /> */}
+      <TimeCicleSystem />
+      <TimeDisplayer />
+      <PlayerActionSystem />
+     
       <FullScreenCanvas>
         <EntityPropsMapper
           query={(e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || '')}
@@ -42,12 +45,13 @@ const Map = () => {
           get={[[TextTypeFacet, PositionFacet, IdentifierFacet, TreeFruitFacet], []]}
           onMatch={EnvironmentObjectTile}
         />
-
         <EntityPropsMapper
           query={(e) => e.get(TextTypeFacet)?.props.type === 'player'}
           get={[[TextTypeFacet, PositionFacet], []]}
           onMatch={PlayerSprite}
+          
         />
+        
       </FullScreenCanvas>
     </StyledMapContainer>
   );

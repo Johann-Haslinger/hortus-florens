@@ -10,6 +10,7 @@ export enum GAME_TAGS {
   PLAYER = 'player',
   GAME_OBJECT = 'game_object',
   HITED = 'hited',
+  PLAYER_TILE = 'player_tile',
 }
 
 export enum TOOL_NAMES {
@@ -56,6 +57,7 @@ export enum ITEM_GROUPS {
   CROPS = 'crops',
   SEEDS = 'seeds',
   FRUITS = 'fruits',
+  OTHER = 'other',
   IMPORTANT_ITEMS = 'important_items', 
 }
 
@@ -92,4 +94,8 @@ export enum WEED_NAMES {
 
 export enum ROCK_NAMES {
   STONE_1 = 'stone_1',
+}
+
+export enum OTHER_ITEM_NAMES {
+  WEED = 'weed',
 }

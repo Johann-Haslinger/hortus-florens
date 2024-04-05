@@ -1,7 +1,17 @@
-import { APPLE_ICON_INVENTORY, AXE_ICON_INVENTORY, HOE_ICON_INVENTORY, WHEAT_ICON_INVENTORY, WHEAT_SEED_ICON_INVENTORY } from '../assets/items/inventory';
-import { CROP_NAMES, FRUIT_NAMES, ITEM_GROUPS, SEED_NAMES, TOOL_NAMES } from '../base/enums';
+import {
+  APPLE_ICON_INVENTORY,
+  AXE_ICON_INVENTORY,
+  HOE_ICON_INVENTORY,
+  WEED_ICON_INVENTORY,
+  WHEAT_ICON_INVENTORY,
+  WHEAT_SEED_ICON_INVENTORY,
+} from '../assets/items/inventory';
+import { CROP_NAMES, FRUIT_NAMES, ITEM_GROUPS, OTHER_ITEM_NAMES, SEED_NAMES, TOOL_NAMES, WEED_NAMES } from '../base/enums';
 
-export const findInventoryIconForItem = (itemName: TOOL_NAMES | SEED_NAMES | CROP_NAMES | FRUIT_NAMES, itemGroup: ITEM_GROUPS) => {
+export const findInventoryIconForItem = (
+  itemName: TOOL_NAMES | SEED_NAMES | CROP_NAMES | FRUIT_NAMES | OTHER_ITEM_NAMES,
+  itemGroup: ITEM_GROUPS,
+) => {
   switch (itemGroup) {
     case ITEM_GROUPS.TOOLS:
       switch (itemName) {
@@ -10,7 +20,7 @@ export const findInventoryIconForItem = (itemName: TOOL_NAMES | SEED_NAMES | CRO
         case TOOL_NAMES.HOE:
           return <img src={HOE_ICON_INVENTORY} alt="hoe" />;
         case TOOL_NAMES.WATERING_CAN:
-          return "W";
+          return 'W';
         default:
           return null;
       }
@@ -35,6 +45,14 @@ export const findInventoryIconForItem = (itemName: TOOL_NAMES | SEED_NAMES | CRO
         default:
           return null;
       }
+    case ITEM_GROUPS.OTHER:
+      switch (itemName) {
+        case OTHER_ITEM_NAMES.WEED:
+          return <img src={WEED_ICON_INVENTORY} alt="weed" />;
+        default:
+          return null;
+      }
+
     default:
       return null;
   }

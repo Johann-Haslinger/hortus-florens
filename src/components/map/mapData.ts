@@ -176,7 +176,7 @@ export const mapData = [
     { terrainType: 'grass', enviromentObject:     WEED_NAMES.WEED_2},
     { terrainType: 'grass', enviromentObject: '' },
     { terrainType: 'grass', enviromentObject: '' },
-    { terrainType: 'grass', enviromentObject: ROCK_NAMES.STONE_1 },
+    { terrainType: 'grass', enviromentObject: ''},
     { terrainType: 'grass', enviromentObject: '' },
     { terrainType: 'grass', enviromentObject: '' },
     { terrainType: 'grass', enviromentObject: '' },
