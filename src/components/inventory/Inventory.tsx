@@ -119,10 +119,7 @@ const Inventory = () => {
   const isInventoryVisible = useIsStoryCurrent(STORY_GUID.OBSERVING_INVENTORY);
   const inventoryRef = useRef<HTMLDivElement>(null);
   const [toolItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.TOOLS);
-  const [normalItems] = useEntities((e) => {
-    const group = e.get(ItemGroupFacet)?.props.group;
-    return group == ITEM_GROUPS.CROPS || group == ITEM_GROUPS.SEEDS || group == ITEM_GROUPS.FRUITS;
-  });
+  const [normalItems] = useEntities((e) => e.has(ItemGroupFacet) && e.get(ItemGroupFacet)?.props.group !== ITEM_GROUPS.TOOLS && e.get(ItemGroupFacet)?.props.group !== ITEM_GROUPS.IMPORTANT_ITEMS);
   const [importantItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.IMPORTANT_ITEMS);
   const filteredItems = normalItems.filter((entity, index, self) => {
     const title = entity?.get(TitleFacet)?.props.title;

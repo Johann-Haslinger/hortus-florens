@@ -13,7 +13,7 @@ const EnironmentObjectsInitializationSystem = () => {
 
   useEffect(() => {
     if (lsc) {
-      mapData.reverse().forEach((row, y) => {
+      mapData.forEach((row, y) => {
         row.forEach((tile, x) => {
           if (tile.enviromentObject !== '') {
             const newntity = new Entity();

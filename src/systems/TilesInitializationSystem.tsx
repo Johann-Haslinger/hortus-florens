@@ -9,13 +9,13 @@ const TilesInitializationSystem = () => {
 
   useEffect(() => {
     if (lsc) {
-      mapData.reverse().forEach((row, y) => {
+      mapData.forEach((row, y) => {
         row.forEach(
           (tile, x) =>
             tile.terrainType !== '' &&
             lsc.entities.create({
               positionX: x,
-              positionY: mapData.length - y,
+              positionY:mapData.length -  y,
               positionZ: 0,
 
               type: tile.terrainType,

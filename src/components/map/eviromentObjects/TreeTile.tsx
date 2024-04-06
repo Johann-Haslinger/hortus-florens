@@ -1,64 +1,16 @@
-import React, { useRef } from 'react';
-import { Entity, EntityProps } from '@leanscope/ecs-engine';
+import { EntityProps } from '@leanscope/ecs-engine';
 import { IdentifierProps, TextTypeProps, PositionProps } from '@leanscope/ecs-models';
+import React, { useRef } from 'react';
 import { useFrame, useLoader } from 'react-three-fiber';
-import * as THREE from 'three';
-import { ENVIRONMENT_OBJECTS, FLOWER_NAMES, FRUIT_NAMES, GAME_TAGS, ROCK_NAMES, WEED_NAMES } from '../../base/enums';
-import { STONE_TILE_1, SUNFLOWER_TILE, TREE_DEAD_TILE, TREE_TILE, WEED_TILE_1, WEED_TILE_2 } from '../../assets/environmentObjects';
-import { Box } from '@react-three/drei';
-import { TILE_SIZE } from '../../base/constants';
-import { TitleFacet, TreeFruitFacet, TreeFruitProps } from '../../app/GameFacets';
-import { TREE_FRUIT_APPLE } from '../../assets/environmentObjects/fruits';
 import { Group, Object3DEventMap } from 'three';
-
-const findEnvotonmentObjectTexture = (object: ENVIRONMENT_OBJECTS, entity: Entity): string => {
-  const name = entity.get(TitleFacet)?.props.title;
-
-  switch (object) {
-    case ENVIRONMENT_OBJECTS.TREE:
-      if (entity.hasTag(GAME_TAGS.CUT)) return TREE_DEAD_TILE;
-
-      return TREE_TILE;
-    case ENVIRONMENT_OBJECTS.ROCK:
-      switch (name) {
-        case ROCK_NAMES.STONE_1:
-          return STONE_TILE_1;
-        default:
-          return '';
-      }
-    case ENVIRONMENT_OBJECTS.FLOWER:
-      switch (name) {
-        case FLOWER_NAMES.SUNFLOWER:
-          return SUNFLOWER_TILE;
-        default:
-          return '';
-      }
-    case ENVIRONMENT_OBJECTS.WEED:
-      switch (name) {
-        case WEED_NAMES.WEED_1:
-          return WEED_TILE_1;
-        case WEED_NAMES.WEED_2:
-          return WEED_TILE_2;
-        default:
-          return '';
-      }
-    case ENVIRONMENT_OBJECTS.BUSH:
-    default:
-      return '';
-  }
-};
-
-const findEnvotonmentObjectSizeArgs = (object: ENVIRONMENT_OBJECTS): [number, number, number] => {
-  switch (object) {
-    case ENVIRONMENT_OBJECTS.TREE:
-      return [TILE_SIZE * 2.5, TILE_SIZE * 2.5, 0];
-
-    case ENVIRONMENT_OBJECTS.FLOWER:
-      return [TILE_SIZE, TILE_SIZE * 1.5, 0];
-    default:
-      return [TILE_SIZE, TILE_SIZE, 0];
-  }
-};
+import { TreeFruitFacet, TreeFruitProps } from '../../../app/GameFacets';
+import { TREE_DEAD_TILE, TREE_TILE } from '../../../assets/environmentObjects';
+import { ENVIRONMENT_OBJECTS, FRUIT_NAMES, GAME_TAGS } from '../../../base/enums';
+import * as THREE from 'three';
+import { TREE_FRUIT_APPLE } from '../../../assets/environmentObjects/fruits';
+import { Box } from '@react-three/drei';
+import { TILE_SIZE } from '../../../base/constants';
+import { findEnvotonmentObjectSizeArgs } from '../../../helpers/functions';
 
 const findFruitTexture = (fruit: FRUIT_NAMES) => {
   switch (fruit) {
@@ -67,15 +19,18 @@ const findFruitTexture = (fruit: FRUIT_NAMES) => {
     default:
       return TREE_FRUIT_APPLE;
   }
-};
+}
 
-const EnvironmentObjectTile = (props: IdentifierProps & TextTypeProps & PositionProps & EntityProps & TreeFruitProps) => {
+
+  
+const TreeTile = (props: IdentifierProps & TextTypeProps & PositionProps & EntityProps & TreeFruitProps) => {
   const { positionX, positionY, type, entity, fruitName, growthStage } = props;
-  const tileTexture = useLoader(THREE.TextureLoader, findEnvotonmentObjectTexture(type as ENVIRONMENT_OBJECTS, entity));
+  const tileTexture = useLoader(THREE.TextureLoader, TREE_TILE);
   const cutTreeTexture = useLoader(THREE.TextureLoader, TREE_DEAD_TILE);
   const fruitTexture = useLoader(THREE.TextureLoader, findFruitTexture(fruitName));
   const meshRef = useRef<THREE.MeshBasicMaterial>(null);
   const fruitRef = useRef<Group<Object3DEventMap>>(null);
+  
 
   useFrame(() => {
     if (type == ENVIRONMENT_OBJECTS.TREE) {
@@ -127,4 +82,4 @@ const EnvironmentObjectTile = (props: IdentifierProps & TextTypeProps & Position
   );
 };
 
-export default EnvironmentObjectTile;
+export default TreeTile;
