@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import tw from 'twin.macro';
 import styled from '@emotion/styled';
-import { Entity, EntityProps, EntityPropsMapper, useEntities } from '@leanscope/ecs-engine';
-import { ItemGroupFacet, TitleFacet, TitleProps } from '../../app/GameFacets';
+import { Entity, EntityProps, EntityPropsMapper, useEntities, useEntity } from '@leanscope/ecs-engine';
+import { ItemGroupFacet, SoundEffectFacet, TitleFacet, TitleProps } from '../../app/GameFacets';
 import { NameFacet, OrderFacet, Tags } from '@leanscope/ecs-models';
 import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
-import { CROP_NAMES, FRUIT_NAMES, ITEM_GROUPS, SEED_NAMES, STORY_GUID, TOOL_NAMES } from '../../base/enums';
+import { CROP_NAMES, FRUIT_NAMES, ITEM_GROUPS, SEED_NAMES, SOUND_EFFECTS, STORY_GUID, TOOL_NAMES } from '../../base/enums';
 import { useIsStoryCurrent } from '@leanscope/storyboarding';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
 import { motion } from 'framer-motion';
@@ -36,16 +36,17 @@ const StyledToolSlot = styled.div<{ isSelected: boolean }>`
   ${({ isSelected }) => isSelected && tw`border-[rgb(189,156,114)] border-[3px]`}
 `;
 
-const ToolSlot = (props: { entity?: Entity }) => {
-  const { entity } = props;
+const ToolSlot = (props: { entity?: Entity, soundEffectEntity?: Entity  }) => {
+  const { entity, soundEffectEntity } = props;
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
   const [isSelected] = useEntityHasTags(entity, Tags.SELECTED);
 
   const handleSelectTool = () => {
     items.forEach((item) => item.removeTag(Tags.SELECTED));
-   if (entity?.hasTag(Tags.SELECTED)) {
+    if (entity?.hasTag(Tags.SELECTED)) {
       entity.removeTag(Tags.SELECTED);
     } else {
+      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.ITEM_SELECT }));
       entity?.addTag(Tags.SELECTED);
     }
   };
@@ -67,8 +68,8 @@ const StyledValueText = styled.p<{ isSelected: boolean }>`
   ${({ isSelected }) => (isSelected ? tw` ml-10 mt-10` : tw` ml-11 mt-11`)}
 `;
 
-const NormalItem = (props: { entity?: Entity }) => {
-  const { entity } = props;
+const NormalItem = (props: { entity?: Entity; soundEffectEntity?: Entity }) => {
+  const { entity, soundEffectEntity } = props;
   const title = entity?.get(TitleFacet)?.props.title;
   const itemGroup = entity?.get(ItemGroupFacet)?.props.group;
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
@@ -82,6 +83,7 @@ const NormalItem = (props: { entity?: Entity }) => {
     if (entity?.hasTag(Tags.SELECTED)) {
       entity.removeTag(Tags.SELECTED);
     } else {
+      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.ITEM_SELECT }));
       entity?.addTag(Tags.SELECTED);
     }
   };
@@ -119,13 +121,19 @@ const Inventory = () => {
   const isInventoryVisible = useIsStoryCurrent(STORY_GUID.OBSERVING_INVENTORY);
   const inventoryRef = useRef<HTMLDivElement>(null);
   const [toolItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.TOOLS);
-  const [normalItems] = useEntities((e) => e.has(ItemGroupFacet) && e.get(ItemGroupFacet)?.props.group !== ITEM_GROUPS.TOOLS && e.get(ItemGroupFacet)?.props.group !== ITEM_GROUPS.IMPORTANT_ITEMS);
+  const [normalItems] = useEntities(
+    (e) =>
+      e.has(ItemGroupFacet) &&
+      e.get(ItemGroupFacet)?.props.group !== ITEM_GROUPS.TOOLS &&
+      e.get(ItemGroupFacet)?.props.group !== ITEM_GROUPS.IMPORTANT_ITEMS,
+  );
   const [importantItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.IMPORTANT_ITEMS);
   const filteredItems = normalItems.filter((entity, index, self) => {
     const title = entity?.get(TitleFacet)?.props.title;
     const itemGroup = entity?.get(ItemGroupFacet)?.props.group;
     return self.findIndex((e) => e?.get(TitleFacet)?.props.title === title && e.get(ItemGroupFacet)?.props.group == itemGroup) === index;
   });
+  const [soundEffectEntity] = useEntity((e) => e.has(SoundEffectFacet));
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -143,6 +151,15 @@ const Inventory = () => {
     };
   }, [isInventoryVisible]);
 
+  useEffect(() => {
+    if (isInventoryVisible) {
+      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.OPEN_INVENTORY }));
+    }else { 
+      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.CLOSE_INVENTORY }));
+    }
+  }, [isInventoryVisible]);
+
+
   return (
     <>
       <StyledBackgroundDimmer isVisible={isInventoryVisible} />
@@ -155,16 +172,12 @@ const Inventory = () => {
           <StyledInevntoryContainer ref={inventoryRef}>
             <StyledNormalItemsGrid>
               {Array.from({ length: 15 }).map((_, i) => (
-                <NormalItem key={i} entity={filteredItems[i] ? filteredItems[i] : undefined} />
+                <NormalItem soundEffectEntity={soundEffectEntity} key={i} entity={filteredItems[i] ? filteredItems[i] : undefined} />
               ))}
-              {/* {Array.from({ length: normalItems.length }).map((_, i) => {
-                const item = normalItems.find((entity) => entity.get(TitleFacet)?.props.title === normalItems[i]?.get(TitleFacet)?.props.title);
-                return <NormalItem key={i} length={normalItems.filter((entity) => entity.get(TitleFacet)?.props.title === item?.get(TitleFacet)?.props.title).length} entity={item ? item : undefined} />;
-              })} */}
             </StyledNormalItemsGrid>
             <StyledToolsGrid>
               {Array.from({ length: 4 }).map((_, i) => (
-                <ToolSlot key={i} entity={toolItems[i] ? toolItems[i] : undefined} />
+                <ToolSlot key={i} soundEffectEntity={soundEffectEntity} entity={toolItems[i] ? toolItems[i] : undefined} />
               ))}
             </StyledToolsGrid>
             <div>

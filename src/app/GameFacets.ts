@@ -1,4 +1,4 @@
-import { CROP_NAMES, FRUIT_NAMES, ITEM_GROUPS, SEED_NAMES, TREE_NAMES } from '../base/enums';
+import { CROP_NAMES, FRUIT_NAMES, ITEM_GROUPS, SEED_NAMES, SOUND_EFFECTS, TREE_NAMES } from '../base/enums';
 import { Facet } from '../base/facet';
 
 export interface TypeProps {
@@ -80,6 +80,15 @@ export interface TimeProps {
 
 export class TimeFacet extends Facet<TimeProps> {
   constructor(props: TimeProps) {
+    super(props);
+  }
+}
+export interface SoundEffectProps {
+  soundEffect: SOUND_EFFECTS | null;
+}
+
+export class SoundEffectFacet extends Facet<SoundEffectProps>{
+  constructor(props: SoundEffectProps) {
     super(props);
   }
 }

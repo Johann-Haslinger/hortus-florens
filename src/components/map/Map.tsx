@@ -18,6 +18,7 @@ import CropGrowingSystem from '../../systems/CropGrowingSystem';
 import EnironmentObjectsInitializationSystem from '../../systems/EnironmentObjectsInitializationSystem';
 import WeedTile from './eviromentObjects/WeedTile';
 import TreeTile from './eviromentObjects/TreeTile';
+import AudioSystem from '../../systems/AudioSystem';
 
 const StyledMapContainer = styled.div`
   ${tw`w-screen h-screen`}
@@ -26,12 +27,14 @@ const StyledMapContainer = styled.div`
 const Map = () => {
   return (
     <StyledMapContainer>
+    
       <EnironmentObjectsInitializationSystem />
       <CropGrowingSystem />
       {/* <SystemCreator systemClass={CropGrowingSystem} /> */}
       <TimeCicleSystem />
       <TimeDisplayer />
       <PlayerActionSystem />
+      <AudioSystem/>
 
       <FullScreenCanvas>
         <EntityPropsMapper

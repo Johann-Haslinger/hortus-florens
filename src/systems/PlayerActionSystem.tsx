@@ -3,7 +3,7 @@ import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engi
 import { IdentifierFacet, PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { useContext, useEffect, useState } from 'react';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
-import { TimeFacet, ItemGroupFacet, TitleFacet, HealthFacet, TileCropFacet, TreeFruitFacet } from '../app/GameFacets';
+import { TimeFacet, ItemGroupFacet, TitleFacet, HealthFacet, TileCropFacet, TreeFruitFacet, SoundEffectFacet } from '../app/GameFacets';
 import {
   INITIAL_CROP_GROWTH_STAGE,
   INITIAL_FRUIT_GROWTH_STAGE,
@@ -12,23 +12,36 @@ import {
   TILE_SIZE,
   VALID_TERRAIN_TILES,
 } from '../base/constants';
-import { TERRAIN_TILES, GAME_TAGS, TOOL_NAMES, SEED_NAMES, ITEM_GROUPS, CROP_NAMES, ENVIRONMENT_OBJECTS, FRUIT_NAMES, OTHER_ITEM_NAMES } from '../base/enums';
+import {
+  TERRAIN_TILES,
+  GAME_TAGS,
+  TOOL_NAMES,
+  SEED_NAMES,
+  ITEM_GROUPS,
+  CROP_NAMES,
+  ENVIRONMENT_OBJECTS,
+  FRUIT_NAMES,
+  OTHER_ITEM_NAMES,
+  SOUND_EFFECTS,
+} from '../base/enums';
 import { ILeanScopeClient } from '@leanscope/api-client/interfaces';
 import { v4 } from 'uuid';
 
-const handleHoeUse = (playerTile: Entity | undefined) => {
+const handleHoeUse = (playerTile: Entity | undefined, soundEffectEntity: Entity) => {
   if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.GRASS) {
+    soundEffectEntity.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.HOE }));
     playerTile.add(new TextTypeFacet({ type: TERRAIN_TILES.FARMLAND }));
   }
 };
 
-const handleWateringCanUse = (playerTile: Entity | undefined) => {
+const handleWateringCanUse = (playerTile: Entity | undefined, soundEffectEntity: Entity) => {
   if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.FARMLAND) {
+    soundEffectEntity.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.WATERING_CAN }));
     playerTile.addTag(GAME_TAGS.WATERD);
   }
 };
 
-const handleAxeUse = (lsc: ILeanScopeClient) => {
+const handleAxeUse = (lsc: ILeanScopeClient, soundEffectEntity: Entity) => {
   const treeEntities = lsc.engine.entities.filter((e) => e.get(TextTypeFacet)?.props.type === ENVIRONMENT_OBJECTS.TREE);
   const playerEntity = lsc.engine.entities.find((e) => e.has(HealthFacet) && e.has(PositionFacet));
   const positionX = playerEntity?.get(PositionFacet)?.props.positionX;
@@ -45,6 +58,7 @@ const handleAxeUse = (lsc: ILeanScopeClient) => {
     });
 
     if (treeEntity) {
+      soundEffectEntity.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.AXE }));
       if (treeEntity.hasTag(GAME_TAGS.HITED)) {
         treeEntity.remove(TreeFruitFacet);
         treeEntity.addTag(GAME_TAGS.CUT);
@@ -55,20 +69,27 @@ const handleAxeUse = (lsc: ILeanScopeClient) => {
   }
 };
 
-const handleToolUse = (playerTile: Entity | undefined, toolName: TOOL_NAMES, lsc: ILeanScopeClient) => {
-  switch (toolName) {
-    case TOOL_NAMES.HOE:
-      handleHoeUse(playerTile);
-      break;
-    case TOOL_NAMES.WATERING_CAN:
-      handleWateringCanUse(playerTile);
-      break;
-    case TOOL_NAMES.AXE:
-      handleAxeUse(lsc);
-      break;
+const handleToolUse = (
+  playerTile: Entity | undefined,
+  toolName: TOOL_NAMES,
+  lsc: ILeanScopeClient,
+  soundEffectEntity: Entity | undefined,
+) => {
+  if (soundEffectEntity) {
+    switch (toolName) {
+      case TOOL_NAMES.HOE:
+        handleHoeUse(playerTile, soundEffectEntity);
+        break;
+      case TOOL_NAMES.WATERING_CAN:
+        handleWateringCanUse(playerTile, soundEffectEntity);
+        break;
+      case TOOL_NAMES.AXE:
+        handleAxeUse(lsc, soundEffectEntity);
+        break;
 
-    default:
-      break;
+      default:
+        break;
+    }
   }
 };
 
@@ -82,7 +103,9 @@ const handleSeedUse = (playerTile: Entity | undefined, seedName: SEED_NAMES, han
 };
 
 const handleTryReapCrop = (playerTile: Entity | undefined, lsc: ILeanScopeClient): boolean => {
+  const soundEffectEntity = lsc.engine.entities.find((e) => e.has(SoundEffectFacet));
   if (playerTile && playerTile.get(TileCropFacet)?.props.growthStage === MAX_CROP_GROWTH_STAGE) {
+    soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.ITEM_COLLECT }));
     switch (playerTile.get(TileCropFacet)?.props.tileCropName) {
       case SEED_NAMES.WHEAT_SEED:
         for (let i = 0; i < 3; i++) {
@@ -150,6 +173,7 @@ const handleTryReapFruit = (selectedTool: TOOL_NAMES, lsc: ILeanScopeClient): bo
 };
 
 const handleTryPickUpWeeds = (playerTile: Entity | undefined, lsc: ILeanScopeClient): boolean => {
+  const soundEffectEntity = lsc.engine.entities.find((e) => e.has(SoundEffectFacet));
   const weedEntities = lsc.engine.entities.filter((e) => e.get(TextTypeFacet)?.props.type === ENVIRONMENT_OBJECTS.WEED);
   const weedEntityOnPlayerPosition = weedEntities.find(
     (e) =>
@@ -158,6 +182,7 @@ const handleTryPickUpWeeds = (playerTile: Entity | undefined, lsc: ILeanScopeCli
   );
 
   if (weedEntityOnPlayerPosition) {
+    soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.ITEM_COLLECT }));
     const newWeedItemEntity = new Entity();
     lsc.engine.addEntity(newWeedItemEntity);
     newWeedItemEntity.addComponent(new IdentifierFacet({ guid: v4() }));
@@ -165,6 +190,7 @@ const handleTryPickUpWeeds = (playerTile: Entity | undefined, lsc: ILeanScopeCli
     newWeedItemEntity.addComponent(new ItemGroupFacet({ group: ITEM_GROUPS.OTHER }));
 
     lsc.engine.removeEntity(weedEntityOnPlayerPosition);
+
     return true;
   }
   return false;
@@ -173,11 +199,8 @@ const handleTryPickUpWeeds = (playerTile: Entity | undefined, lsc: ILeanScopeCli
 const PlayerActionSystem = () => {
   const lsc = useContext(LeanScopeClientContext);
   const [playerTile] = useEntity((e) => e.has(PositionFacet) && e.has(GAME_TAGS.PLAYER_TILE));
-  const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || ''));
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
-  const [playerEntity] = useEntity((e) => e.has(HealthFacet) && e.has(PositionFacet));
-  const positionX = playerEntity?.get(PositionFacet)?.props.positionX;
-  const positionY = playerEntity?.get(PositionFacet)?.props.positionY;
+  const [soundEffectEntity] = useEntity((e) => e.has(SoundEffectFacet));
 
   const [selectedItem] = useEntity((e) => e.has(ItemGroupFacet) && e.hasTag(Tags.SELECTED));
   const selectedItemName = selectedItem?.get(TitleFacet)?.props.title;
@@ -208,7 +231,7 @@ const PlayerActionSystem = () => {
         }
         switch (selectedItemGroup) {
           case ITEM_GROUPS.TOOLS:
-            handleToolUse(playerTile, selectedItemName as TOOL_NAMES, lsc);
+            handleToolUse(playerTile, selectedItemName as TOOL_NAMES, lsc, soundEffectEntity);
             break;
           case ITEM_GROUPS.SEEDS:
             handleSeedUse(playerTile, selectedItemName as SEED_NAMES, handleRemoveSelectedItem);

@@ -725,17 +725,13 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || ''));
   const [isWaterd] = useEntityHasTags(entity, GAME_TAGS.WATERD);
   const terrainTexture = useLoader(THREE.TextureLoader, selectImageForTileType(entity, tiles));
-  const waterdFarmlandTexture = useLoader(
-    THREE.TextureLoader, FARMLAND_WATERD
-  );
+  const waterdFarmlandTexture = useLoader(THREE.TextureLoader, FARMLAND_WATERD);
 
-
-  const seedTexture =  useLoader(THREE.TextureLoader,  selectCropImage(tileCropName as SEED_NAMES, growthStage));
+  const seedTexture = useLoader(THREE.TextureLoader, selectCropImage(tileCropName as SEED_NAMES, growthStage));
   const meshRef = useRef<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>(null);
   const materialRef = useRef<MeshBasicMaterial>(null);
   const seedRef = useRef<MeshBasicMaterial>(null);
   const textureRef = useRef<MeshBasicMaterial>(null);
-
 
   useFrame(() => {
     if (isWaterd && materialRef.current) {
@@ -748,23 +744,49 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
     } else if (seedRef.current && materialRef.current) {
       seedRef.current.opacity = 0;
     }
-    if (entity.has(GAME_TAGS.PLAYER_TILE) && materialRef.current) {
-      materialRef.current.opacity =1
-      materialRef.current.color = new THREE.Color(0x00ff00);
+    // if (entity.has(GAME_TAGS.PLAYER_TILE) && materialRef.current) {
+    //   materialRef.current.opacity =1
+    //   materialRef.current.color = new THREE.Color(0x00ff00);
 
-    }
+    // }
   });
 
   return (
     <>
       <Box ref={meshRef} position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
-        <meshBasicMaterial map={terrainTexture} transparent />
+        <meshBasicMaterial
+          polygonOffset={true}
+          alphaTest={1}
+          depthWrite={false}
+          clipShadows={false}
+          premultipliedAlpha={true}
+          map={terrainTexture}
+          transparent
+        />
       </Box>
       <Box position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
-        <meshBasicMaterial map={waterdFarmlandTexture} ref={materialRef} transparent />
+        <meshBasicMaterial
+          polygonOffset={true}
+          alphaTest={1}
+          depthWrite={false}
+          clipShadows={false}
+          premultipliedAlpha={true}
+          map={waterdFarmlandTexture}
+          ref={materialRef}
+          transparent
+        />
       </Box>
       <Box position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
-        <meshBasicMaterial ref={seedRef} map={seedTexture} alphaTest={0.5} transparent />
+        <meshBasicMaterial
+          polygonOffset={true}
+          alphaTest={1}
+          depthWrite={false}
+          clipShadows={false}
+          premultipliedAlpha={true}
+          ref={seedRef}
+          map={seedTexture}
+          transparent
+        />
       </Box>
     </>
   );

@@ -99,3 +99,14 @@ export enum ROCK_NAMES {
 export enum OTHER_ITEM_NAMES {
   WEED = 'weed',
 }
+
+export enum SOUND_EFFECTS {
+  AXE = 'axe',
+  HOE = 'hoe',
+  WATERING_CAN = 'watering_can',    
+  ITEM_SELECT = 'item_select',
+  ITEM_COLLECT = 'item_collect',
+  OPEN_INVENTORY = 'open_inventory',
+  CLOSE_INVENTORY = 'close_inventory',
+
+}
