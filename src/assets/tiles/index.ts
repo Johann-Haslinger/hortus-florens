@@ -17,6 +17,10 @@ export { default as GRASS_TILE_CORNER_TR } from './Grass_corner_br.png';
 export { default as GRASS_TILE_CORNER_BL } from './Grass_corner_tl.png';
 export { default as GRASS_TILE_CORNER_BR } from './Grass_corner_tr.png';
 
+export { default as HILL_TILE_CORNER_TL } from './Hill_corner_tl.png';
+export { default as HILL_TILE_CORNER_TR } from './Hill_corner_tr.png';
+export { default as HILL_TILE_CORNER_BL } from './Hill_corner_bl.png';
+export { default as HILL_TILE_CORNER_BR } from './Hill_corner_br.png';
 
 export { default as FARMLAND_TILE } from './Farmland_1.png'
 export { default as FARMLAND_TILE_B } from './Farmland_b.png';
@@ -77,3 +81,12 @@ export { default as FARMLAND_TILE_BL_CORNER_BL } from './Farmland_bl_corner_bl.p
 export { default as FARMLAND_TILE_BR_CORNER_BR } from './Farmland_br_corner_br.png';
 
 export { default as FARMLAND_TILE_BLANK } from './Farmland_blank.png';
+
+export { default as HILL_TILE_B } from './Hill_b.png';
+export { default as HILL_TILE_T } from './Hill_t.png';
+export { default as HILL_TILE_L } from './Hill_l.png';
+export { default as HILL_TILE_R } from './Hill_r.png';
+export { default as HILL_TILE_BL } from './Hill_bl.png';
+export { default as HILL_TILE_BR } from './Hill_br.png';
+export { default as HILL_TILE_TL } from './Hill_tl.png';
+export { default as HILL_TILE_TR } from './Hill_tr.png';

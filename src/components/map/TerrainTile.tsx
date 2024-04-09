@@ -71,6 +71,18 @@ import {
   FARMLAND_TILE_B_CORNER_TR,
   FARMLAND_TILE_B_CORNER_TLR,
   FARMLAND_TILE_BLANK,
+  HILL_TILE_TL,
+  HILL_TILE_TR,
+  HILL_TILE_BL,
+  HILL_TILE_BR,
+  HILL_TILE_T,
+  HILL_TILE_B,
+  HILL_TILE_L,
+  HILL_TILE_R,
+  HILL_TILE_CORNER_TL,
+  HILL_TILE_CORNER_TR,
+  HILL_TILE_CORNER_BL,
+  HILL_TILE_CORNER_BR,
 } from '../../assets/tiles';
 import { Canvas, useLoader } from 'react-three-fiber';
 import * as THREE from 'three';
@@ -147,6 +159,8 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
     return GRASS_TILE_CORNER_TR;
   }
 
+
+
   if (
     rightNeighbor &&
     leftNeighbor &&
@@ -166,6 +180,131 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
     const topRightNeighborType = topRightNeighbor.get(TextTypeFacet)?.props.type;
     const bottomLeftNeighborType = bottomLeftNeighbor.get(TextTypeFacet)?.props.type;
     const bottomRightNeighborType = bottomRightNeighbor.get(TextTypeFacet)?.props.type;
+
+
+    if (tile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.HILL) {
+      if (
+        leftNeighborType === TERRAIN_TILES.HILL &&
+        rightNeighborType === TERRAIN_TILES.HILL &&
+        topNeighborType === TERRAIN_TILES.HILL &&
+        bottomNeighborType === TERRAIN_TILES.HILL &&
+        bottomLeftNeighborType === TERRAIN_TILES.GRASS
+
+      ) {
+        return HILL_TILE_CORNER_BL;
+      }
+      if (
+        leftNeighborType === TERRAIN_TILES.HILL &&
+        rightNeighborType === TERRAIN_TILES.HILL &&
+        topNeighborType === TERRAIN_TILES.HILL &&
+        bottomNeighborType === TERRAIN_TILES.HILL &&
+        bottomRightNeighborType === TERRAIN_TILES.GRASS
+
+      ) {
+        return HILL_TILE_CORNER_BR;
+      }
+      if (
+        leftNeighborType === TERRAIN_TILES.HILL &&
+        rightNeighborType === TERRAIN_TILES.HILL &&
+        topNeighborType === TERRAIN_TILES.HILL &&
+        bottomNeighborType === TERRAIN_TILES.HILL &&
+        topLeftNeighborType === TERRAIN_TILES.GRASS
+
+      ) {
+        return HILL_TILE_CORNER_TL;
+      }
+      if (
+        leftNeighborType === TERRAIN_TILES.HILL &&
+        rightNeighborType === TERRAIN_TILES.HILL &&
+        topNeighborType === TERRAIN_TILES.HILL &&
+        bottomNeighborType === TERRAIN_TILES.HILL &&
+        topRightNeighborType === TERRAIN_TILES.GRASS
+
+      ) {
+        return HILL_TILE_CORNER_TR;
+      }
+      
+      if (
+        leftNeighborType === TERRAIN_TILES.GRASS &&
+        rightNeighborType === TERRAIN_TILES.HILL &&
+        topNeighborType === TERRAIN_TILES.HILL &&
+        bottomNeighborType === TERRAIN_TILES.GRASS 
+
+      ) {
+        return HILL_TILE_BL;
+      }
+      if (
+        leftNeighborType === TERRAIN_TILES.HILL &&
+        rightNeighborType === TERRAIN_TILES.GRASS &&
+        topNeighborType === TERRAIN_TILES.HILL &&
+        bottomNeighborType === TERRAIN_TILES.GRASS
+
+      ) {
+        return HILL_TILE_BR;
+      }
+      if (
+        leftNeighborType === TERRAIN_TILES.GRASS &&
+        rightNeighborType === TERRAIN_TILES.HILL &&
+        topNeighborType === TERRAIN_TILES.GRASS &&
+        bottomNeighborType === TERRAIN_TILES.HILL 
+
+      ) {
+        return HILL_TILE_TL;
+      }
+      if (
+        leftNeighborType === TERRAIN_TILES.HILL &&
+        rightNeighborType === TERRAIN_TILES.GRASS &&
+        topNeighborType === TERRAIN_TILES.GRASS &&
+        bottomNeighborType === TERRAIN_TILES.HILL
+
+      ) {
+        return HILL_TILE_TR;
+      }
+
+      if (
+        leftNeighborType === TERRAIN_TILES.HILL &&
+        rightNeighborType === TERRAIN_TILES.HILL &&
+        topNeighborType === TERRAIN_TILES.HILL &&
+        bottomNeighborType === TERRAIN_TILES.HILL
+      ) {
+        return randomNum === 0 ? GRASS_TILE_1 : randomNum === 1 ? GRASS_TILE_2 : randomNum === 2 ? GRASS_TILE_3 : GRASS_TILE_4;
+      }
+      if (
+        leftNeighborType === TERRAIN_TILES.HILL &&
+        rightNeighborType === TERRAIN_TILES.HILL &&
+        topNeighborType === TERRAIN_TILES.HILL &&
+        bottomNeighborType === TERRAIN_TILES.GRASS
+      ) {
+        return HILL_TILE_B;
+      }
+      if (
+        leftNeighborType === TERRAIN_TILES.HILL &&
+        rightNeighborType === TERRAIN_TILES.HILL &&
+        topNeighborType === TERRAIN_TILES.GRASS &&
+        bottomNeighborType === TERRAIN_TILES.HILL
+      ) {
+        return HILL_TILE_T;
+      }
+      if (
+        leftNeighborType === TERRAIN_TILES.GRASS &&
+        rightNeighborType === TERRAIN_TILES.HILL &&
+        topNeighborType === TERRAIN_TILES.HILL &&
+        bottomNeighborType === TERRAIN_TILES.HILL
+      ) {
+        return HILL_TILE_L;
+      }
+      if (
+        leftNeighborType === TERRAIN_TILES.HILL &&
+        rightNeighborType === TERRAIN_TILES.GRASS &&
+        topNeighborType === TERRAIN_TILES.HILL &&
+        bottomNeighborType === TERRAIN_TILES.HILL
+      ) {
+        return HILL_TILE_R;
+      }
+      return  HILL_TILE_B
+     
+
+    }
 
     if (tile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.GRASS) {
       return randomNum === 0 ? GRASS_TILE_1 : randomNum === 1 ? GRASS_TILE_2 : randomNum === 2 ? GRASS_TILE_3 : GRASS_TILE_4;

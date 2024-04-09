@@ -67,12 +67,14 @@ export enum TERRAIN_TILES {
   GRASS = 'grass',
   DIRT = 'dirt',
   FARMLAND = 'farmland',
+  HILL = 'hill',
 }
 
 export enum TILE_TYPES {
   DIRT = 'dirt',
   GRASS = 'grass',
   WATER = 'water',
+  HILL = 'hill',
 }
 
 export enum ENVIRONMENT_OBJECTS  {
@@ -108,5 +110,6 @@ export enum SOUND_EFFECTS {
   ITEM_COLLECT = 'item_collect',
   OPEN_INVENTORY = 'open_inventory',
   CLOSE_INVENTORY = 'close_inventory',
+  PLANT_SEED = 'plant_seed',
 
 }

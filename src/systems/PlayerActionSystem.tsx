@@ -93,10 +93,11 @@ const handleToolUse = (
   }
 };
 
-const handleSeedUse = (playerTile: Entity | undefined, seedName: SEED_NAMES, handleRemoveEntity: (itemGroup: SEED_NAMES) => void) => {
+const handleSeedUse = (playerTile: Entity | undefined, seedName: SEED_NAMES, handleRemoveEntity: (itemGroup: SEED_NAMES) => void, soundEffectEntity?: Entity) => {
   const hasTileSeed = playerTile?.get(TileCropFacet)?.props.tileCropName !== undefined;
 
   if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.FARMLAND && !hasTileSeed) {
+    soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.PLANT_SEED }));
     playerTile.add(new TileCropFacet({ tileCropName: seedName, growthStage: INITIAL_CROP_GROWTH_STAGE }));
     handleRemoveEntity(seedName);
   }
@@ -234,7 +235,7 @@ const PlayerActionSystem = () => {
             handleToolUse(playerTile, selectedItemName as TOOL_NAMES, lsc, soundEffectEntity);
             break;
           case ITEM_GROUPS.SEEDS:
-            handleSeedUse(playerTile, selectedItemName as SEED_NAMES, handleRemoveSelectedItem);
+            handleSeedUse(playerTile, selectedItemName as SEED_NAMES, handleRemoveSelectedItem, soundEffectEntity);
             break;
           case ITEM_GROUPS.CROPS:
             break;
