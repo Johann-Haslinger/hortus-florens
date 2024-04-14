@@ -13,7 +13,7 @@ import { AXE_ICON_INVENTORY, HOE_ICON_INVENTORY } from '../../assets/items/inven
 import { findInventoryIconForItem } from '../../helpers/functions';
 
 const StyledImportantItemSlot = styled.div<{ isSelected: boolean }>`
-  ${tw`m-2.5   p-1 hover:p-[1px] hover:bg-opacity-10 transition-all size-[6.7rem] bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
+  ${tw`m-2.5     p-1 hover:p-[1px] hover:bg-opacity-10 transition-all size-[6.7rem] bg-[rgb(189,156,114)] bg-opacity-30 backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
 `;
 
 const ImportantItemSlot = (props: { entity?: Entity }) => {
@@ -139,7 +139,7 @@ const Inventory = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isInventoryVisible) {
         lsc.stories.transitTo(STORY_GUID.PLAY_GAME);
-      } else if (e.key === 'e') {
+      } else if (e.key === 'i') {
         lsc.stories.transitTo(STORY_GUID.OBSERVING_INVENTORY);
       }
     };

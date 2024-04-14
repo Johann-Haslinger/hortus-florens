@@ -220,7 +220,7 @@ const PlayerActionSystem = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === ' ') {
+      if (e.key === 'e') {
         if (handleTryPickUpWeeds(playerTile, lsc)) {
           return;
         }

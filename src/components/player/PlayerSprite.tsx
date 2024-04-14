@@ -137,7 +137,7 @@ const PlayerSprite = (props: PositionProps & EntityProps) => {
       const tileTop = tile.get(PositionFacet)?.props.positionY! - TILE_SIZE / 2;
       const tileBottom = tile.get(PositionFacet)?.props.positionY! + TILE_SIZE / 2;
 
-      const correctFactor = 1.12;
+      const correctFactor = 1.125;
       const playerX = smoothX * correctFactor;
       const playerY = smoothY * correctFactor;
 
