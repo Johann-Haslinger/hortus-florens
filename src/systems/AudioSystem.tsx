@@ -11,30 +11,30 @@ import {
   UI_SOUND_EFFECT_4,
   UI_SOUND_EFFECT_5,
   WATERING_CAN_SOUND_EFFECT,
-} from '../audio';
+} from '../assets/audio';
 import { useEntity } from '@leanscope/ecs-engine';
-import { GAME_TAGS, SOUND_EFFECTS } from '../base/enums';
+import { GameTags, SoundEffects } from '../base/enums';
 import { PositionFacet } from '@leanscope/ecs-models';
 import { PLAYER_START_POSITION } from '../base/constants';
 import { SoundEffectFacet } from '../app/GameFacets';
 
-const handleSelectSoundEffectSrc = (soundEffect: SOUND_EFFECTS) => {
+const handleSelectSoundEffectSrc = (soundEffect: SoundEffects) => {
   switch (soundEffect) {
-    case SOUND_EFFECTS.AXE:
+    case SoundEffects.AXE:
       return AXE_SOUND_EFFECT;
-    case SOUND_EFFECTS.HOE:
+    case SoundEffects.HOE:
       return HOE_SOUND_EFFECT;
-    case SOUND_EFFECTS.WATERING_CAN:
+    case SoundEffects.WATERING_CAN:
       return WATERING_CAN_SOUND_EFFECT;
-    case SOUND_EFFECTS.PLANT_SEED:
+    case SoundEffects.PLANT_SEED:
       return PLANT_CROP_SOUND_EFFECT;
-    case SOUND_EFFECTS.ITEM_SELECT:
+    case SoundEffects.ITEM_SELECT:
       return UI_SOUND_EFFECT_1;
-    case SOUND_EFFECTS.ITEM_COLLECT:
+    case SoundEffects.ITEM_COLLECT:
       return UI_SOUND_EFFECT_3;
-    case SOUND_EFFECTS.OPEN_INVENTORY:
+    case SoundEffects.OPEN_INVENTORY:
       return UI_SOUND_EFFECT_4;
-    case SOUND_EFFECTS.CLOSE_INVENTORY:
+    case SoundEffects.CLOSE_INVENTORY:
       return UI_SOUND_EFFECT_5;
 
     default:
@@ -45,7 +45,7 @@ const AudioSystem = () => {
   const [soundEffectEntity] = useEntity((e) => e.has(SoundEffectFacet));
   const soundEffect = soundEffectEntity?.get(SoundEffectFacet)?.props.soundEffect;
 
-  const [playerEntity] = useEntity((e) => e.hasTag(GAME_TAGS.PLAYER));
+  const [playerEntity] = useEntity((e) => e.hasTag(GameTags.PLAYER));
   const positionX = playerEntity?.get(PositionFacet)?.props.positionX;
   const positionY = playerEntity?.get(PositionFacet)?.props.positionY;
   const [isPlaying, setIsPlaying] = useState(false);
@@ -76,7 +76,7 @@ const AudioSystem = () => {
 
       if (soundEffectSrc) {
         const soundEffectAudio = new Audio(soundEffectSrc);
-        if (soundEffect === SOUND_EFFECTS.CLOSE_INVENTORY) {
+        if (soundEffect === SoundEffects.CLOSE_INVENTORY) {
          
         }
         soundEffectAudio.play();

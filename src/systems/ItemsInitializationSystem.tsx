@@ -2,7 +2,7 @@ import React from 'react';
 import { EntityCreator } from '@leanscope/ecs-engine';
 import { IdentifierFacet, OrderFacet, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { ItemGroupFacet, TitleFacet } from '../app/GameFacets';
-import { CROP_NAMES, FRUIT_NAMES, ITEM_GROUPS, SEED_NAMES, TOOL_NAMES } from '../base/enums';
+import { CropNames, FruitNames, ItemGroups, SeedNames, ToolNames } from '../base/enums';
 import { v4 } from 'uuid';
 
 const ItemsInitializationSystem = () => {
@@ -11,8 +11,8 @@ const ItemsInitializationSystem = () => {
       <EntityCreator
         facets={[
           new IdentifierFacet({ guid: v4() }),
-          new ItemGroupFacet({ group: ITEM_GROUPS.TOOLS }),
-          new TitleFacet({ title: TOOL_NAMES.AXE }),
+          new ItemGroupFacet({ group: ItemGroups.TOOLS }),
+          new TitleFacet({ title: ToolNames.AXE }),
           new OrderFacet({ orderIndex: 1 }),
         ]}
         tags={[Tags.SELECTED]}
@@ -20,8 +20,8 @@ const ItemsInitializationSystem = () => {
       <EntityCreator
         facets={[
           new IdentifierFacet({ guid: v4() }),
-          new ItemGroupFacet({ group: ITEM_GROUPS.TOOLS }),
-          new TitleFacet({ title: TOOL_NAMES.HOE }),
+          new ItemGroupFacet({ group: ItemGroups.TOOLS }),
+          new TitleFacet({ title: ToolNames.HOE }),
           new OrderFacet({ orderIndex: 2 }),
         ]}
         tags={[]}
@@ -29,8 +29,8 @@ const ItemsInitializationSystem = () => {
       <EntityCreator
         facets={[
           new IdentifierFacet({ guid: v4() }),
-          new ItemGroupFacet({ group: ITEM_GROUPS.TOOLS }),
-          new TitleFacet({ title: TOOL_NAMES.WATERING_CAN }),
+          new ItemGroupFacet({ group: ItemGroups.TOOLS }),
+          new TitleFacet({ title: ToolNames.WATERING_CAN }),
           new OrderFacet({ orderIndex: 3 }),
         ]}
         tags={[]}
@@ -38,40 +38,40 @@ const ItemsInitializationSystem = () => {
       <EntityCreator
         facets={[
           new IdentifierFacet({ guid: v4() }),
-          new ItemGroupFacet({ group: ITEM_GROUPS.SEEDS }),
-          new TitleFacet({ title: SEED_NAMES.WHEAT_SEED }),
+          new ItemGroupFacet({ group: ItemGroups.SEEDS }),
+          new TitleFacet({ title: SeedNames.WHEAT_SEED }),
         ]}
         tags={[]}
       />
       <EntityCreator
         facets={[
           new IdentifierFacet({ guid: v4() }),
-          new ItemGroupFacet({ group: ITEM_GROUPS.SEEDS }),
-          new TitleFacet({ title: SEED_NAMES.WHEAT_SEED }),
+          new ItemGroupFacet({ group: ItemGroups.SEEDS }),
+          new TitleFacet({ title: SeedNames.WHEAT_SEED }),
         ]}
         tags={[]}
       />
       <EntityCreator
         facets={[
           new IdentifierFacet({ guid: v4() }),
-          new ItemGroupFacet({ group: ITEM_GROUPS.CROPS }),
-          new TitleFacet({ title: CROP_NAMES.WHEAT }),
+          new ItemGroupFacet({ group: ItemGroups.CROPS }),
+          new TitleFacet({ title: CropNames.WHEAT }),
         ]}
         tags={[]}
       />
       <EntityCreator
         facets={[
           new IdentifierFacet({ guid: v4() }),
-          new ItemGroupFacet({ group: ITEM_GROUPS.FRUITS }),
-          new TitleFacet({ title: FRUIT_NAMES.APPLE }),
+          new ItemGroupFacet({ group: ItemGroups.FRUITS }),
+          new TitleFacet({ title: FruitNames.APPLE }),
         ]}
         tags={[]}
       />
        <EntityCreator
         facets={[
           new IdentifierFacet({ guid: v4() }),
-          new ItemGroupFacet({ group: ITEM_GROUPS.FRUITS }),
-          new TitleFacet({ title: FRUIT_NAMES.APPLE }),
+          new ItemGroupFacet({ group: ItemGroups.FRUITS }),
+          new TitleFacet({ title: FruitNames.APPLE }),
         ]}
         tags={[]}
       />

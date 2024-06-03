@@ -1,10 +1,10 @@
-export enum STORY_GUID {
+export enum Stories {
   PLAY_GAME = '284a0d3d-af06-482d-942f-8efafbf0d4aa',
   PAUSE_GAME = 'fe3c96e8-432d-4cfd-ad8b-96e30167c99e',
   OBSERVING_INVENTORY = '4cd69f91-45ec-4871-9d96-be8ea01d0c2f',
 }
 
-export enum GAME_TAGS {
+export enum GameTags {
   WATERD = 'watered',
   CUT = 'cut',
   PLAYER = 'player',
@@ -13,13 +13,13 @@ export enum GAME_TAGS {
   PLAYER_TILE = 'player_tile',
 }
 
-export enum TOOL_NAMES {
+export enum ToolNames {
   AXE = 'axe',
   HOE = 'hoe',
   WATERING_CAN = 'watering_can',
 }
 
-export enum CROP_NAMES {  
+export enum CropNames {  
   WHEAT = 'wheat',
   CARROT = 'carrot',
   POTATO = 'potato',
@@ -29,14 +29,14 @@ export enum CROP_NAMES {
   BLUEBERRY = 'blueberry',
 }
 
-export enum FRUIT_NAMES {
+export enum FruitNames {
   APPLE = 'apple',
   CHERRY = 'cherry',
   PEACH = 'peach',
   ORANGE = 'orange',
 }
 
-export enum TREE_NAMES {
+export enum TreeNames {
   OAK = 'oak',
   PINE = 'pine',
   PALM = 'palm',
@@ -46,12 +46,12 @@ export enum TREE_NAMES {
   ORANGE = 'orange',
 }
 
-export enum SEED_NAMES {
+export enum SeedNames {
   WHEAT_SEED = 'wheat_seed',
   CARROT_SEED = 'carrot_seed',
 }
 
-export enum ITEM_GROUPS {
+export enum ItemGroups {
   TOOLS = 'tools',
   FOOD = 'food',
   CROPS = 'crops',
@@ -62,7 +62,7 @@ export enum ITEM_GROUPS {
 }
 
 
-export enum TERRAIN_TILES {
+export enum TerrainTiles {
   WATER = 'water',
   GRASS = 'grass',
   DIRT = 'dirt',
@@ -70,14 +70,14 @@ export enum TERRAIN_TILES {
   HILL = 'hill',
 }
 
-export enum TILE_TYPES {
+export enum TileTypes {
   DIRT = 'dirt',
   GRASS = 'grass',
   WATER = 'water',
   HILL = 'hill',
 }
 
-export enum ENVIRONMENT_OBJECTS  {
+export enum EnvironmentObjects  {
   TREE = 'tree',
   WEED = 'weed',
   FLOWER = 'flower',
@@ -85,24 +85,24 @@ export enum ENVIRONMENT_OBJECTS  {
   BUSH = 'bush',
 }
 
-export enum FLOWER_NAMES {
+export enum FlowerNames {
   SUNFLOWER = 'sunflower',
 }
 
-export enum WEED_NAMES {
+export enum WeedNames {
   WEED_1 = 'weed_1',
   WEED_2 = 'weed_2',
 }
 
-export enum ROCK_NAMES {
+export enum RockNames {
   STONE_1 = 'stone_1',
 }
 
-export enum OTHER_ITEM_NAMES {
+export enum OtherItemNames {
   WEED = 'weed',
 }
 
-export enum SOUND_EFFECTS {
+export enum SoundEffects {
   AXE = 'axe',
   HOE = 'hoe',
   WATERING_CAN = 'watering_can',    

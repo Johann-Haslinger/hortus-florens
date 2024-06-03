@@ -2,7 +2,7 @@ import { LeanScopeClientContext } from '@leanscope/api-client/node';
 import { Entity, EntityCreator } from '@leanscope/ecs-engine';
 import { IdentifierFacet, PositionFacet, TextTypeFacet } from '@leanscope/ecs-models';
 import React, { useContext, useEffect } from 'react';
-import { ENVIRONMENT_OBJECTS, FLOWER_NAMES, FRUIT_NAMES, GAME_TAGS, ROCK_NAMES, TREE_NAMES, WEED_NAMES } from '../base/enums';
+import { EnvironmentObjects, FlowerNames, FruitNames, GameTags, RockNames, TreeNames, WeedNames } from '../base/enums';
 import { v4 } from 'uuid';
 import { TitleFacet, TreeFruitFacet } from '../app/GameFacets';
 import { mapData } from '../components/map/mapData';
@@ -21,23 +21,23 @@ const EnironmentObjectsInitializationSystem = () => {
             newntity.add(new IdentifierFacet({ guid: v4() }));
             newntity.add(new PositionFacet({ positionX: x, positionY: mapData.length - y, positionZ: 0 }));
 
-            if (tile.enviromentObject === ENVIRONMENT_OBJECTS.TREE) {
+            if (tile.enviromentObject === EnvironmentObjects.TREE) {
               newntity.add(new TextTypeFacet({ type: tile.enviromentObject }));
-              newntity.add(new TitleFacet({ title: TREE_NAMES.APPLE }));
-              newntity.add(new TreeFruitFacet({ fruitName: FRUIT_NAMES.APPLE, growthStage: MAX_TREE_FRUIT_GROWTH_STAGE }));
+              newntity.add(new TitleFacet({ title: TreeNames.APPLE }));
+              newntity.add(new TreeFruitFacet({ fruitName: FruitNames.APPLE, growthStage: MAX_TREE_FRUIT_GROWTH_STAGE }));
             }
 
-            if (tile.enviromentObject === FLOWER_NAMES.SUNFLOWER) {
-              newntity.add(new TextTypeFacet({ type: ENVIRONMENT_OBJECTS.FLOWER }));
-              newntity.add(new TitleFacet({ title: FLOWER_NAMES.SUNFLOWER }));
+            if (tile.enviromentObject === FlowerNames.SUNFLOWER) {
+              newntity.add(new TextTypeFacet({ type: EnvironmentObjects.FLOWER }));
+              newntity.add(new TitleFacet({ title: FlowerNames.SUNFLOWER }));
             }
 
-            if (tile.enviromentObject === ROCK_NAMES.STONE_1) {
-              newntity.add(new TextTypeFacet({ type: ENVIRONMENT_OBJECTS.ROCK }));
-              newntity.add(new TitleFacet({ title: ROCK_NAMES.STONE_1 }));
+            if (tile.enviromentObject === RockNames.STONE_1) {
+              newntity.add(new TextTypeFacet({ type: EnvironmentObjects.ROCK }));
+              newntity.add(new TitleFacet({ title: RockNames.STONE_1 }));
             }
-            if (tile.enviromentObject === WEED_NAMES.WEED_1 || tile.enviromentObject === WEED_NAMES.WEED_2) {
-              newntity.add(new TextTypeFacet({ type: ENVIRONMENT_OBJECTS.WEED }));
+            if (tile.enviromentObject === WeedNames.WEED_1 || tile.enviromentObject === WeedNames.WEED_2) {
+              newntity.add(new TextTypeFacet({ type: EnvironmentObjects.WEED }));
               newntity.add(new TitleFacet({ title:tile.enviromentObject}));
             }
           }

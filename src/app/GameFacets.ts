@@ -1,4 +1,4 @@
-import { CROP_NAMES, FRUIT_NAMES, ITEM_GROUPS, SEED_NAMES, SOUND_EFFECTS, TREE_NAMES } from '../base/enums';
+import { CropNames, FruitNames, ItemGroups, SeedNames, SoundEffects, TreeNames } from '../base/enums';
 import { Facet } from '../base/facet';
 
 export interface TypeProps {
@@ -42,7 +42,7 @@ export class TitleFacet extends Facet<TitleProps> {
 }
 
 export interface ItemGroupProps {
-  group: ITEM_GROUPS;
+  group: ItemGroups;
 }
 
 export class ItemGroupFacet extends Facet<ItemGroupProps> {
@@ -52,7 +52,7 @@ export class ItemGroupFacet extends Facet<ItemGroupProps> {
 }
 
 export interface TileCropProps {
-  tileCropName: SEED_NAMES;
+  tileCropName: SeedNames;
   growthStage: number;
 }
 
@@ -63,7 +63,7 @@ export class TileCropFacet extends Facet<TileCropProps> {
 }
 
 export interface TreeFruitProps {
-  fruitName: FRUIT_NAMES;
+  fruitName: FruitNames;
   growthStage: number;
 }
 
@@ -84,7 +84,7 @@ export class TimeFacet extends Facet<TimeProps> {
   }
 }
 export interface SoundEffectProps {
-  soundEffect: SOUND_EFFECTS | null;
+  soundEffect: SoundEffects | null;
 }
 
 export class SoundEffectFacet extends Facet<SoundEffectProps>{

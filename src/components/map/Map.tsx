@@ -8,7 +8,7 @@ import TilesInitializationSystem from '../../systems/TilesInitializationSystem';
 import PlayerInitializationSystem from '../../systems/PlayerInitializationSystem';
 import { TILE_SIZE, VALID_ENVITONMENT_OBJECTS_TILES, VALID_TERRAIN_TILES } from '../../base/constants';
 import ItemsInitializationSystem from '../../systems/ItemsInitializationSystem';
-import { ENVIRONMENT_OBJECTS, TERRAIN_TILES } from '../../base/enums';
+import { EnvironmentObjects, TerrainTiles } from '../../base/enums';
 import PlayerActionSystem from '../../systems/PlayerActionSystem';
 import PlayerSprite from '../player/PlayerSprite';
 import TimeCicleSystem from '../../systems/TimeCicleSystem';
@@ -38,18 +38,18 @@ const Map = () => {
 
       <FullScreenCanvas>
         <EntityPropsMapper
-          query={(e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || '')}
+          query={(e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TerrainTiles) || '')}
           get={[[TextTypeFacet, PositionFacet, IdentifierFacet, TileCropFacet], []]}
           onMatch={TerrainTile}
         />
 
         <EntityPropsMapper
-          query={(e) => e.get(TextTypeFacet)?.props.type === ENVIRONMENT_OBJECTS.WEED}
+          query={(e) => e.get(TextTypeFacet)?.props.type === EnvironmentObjects.WEED}
           get={[[TextTypeFacet, PositionFacet, IdentifierFacet, TitleFacet], []]}
           onMatch={WeedTile}
         />
         <EntityPropsMapper
-          query={(e) => e.get(TextTypeFacet)?.props.type === ENVIRONMENT_OBJECTS.TREE}
+          query={(e) => e.get(TextTypeFacet)?.props.type === EnvironmentObjects.TREE}
           get={[[TextTypeFacet, PositionFacet, IdentifierFacet, TitleFacet, TreeFruitFacet], []]}
           onMatch={TreeTile}
         />

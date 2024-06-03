@@ -5,16 +5,16 @@ import { useFrame, useLoader } from 'react-three-fiber';
 import { Group, Object3DEventMap } from 'three';
 import { TreeFruitFacet, TreeFruitProps } from '../../../app/GameFacets';
 import { TREE_DEAD_TILE, TREE_TILE } from '../../../assets/environmentObjects';
-import { ENVIRONMENT_OBJECTS, FRUIT_NAMES, GAME_TAGS } from '../../../base/enums';
+import { EnvironmentObjects, FruitNames, GameTags } from '../../../base/enums';
 import * as THREE from 'three';
 import { TREE_FRUIT_APPLE } from '../../../assets/environmentObjects/fruits';
 import { Box } from '@react-three/drei';
 import { TILE_SIZE } from '../../../base/constants';
 import { findEnvotonmentObjectSizeArgs } from '../../../helpers/functions';
 
-const findFruitTexture = (fruit: FRUIT_NAMES) => {
+const findFruitTexture = (fruit: FruitNames) => {
   switch (fruit) {
-    case FRUIT_NAMES.APPLE:
+    case FruitNames.APPLE:
       return TREE_FRUIT_APPLE;
     default:
       return TREE_FRUIT_APPLE;
@@ -33,8 +33,8 @@ const TreeTile = (props: IdentifierProps & TextTypeProps & PositionProps & Entit
   
 
   useFrame(() => {
-    if (type == ENVIRONMENT_OBJECTS.TREE) {
-      if (entity.hasTag(GAME_TAGS.CUT)) {
+    if (type == EnvironmentObjects.TREE) {
+      if (entity.hasTag(GameTags.CUT)) {
         meshRef.current!.map = cutTreeTexture;
       } else {
         meshRef.current!.map = tileTexture;
@@ -53,7 +53,7 @@ const TreeTile = (props: IdentifierProps & TextTypeProps & PositionProps & Entit
         receiveShadow={false}
         castShadow={false}
         position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]}
-        args={findEnvotonmentObjectSizeArgs(type as ENVIRONMENT_OBJECTS)}
+        args={findEnvotonmentObjectSizeArgs(type as EnvironmentObjects)}
       >
         <meshBasicMaterial
           polygonOffset={true}

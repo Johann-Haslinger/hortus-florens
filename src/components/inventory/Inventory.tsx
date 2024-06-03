@@ -5,7 +5,7 @@ import { Entity, EntityProps, EntityPropsMapper, useEntities, useEntity } from '
 import { ItemGroupFacet, SoundEffectFacet, TitleFacet, TitleProps } from '../../app/GameFacets';
 import { NameFacet, OrderFacet, Tags } from '@leanscope/ecs-models';
 import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
-import { CROP_NAMES, FRUIT_NAMES, ITEM_GROUPS, SEED_NAMES, SOUND_EFFECTS, STORY_GUID, TOOL_NAMES } from '../../base/enums';
+import { CropNames, FruitNames, ItemGroups, SeedNames, SoundEffects, Stories, ToolNames } from '../../base/enums';
 import { useIsStoryCurrent } from '@leanscope/storyboarding';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
 import { motion } from 'framer-motion';
@@ -46,14 +46,14 @@ const ToolSlot = (props: { entity?: Entity, soundEffectEntity?: Entity  }) => {
     if (entity?.hasTag(Tags.SELECTED)) {
       entity.removeTag(Tags.SELECTED);
     } else {
-      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.ITEM_SELECT }));
+      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SoundEffects.ITEM_SELECT }));
       entity?.addTag(Tags.SELECTED);
     }
   };
 
   return (
     <StyledToolSlot onClick={handleSelectTool} isSelected={isSelected}>
-      {entity && <>{findInventoryIconForItem(entity.get(TitleFacet)?.props.title as TOOL_NAMES, ITEM_GROUPS.TOOLS)}</>}
+      {entity && <>{findInventoryIconForItem(entity.get(TitleFacet)?.props.title as ToolNames, ItemGroups.TOOLS)}</>}
     </StyledToolSlot>
   );
 };
@@ -83,14 +83,14 @@ const NormalItem = (props: { entity?: Entity; soundEffectEntity?: Entity }) => {
     if (entity?.hasTag(Tags.SELECTED)) {
       entity.removeTag(Tags.SELECTED);
     } else {
-      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.ITEM_SELECT }));
+      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SoundEffects.ITEM_SELECT }));
       entity?.addTag(Tags.SELECTED);
     }
   };
 
   return (
     <StyledNormalItem onClick={handleSelectTool} isSelected={isSelected && entity !== undefined}>
-      {entity && <>{findInventoryIconForItem(title as SEED_NAMES | CROP_NAMES | FRUIT_NAMES, itemGroup as ITEM_GROUPS)}</>}
+      {entity && <>{findInventoryIconForItem(title as SeedNames | CropNames | FruitNames, itemGroup as ItemGroups)}</>}
       {value > 1 && <StyledValueText isSelected={isSelected}>{value}</StyledValueText>}
     </StyledNormalItem>
   );
@@ -118,16 +118,16 @@ const StyledToolsGrid = styled.div`
 
 const Inventory = () => {
   const lsc = useContext(LeanScopeClientContext);
-  const isInventoryVisible = useIsStoryCurrent(STORY_GUID.OBSERVING_INVENTORY);
+  const isInventoryVisible = useIsStoryCurrent(Stories.OBSERVING_INVENTORY);
   const inventoryRef = useRef<HTMLDivElement>(null);
-  const [toolItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.TOOLS);
+  const [toolItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ItemGroups.TOOLS);
   const [normalItems] = useEntities(
     (e) =>
       e.has(ItemGroupFacet) &&
-      e.get(ItemGroupFacet)?.props.group !== ITEM_GROUPS.TOOLS &&
-      e.get(ItemGroupFacet)?.props.group !== ITEM_GROUPS.IMPORTANT_ITEMS,
+      e.get(ItemGroupFacet)?.props.group !== ItemGroups.TOOLS &&
+      e.get(ItemGroupFacet)?.props.group !== ItemGroups.IMPORTANT_ITEMS,
   );
-  const [importantItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.IMPORTANT_ITEMS);
+  const [importantItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ItemGroups.IMPORTANT_ITEMS);
   const filteredItems = normalItems.filter((entity, index, self) => {
     const title = entity?.get(TitleFacet)?.props.title;
     const itemGroup = entity?.get(ItemGroupFacet)?.props.group;
@@ -138,9 +138,9 @@ const Inventory = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isInventoryVisible) {
-        lsc.stories.transitTo(STORY_GUID.PLAY_GAME);
+        lsc.stories.transitTo(Stories.PLAY_GAME);
       } else if (e.key === 'i') {
-        lsc.stories.transitTo(STORY_GUID.OBSERVING_INVENTORY);
+        lsc.stories.transitTo(Stories.OBSERVING_INVENTORY);
       }
     };
 
@@ -153,9 +153,9 @@ const Inventory = () => {
 
   useEffect(() => {
     if (isInventoryVisible) {
-      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.OPEN_INVENTORY }));
+      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SoundEffects.OPEN_INVENTORY }));
     }else { 
-      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SOUND_EFFECTS.CLOSE_INVENTORY }));
+      soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SoundEffects.CLOSE_INVENTORY }));
     }
   }, [isInventoryVisible]);
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
 import { mapData } from '../components/map/mapData';
-import { ENVIRONMENT_OBJECTS } from '../base/enums';
+import { EnvironmentObjects } from '../base/enums';
 import { v4 } from 'uuid';
 
 const TilesInitializationSystem = () => {

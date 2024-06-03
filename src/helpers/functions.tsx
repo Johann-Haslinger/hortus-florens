@@ -7,48 +7,48 @@ import {
   WHEAT_SEED_ICON_INVENTORY,
 } from '../assets/items/inventory';
 import { TILE_SIZE } from '../base/constants';
-import { CROP_NAMES, ENVIRONMENT_OBJECTS, FRUIT_NAMES, ITEM_GROUPS, OTHER_ITEM_NAMES, SEED_NAMES, TOOL_NAMES, WEED_NAMES } from '../base/enums';
+import { CropNames, EnvironmentObjects, FruitNames, ItemGroups, OtherItemNames, SeedNames, ToolNames, WeedNames } from '../base/enums';
 
 export const findInventoryIconForItem = (
-  itemName: TOOL_NAMES | SEED_NAMES | CROP_NAMES | FRUIT_NAMES | OTHER_ITEM_NAMES,
-  itemGroup: ITEM_GROUPS,
+  itemName: ToolNames | SeedNames | CropNames | FruitNames | OtherItemNames,
+  itemGroup: ItemGroups,
 ) => {
   switch (itemGroup) {
-    case ITEM_GROUPS.TOOLS:
+    case ItemGroups.TOOLS:
       switch (itemName) {
-        case TOOL_NAMES.AXE:
+        case ToolNames.AXE:
           return <img src={AXE_ICON_INVENTORY} alt="axe" />;
-        case TOOL_NAMES.HOE:
+        case ToolNames.HOE:
           return <img src={HOE_ICON_INVENTORY} alt="hoe" />;
-        case TOOL_NAMES.WATERING_CAN:
+        case ToolNames.WATERING_CAN:
           return 'W';
         default:
           return null;
       }
-    case ITEM_GROUPS.SEEDS:
+    case ItemGroups.SEEDS:
       switch (itemName) {
-        case SEED_NAMES.WHEAT_SEED:
+        case SeedNames.WHEAT_SEED:
           return <img src={WHEAT_SEED_ICON_INVENTORY} alt="wheat seed" />;
         default:
           return null;
       }
-    case ITEM_GROUPS.CROPS:
+    case ItemGroups.CROPS:
       switch (itemName) {
-        case CROP_NAMES.WHEAT:
+        case CropNames.WHEAT:
           return <img src={WHEAT_ICON_INVENTORY} alt="wheat" />;
         default:
           return null;
       }
-    case ITEM_GROUPS.FRUITS:
+    case ItemGroups.FRUITS:
       switch (itemName) {
-        case FRUIT_NAMES.APPLE:
+        case FruitNames.APPLE:
           return <img src={APPLE_ICON_INVENTORY} alt="apple" />;
         default:
           return null;
       }
-    case ITEM_GROUPS.OTHER:
+    case ItemGroups.OTHER:
       switch (itemName) {
-        case OTHER_ITEM_NAMES.WEED:
+        case OtherItemNames.WEED:
           return <img src={WEED_ICON_INVENTORY} alt="weed" />;
         default:
           return null;
@@ -60,12 +60,12 @@ export const findInventoryIconForItem = (
 };
 
 
-export const findEnvotonmentObjectSizeArgs = (object: ENVIRONMENT_OBJECTS): [number, number, number] => {
+export const findEnvotonmentObjectSizeArgs = (object: EnvironmentObjects): [number, number, number] => {
   switch (object) {
-    case ENVIRONMENT_OBJECTS.TREE:
+    case EnvironmentObjects.TREE:
       return [TILE_SIZE * 2.5, TILE_SIZE * 2.5, 0];
 
-    case ENVIRONMENT_OBJECTS.FLOWER:
+    case EnvironmentObjects.FLOWER:
       return [TILE_SIZE, TILE_SIZE * 1.5, 0];
     default:
       return [TILE_SIZE, TILE_SIZE, 0];

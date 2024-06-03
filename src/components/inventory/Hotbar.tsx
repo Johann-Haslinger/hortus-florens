@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { HOE_ICON_INVENTORY, AXE_ICON_INVENTORY } from '../../assets/items/inventory';
 import { useIsStoryCurrent } from '@leanscope/storyboarding';
-import { ITEM_GROUPS, STORY_GUID, TOOL_NAMES } from '../../base/enums';
+import { ItemGroups, Stories, ToolNames } from '../../base/enums';
 import { motion } from 'framer-motion';
 import { findInventoryIconForItem } from '../../helpers/functions';
 
@@ -33,7 +33,7 @@ const itemGroup = entity?.get(ItemGroupFacet)?.props.group;
 
   return (
     <StyledSelectedIconWrappper>
-      {entity && findInventoryIconForItem(title as TOOL_NAMES,itemGroup as ITEM_GROUPS)} {value > 1 && <StyledValueText>{value}</StyledValueText>}
+      {entity && findInventoryIconForItem(title as ToolNames,itemGroup as ItemGroups)} {value > 1 && <StyledValueText>{value}</StyledValueText>}
     </StyledSelectedIconWrappper>
   );
 };
@@ -44,7 +44,7 @@ const StyledHotbarWrapper = styled.div`
 
 const Hotbar = () => {
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
-  const [tools] = useEntities((e) => e.has(ItemGroupFacet) && e.get(ItemGroupFacet)?.props.group === ITEM_GROUPS.TOOLS);
+  const [tools] = useEntities((e) => e.has(ItemGroupFacet) && e.get(ItemGroupFacet)?.props.group === ItemGroups.TOOLS);
   const [selectedItem] = useEntity((e) => e.has(Tags.SELECTED) && e.has(ItemGroupFacet));
   const isHotbarVisible = true;
 
@@ -65,7 +65,7 @@ const Hotbar = () => {
             newTool = tools.find(
               (e) =>
                 e.get(OrderFacet)?.props.orderIndex ===
-                items.filter((item) => item.get(ItemGroupFacet)?.props.group == ITEM_GROUPS.TOOLS).length,
+                items.filter((item) => item.get(ItemGroupFacet)?.props.group == ItemGroups.TOOLS).length,
             );
           }
         } else {

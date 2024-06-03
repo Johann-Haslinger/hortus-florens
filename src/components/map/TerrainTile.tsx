@@ -87,7 +87,7 @@ import {
 import { Canvas, useLoader } from 'react-three-fiber';
 import * as THREE from 'three';
 import { Box } from '@react-three/drei';
-import { CROP_NAMES, GAME_TAGS, SEED_NAMES, TERRAIN_TILES } from '../../base/enums';
+import { CropNames, GameTags, SeedNames, TerrainTiles } from '../../base/enums';
 import { TileCropFacet, TileCropProps } from '../../app/GameFacets';
 import { FARMLAND_WATERD, WHEAT_CROP_STATE_1, WHEAT_CROP_STATE_2, WHEAT_CROP_STATE_3 } from '../../assets/crops';
 
@@ -182,122 +182,122 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
     const bottomRightNeighborType = bottomRightNeighbor.get(TextTypeFacet)?.props.type;
 
 
-    if (tile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.HILL) {
+    if (tile.get(TextTypeFacet)?.props.type === TerrainTiles.HILL) {
       if (
-        leftNeighborType === TERRAIN_TILES.HILL &&
-        rightNeighborType === TERRAIN_TILES.HILL &&
-        topNeighborType === TERRAIN_TILES.HILL &&
-        bottomNeighborType === TERRAIN_TILES.HILL &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.HILL &&
+        rightNeighborType === TerrainTiles.HILL &&
+        topNeighborType === TerrainTiles.HILL &&
+        bottomNeighborType === TerrainTiles.HILL &&
+        bottomLeftNeighborType === TerrainTiles.GRASS
 
       ) {
         return HILL_TILE_CORNER_BL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.HILL &&
-        rightNeighborType === TERRAIN_TILES.HILL &&
-        topNeighborType === TERRAIN_TILES.HILL &&
-        bottomNeighborType === TERRAIN_TILES.HILL &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.HILL &&
+        rightNeighborType === TerrainTiles.HILL &&
+        topNeighborType === TerrainTiles.HILL &&
+        bottomNeighborType === TerrainTiles.HILL &&
+        bottomRightNeighborType === TerrainTiles.GRASS
 
       ) {
         return HILL_TILE_CORNER_BR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.HILL &&
-        rightNeighborType === TERRAIN_TILES.HILL &&
-        topNeighborType === TERRAIN_TILES.HILL &&
-        bottomNeighborType === TERRAIN_TILES.HILL &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.HILL &&
+        rightNeighborType === TerrainTiles.HILL &&
+        topNeighborType === TerrainTiles.HILL &&
+        bottomNeighborType === TerrainTiles.HILL &&
+        topLeftNeighborType === TerrainTiles.GRASS
 
       ) {
         return HILL_TILE_CORNER_TL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.HILL &&
-        rightNeighborType === TERRAIN_TILES.HILL &&
-        topNeighborType === TERRAIN_TILES.HILL &&
-        bottomNeighborType === TERRAIN_TILES.HILL &&
-        topRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.HILL &&
+        rightNeighborType === TerrainTiles.HILL &&
+        topNeighborType === TerrainTiles.HILL &&
+        bottomNeighborType === TerrainTiles.HILL &&
+        topRightNeighborType === TerrainTiles.GRASS
 
       ) {
         return HILL_TILE_CORNER_TR;
       }
       
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.HILL &&
-        topNeighborType === TERRAIN_TILES.HILL &&
-        bottomNeighborType === TERRAIN_TILES.GRASS 
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.HILL &&
+        topNeighborType === TerrainTiles.HILL &&
+        bottomNeighborType === TerrainTiles.GRASS 
 
       ) {
         return HILL_TILE_BL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.HILL &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.HILL &&
-        bottomNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.HILL &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.HILL &&
+        bottomNeighborType === TerrainTiles.GRASS
 
       ) {
         return HILL_TILE_BR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.HILL &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.HILL 
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.HILL &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.HILL 
 
       ) {
         return HILL_TILE_TL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.HILL &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.HILL
+        leftNeighborType === TerrainTiles.HILL &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.HILL
 
       ) {
         return HILL_TILE_TR;
       }
 
       if (
-        leftNeighborType === TERRAIN_TILES.HILL &&
-        rightNeighborType === TERRAIN_TILES.HILL &&
-        topNeighborType === TERRAIN_TILES.HILL &&
-        bottomNeighborType === TERRAIN_TILES.HILL
+        leftNeighborType === TerrainTiles.HILL &&
+        rightNeighborType === TerrainTiles.HILL &&
+        topNeighborType === TerrainTiles.HILL &&
+        bottomNeighborType === TerrainTiles.HILL
       ) {
         return randomNum === 0 ? GRASS_TILE_1 : randomNum === 1 ? GRASS_TILE_2 : randomNum === 2 ? GRASS_TILE_3 : GRASS_TILE_4;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.HILL &&
-        rightNeighborType === TERRAIN_TILES.HILL &&
-        topNeighborType === TERRAIN_TILES.HILL &&
-        bottomNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.HILL &&
+        rightNeighborType === TerrainTiles.HILL &&
+        topNeighborType === TerrainTiles.HILL &&
+        bottomNeighborType === TerrainTiles.GRASS
       ) {
         return HILL_TILE_B;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.HILL &&
-        rightNeighborType === TERRAIN_TILES.HILL &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.HILL
+        leftNeighborType === TerrainTiles.HILL &&
+        rightNeighborType === TerrainTiles.HILL &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.HILL
       ) {
         return HILL_TILE_T;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.HILL &&
-        topNeighborType === TERRAIN_TILES.HILL &&
-        bottomNeighborType === TERRAIN_TILES.HILL
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.HILL &&
+        topNeighborType === TerrainTiles.HILL &&
+        bottomNeighborType === TerrainTiles.HILL
       ) {
         return HILL_TILE_L;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.HILL &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.HILL &&
-        bottomNeighborType === TERRAIN_TILES.HILL
+        leftNeighborType === TerrainTiles.HILL &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.HILL &&
+        bottomNeighborType === TerrainTiles.HILL
       ) {
         return HILL_TILE_R;
       }
@@ -306,528 +306,528 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
 
     }
 
-    if (tile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.GRASS) {
+    if (tile.get(TextTypeFacet)?.props.type === TerrainTiles.GRASS) {
       return randomNum === 0 ? GRASS_TILE_1 : randomNum === 1 ? GRASS_TILE_2 : randomNum === 2 ? GRASS_TILE_3 : GRASS_TILE_4;
-    } else if (tile.get(TextTypeFacet)?.props.type === TERRAIN_TILES.FARMLAND) {
+    } else if (tile.get(TextTypeFacet)?.props.type === TerrainTiles.FARMLAND) {
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_ROUNDED;
       }
 
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_ROUNDED_T;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_ROUNDED_B;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_ROUNDED_L;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_ROUNDED_R;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_LR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_TB;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_T_CORNER_BL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_T_CORNER_BR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_T_CORNER_BLR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.GRASS &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.GRASS &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_B_CORNER_TL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.GRASS &&
-        topLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.GRASS &&
+        topLeftNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_B_CORNER_TR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.GRASS &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.GRASS &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_B_CORNER_TLR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_L_CORNER_TR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_L_CORNER_BR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_L_CORNER_TRBR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomLeftNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        bottomLeftNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_R_CORNER_TL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_R_CORNER_BL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        bottomLeftNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_R_CORNER_TLBL;
       }
 
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.GRASS &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.GRASS &&
+        bottomLeftNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_TLRBLR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_CORNER_BR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.GRASS &&
-        bottomLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.GRASS &&
+        bottomLeftNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_CORNER_BL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_CORNER_TR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_TL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_TLBR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.GRASS &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.GRASS &&
+        bottomLeftNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_CORNER_TRBL;
       }
 
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.GRASS &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.GRASS &&
+        bottomLeftNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_CORNER_TLBL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_TRBR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_BLR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.GRASS &&
-        bottomLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.GRASS &&
+        bottomLeftNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_CORNER_TLR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_CORNER_TLBL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.GRASS &&
-        bottomLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.GRASS &&
+        bottomLeftNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_TRBR;
       }
 
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.GRASS &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.GRASS &&
+        bottomLeftNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_TRBLR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_TLBLR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.GRASS &&
-        bottomLeftNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.GRASS &&
+        bottomLeftNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_TLRBR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.GRASS &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS &&
-        bottomRightNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.GRASS &&
+        bottomLeftNeighborType === TerrainTiles.GRASS &&
+        bottomRightNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_CORNER_TLRBL;
       }
 
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_TL_CORNER_TL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_TR_CORNER_TR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.GRASS &&
-        topRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.GRASS &&
+        topRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_BL_CORNER_BL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.GRASS &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.GRASS &&
+        topLeftNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_BR_CORNER_BR;
       }
 
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topLeftNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topLeftNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_TL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        topRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        topRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_TR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomLeftNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        bottomLeftNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_BL;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomRightNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND &&
+        bottomRightNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_CORNER_BR;
       }
       if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE;
       } else if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_B;
       } else if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_T;
       } else if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_R;
       } else if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_L;
       } else if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_TR;
       } else if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.GRASS &&
-        bottomNeighborType === TERRAIN_TILES.FARMLAND
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.GRASS &&
+        bottomNeighborType === TerrainTiles.FARMLAND
       ) {
         return FARMLAND_TILE_TL;
       } else if (
-        leftNeighborType === TERRAIN_TILES.FARMLAND &&
-        rightNeighborType === TERRAIN_TILES.GRASS &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.FARMLAND &&
+        rightNeighborType === TerrainTiles.GRASS &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_BR;
       } else if (
-        leftNeighborType === TERRAIN_TILES.GRASS &&
-        rightNeighborType === TERRAIN_TILES.FARMLAND &&
-        topNeighborType === TERRAIN_TILES.FARMLAND &&
-        bottomNeighborType === TERRAIN_TILES.GRASS
+        leftNeighborType === TerrainTiles.GRASS &&
+        rightNeighborType === TerrainTiles.FARMLAND &&
+        topNeighborType === TerrainTiles.FARMLAND &&
+        bottomNeighborType === TerrainTiles.GRASS
       ) {
         return FARMLAND_TILE_BL;
       } else {
@@ -841,9 +841,9 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
   return GRASS_TILE_1;
 };
 
-const selectCropImage = (tileCropName: SEED_NAMES, growthStage: number): string => {
+const selectCropImage = (tileCropName: SeedNames, growthStage: number): string => {
   switch (tileCropName) {
-    case SEED_NAMES.WHEAT_SEED:
+    case SeedNames.WHEAT_SEED:
       switch (growthStage) {
         case 1:
           return WHEAT_CROP_STATE_1;
@@ -861,12 +861,12 @@ const selectCropImage = (tileCropName: SEED_NAMES, growthStage: number): string 
 
 const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & EntityProps & TileCropProps) => {
   const { positionX, positionY, type, entity, tileCropName, growthStage } = props;
-  const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || ''));
-  const [isWaterd] = useEntityHasTags(entity, GAME_TAGS.WATERD);
+  const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TerrainTiles) || ''));
+  const [isWaterd] = useEntityHasTags(entity, GameTags.WATERD);
   const terrainTexture = useLoader(THREE.TextureLoader, selectImageForTileType(entity, tiles));
   const waterdFarmlandTexture = useLoader(THREE.TextureLoader, FARMLAND_WATERD);
 
-  const seedTexture = useLoader(THREE.TextureLoader, selectCropImage(tileCropName as SEED_NAMES, growthStage));
+  const seedTexture = useLoader(THREE.TextureLoader, selectCropImage(tileCropName as SeedNames, growthStage));
   const meshRef = useRef<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>(null);
   const materialRef = useRef<MeshBasicMaterial>(null);
   const seedRef = useRef<MeshBasicMaterial>(null);

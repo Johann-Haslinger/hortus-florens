@@ -3,13 +3,13 @@ import { useFrame } from '@react-three/fiber';
 import { PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
 import { VALID_TERRAIN_TILES, TILE_SIZE, WALKABLE_TILES, PLAYER_SPEED } from '../../base/constants';
-import { ENVIRONMENT_OBJECTS, GAME_TAGS, TERRAIN_TILES } from '../../base/enums';
+import { EnvironmentObjects, GameTags, TerrainTiles } from '../../base/enums';
 import { Box } from '@react-three/drei';
 import { ILeanScopeClient } from '@leanscope/api-client/interfaces';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
 
 const checkCanMoveRight = (playerX: number, playerY: number, tiles: readonly Entity[], lsc: ILeanScopeClient): boolean => {
-  const playerTile = tiles.find((e) => e.hasTag(GAME_TAGS.PLAYER_TILE));
+  const playerTile = tiles.find((e) => e.hasTag(GameTags.PLAYER_TILE));
 
   if (playerTile) {
     const currentTileY = playerTile.get(PositionFacet)?.props.positionY!;
@@ -53,7 +53,7 @@ const checkCanMoveLeft = (playerX: number, playerY: number, tiles: readonly Enti
 
     const previousTile = tilesInRow.reverse().find((tile) => tile.get(PositionFacet)?.props.positionX! < currentTileX);
 
-    if (previousTile && (previousTile.get(TextTypeFacet)?.props.type as TERRAIN_TILES) == TERRAIN_TILES.WATER) {
+    if (previousTile && (previousTile.get(TextTypeFacet)?.props.type as TerrainTiles) == TerrainTiles.WATER) {
       return false;
     }
   }
@@ -63,7 +63,7 @@ const checkCanMoveLeft = (playerX: number, playerY: number, tiles: readonly Enti
 
 const PlayerSprite = (props: PositionProps & EntityProps) => {
   const lsc = useContext(LeanScopeClientContext);
-  const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TERRAIN_TILES) || ''));
+  const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TerrainTiles) || ''));
 
   const { entity, positionX, positionY } = props;
   const previousPositionRef = useRef([1, 1]);
@@ -145,9 +145,9 @@ const PlayerSprite = (props: PositionProps & EntityProps) => {
     });
 
     tiles.forEach((tile) => {
-      tile.removeTag(GAME_TAGS.PLAYER_TILE);
+      tile.removeTag(GameTags.PLAYER_TILE);
     });
-    playerTile?.addTag(GAME_TAGS.PLAYER_TILE);
+    playerTile?.addTag(GameTags.PLAYER_TILE);
 
     previousPositionRef.current = [smoothX, smoothY];
   });
