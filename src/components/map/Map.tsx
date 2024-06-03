@@ -1,24 +1,21 @@
-import FullScreenCanvas from './FullscreenCanvas';
-import tw from 'twin.macro';
 import styled from '@emotion/styled';
-import { EntityPropsMapper, SystemCreator } from '@leanscope/ecs-engine';
+import { EntityPropsMapper } from '@leanscope/ecs-engine';
 import { IdentifierFacet, PositionFacet, TextTypeFacet } from '@leanscope/ecs-models';
-import TerrainTile from './TerrainTile';
-import TilesInitializationSystem from '../../systems/TilesInitializationSystem';
-import PlayerInitializationSystem from '../../systems/PlayerInitializationSystem';
-import { TILE_SIZE, VALID_ENVITONMENT_OBJECTS_TILES, VALID_TERRAIN_TILES } from '../../base/constants';
-import ItemsInitializationSystem from '../../systems/ItemsInitializationSystem';
+import tw from 'twin.macro';
+import { TileCropFacet, TitleFacet, TreeFruitFacet } from '../../app/GameFacets';
+import { VALID_TERRAIN_TILES } from '../../base/constants';
 import { EnvironmentObjects, TerrainTiles } from '../../base/enums';
-import PlayerActionSystem from '../../systems/PlayerActionSystem';
-import PlayerSprite from '../player/PlayerSprite';
-import TimeCicleSystem from '../../systems/TimeCicleSystem';
-import TimeDisplayer from './TimeDisplayer';
-import { TileCropFacet, TitleFacet, TreeFruitFacet, TypeFacet } from '../../app/GameFacets';
+import AudioSystem from '../../systems/AudioSystem';
 import CropGrowingSystem from '../../systems/CropGrowingSystem';
 import EnironmentObjectsInitializationSystem from '../../systems/EnironmentObjectsInitializationSystem';
-import WeedTile from './eviromentObjects/WeedTile';
+import PlayerActionSystem from '../../systems/PlayerActionSystem';
+import TimeCicleSystem from '../../systems/TimeCicleSystem';
+import PlayerSprite from '../player/PlayerSprite';
 import TreeTile from './eviromentObjects/TreeTile';
-import AudioSystem from '../../systems/AudioSystem';
+import WeedTile from './eviromentObjects/WeedTile';
+import FullScreenCanvas from './FullscreenCanvas';
+import TerrainTile from './TerrainTile';
+import TimeDisplayer from './TimeDisplayer';
 
 const StyledMapContainer = styled.div`
   ${tw`w-screen h-screen`}
@@ -27,14 +24,12 @@ const StyledMapContainer = styled.div`
 const Map = () => {
   return (
     <StyledMapContainer>
-    
       <EnironmentObjectsInitializationSystem />
       <CropGrowingSystem />
-      {/* <SystemCreator systemClass={CropGrowingSystem} /> */}
       <TimeCicleSystem />
       <TimeDisplayer />
       <PlayerActionSystem />
-      <AudioSystem/>
+      <AudioSystem />
 
       <FullScreenCanvas>
         <EntityPropsMapper

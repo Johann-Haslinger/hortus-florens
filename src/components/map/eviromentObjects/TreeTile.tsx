@@ -1,15 +1,15 @@
 import { EntityProps } from '@leanscope/ecs-engine';
-import { IdentifierProps, TextTypeProps, PositionProps } from '@leanscope/ecs-models';
-import React, { useRef } from 'react';
+import { IdentifierProps, PositionProps, TextTypeProps } from '@leanscope/ecs-models';
+import { Box } from '@react-three/drei';
+import { Fragment, useRef } from 'react';
 import { useFrame, useLoader } from 'react-three-fiber';
+import * as THREE from 'three';
 import { Group, Object3DEventMap } from 'three';
 import { TreeFruitFacet, TreeFruitProps } from '../../../app/GameFacets';
 import { TREE_DEAD_TILE, TREE_TILE } from '../../../assets/environmentObjects';
-import { EnvironmentObjects, FruitNames, GameTags } from '../../../base/enums';
-import * as THREE from 'three';
 import { TREE_FRUIT_APPLE } from '../../../assets/environmentObjects/fruits';
-import { Box } from '@react-three/drei';
 import { TILE_SIZE } from '../../../base/constants';
+import { EnvironmentObjects, FruitNames, GameTags } from '../../../base/enums';
 import { findEnvotonmentObjectSizeArgs } from '../../../helpers/functions';
 
 const findFruitTexture = (fruit: FruitNames) => {
@@ -19,10 +19,8 @@ const findFruitTexture = (fruit: FruitNames) => {
     default:
       return TREE_FRUIT_APPLE;
   }
-}
+};
 
-
-  
 const TreeTile = (props: IdentifierProps & TextTypeProps & PositionProps & EntityProps & TreeFruitProps) => {
   const { positionX, positionY, type, entity, fruitName, growthStage } = props;
   const tileTexture = useLoader(THREE.TextureLoader, TREE_TILE);
@@ -30,7 +28,6 @@ const TreeTile = (props: IdentifierProps & TextTypeProps & PositionProps & Entit
   const fruitTexture = useLoader(THREE.TextureLoader, findFruitTexture(fruitName));
   const meshRef = useRef<THREE.MeshBasicMaterial>(null);
   const fruitRef = useRef<Group<Object3DEventMap>>(null);
-  
 
   useFrame(() => {
     if (type == EnvironmentObjects.TREE) {
@@ -48,7 +45,7 @@ const TreeTile = (props: IdentifierProps & TextTypeProps & PositionProps & Entit
   });
 
   return (
-    <>
+    <Fragment>
       <Box
         receiveShadow={false}
         castShadow={false}
@@ -69,8 +66,8 @@ const TreeTile = (props: IdentifierProps & TextTypeProps & PositionProps & Entit
 
       <group visible={false} ref={fruitRef}>
         {[
-          [positionX * TILE_SIZE - TILE_SIZE / 2.5, positionY * TILE_SIZE + TILE_SIZE / 12 , 0],
-          [positionX * TILE_SIZE + TILE_SIZE / 3, positionY * TILE_SIZE + TILE_SIZE / 12 , 0],
+          [positionX * TILE_SIZE - TILE_SIZE / 2.5, positionY * TILE_SIZE + TILE_SIZE / 12, 0],
+          [positionX * TILE_SIZE + TILE_SIZE / 3, positionY * TILE_SIZE + TILE_SIZE / 12, 0],
           [positionX * TILE_SIZE, positionY * TILE_SIZE + TILE_SIZE / 1.5, 0],
         ].map((position, idx) => (
           <Box key={idx} position={new THREE.Vector3(position[0], position[1], position[2])} args={[TILE_SIZE / 2, TILE_SIZE / 2, 0]}>
@@ -78,7 +75,7 @@ const TreeTile = (props: IdentifierProps & TextTypeProps & PositionProps & Entit
           </Box>
         ))}
       </group>
-    </>
+    </Fragment>
   );
 };
 

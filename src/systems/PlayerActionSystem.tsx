@@ -1,31 +1,29 @@
-import React from 'react';
-import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
-import { IdentifierFacet, PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
-import { useContext, useEffect, useState } from 'react';
+import { ILeanScopeClient } from '@leanscope/api-client/interfaces';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
-import { TimeFacet, ItemGroupFacet, TitleFacet, HealthFacet, TileCropFacet, TreeFruitFacet, SoundEffectFacet } from '../app/GameFacets';
+import { Entity, useEntities, useEntity } from '@leanscope/ecs-engine';
+import { IdentifierFacet, PositionFacet, Tags, TextTypeFacet } from '@leanscope/ecs-models';
+import { useContext, useEffect } from 'react';
+import { v4 } from 'uuid';
+import { HealthFacet, ItemGroupFacet, SoundEffectFacet, TileCropFacet, TitleFacet, TreeFruitFacet } from '../app/GameFacets';
 import {
   INITIAL_CROP_GROWTH_STAGE,
   INITIAL_FRUIT_GROWTH_STAGE,
   MAX_CROP_GROWTH_STAGE,
   MAX_TREE_FRUIT_GROWTH_STAGE,
   TILE_SIZE,
-  VALID_TERRAIN_TILES,
 } from '../base/constants';
 import {
-  TerrainTiles,
-  GameTags,
-  ToolNames,
-  SeedNames,
-  ItemGroups,
   CropNames,
   EnvironmentObjects,
   FruitNames,
+  GameTags,
+  ItemGroups,
   OtherItemNames,
+  SeedNames,
   SoundEffects,
+  TerrainTiles,
+  ToolNames,
 } from '../base/enums';
-import { ILeanScopeClient } from '@leanscope/api-client/interfaces';
-import { v4 } from 'uuid';
 
 const handleHoeUse = (playerTile: Entity | undefined, soundEffectEntity: Entity) => {
   if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TerrainTiles.GRASS) {
@@ -93,7 +91,12 @@ const handleToolUse = (
   }
 };
 
-const handleSeedUse = (playerTile: Entity | undefined, seedName: SeedNames, handleRemoveEntity: (itemGroup: SeedNames) => void, soundEffectEntity?: Entity) => {
+const handleSeedUse = (
+  playerTile: Entity | undefined,
+  seedName: SeedNames,
+  handleRemoveEntity: (itemGroup: SeedNames) => void,
+  soundEffectEntity?: Entity,
+) => {
   const hasTileSeed = playerTile?.get(TileCropFacet)?.props.tileCropName !== undefined;
 
   if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TerrainTiles.FARMLAND && !hasTileSeed) {

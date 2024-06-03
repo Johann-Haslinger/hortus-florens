@@ -1,5 +1,5 @@
-import { UpdateOnRenderSystem, useEntity } from '@leanscope/ecs-engine';
-import React, { useEffect } from 'react';
+import { useEntity } from '@leanscope/ecs-engine';
+import { useEffect } from 'react';
 import { TimeFacet } from '../app/GameFacets';
 import { TIME_SPEED } from '../base/constants';
 
@@ -9,10 +9,10 @@ const TimeCicleSystem = () => {
 
   useEffect(() => {
     if ((time || 0) >= 24) {
-      timeEntity?.add(new TimeFacet({ time: 0, day: (timeEntity?.get(TimeFacet)?.props.day || 0) + 1}));
+      timeEntity?.add(new TimeFacet({ time: 0, day: (timeEntity?.get(TimeFacet)?.props.day || 0) + 1 }));
     }
     const interval = setInterval(() => {
-      timeEntity?.add(new TimeFacet({ time: (time || 0) + 0.1, day: timeEntity?.get(TimeFacet)?.props.day || 0}));
+      timeEntity?.add(new TimeFacet({ time: (time || 0) + 0.1, day: timeEntity?.get(TimeFacet)?.props.day || 0 }));
     }, TIME_SPEED * 100);
 
     return () => {
@@ -20,8 +20,7 @@ const TimeCicleSystem = () => {
     };
   }, [time]);
 
-  return <></>;
+  return null;
 };
 
-
-export default TimeCicleSystem
+export default TimeCicleSystem;

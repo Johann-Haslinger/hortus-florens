@@ -1,4 +1,4 @@
-import { EnvironmentObjects, FlowerNames, RockNames, TerrainTiles, WeedNames } from '../../base/enums';
+import { EnvironmentObjects, TerrainTiles, WeedNames } from '../../base/enums';
 
 export const mapData = [
   [
@@ -16,10 +16,9 @@ export const mapData = [
     { terrainType: TerrainTiles.GRASS, enviromentObject: '' },
     { terrainType: TerrainTiles.GRASS, enviromentObject: '' },
     { terrainType: TerrainTiles.GRASS, enviromentObject: '' },
-     { terrainType: "", enviromentObject: '' },
-    { terrainType: "", enviromentObject: '' },
-    { terrainType: "", enviromentObject: '' },
-
+    { terrainType: '', enviromentObject: '' },
+    { terrainType: '', enviromentObject: '' },
+    { terrainType: '', enviromentObject: '' },
   ],
   [
     { terrainType: TerrainTiles.GRASS, enviromentObject: '' },
@@ -49,8 +48,8 @@ export const mapData = [
     { terrainType: TerrainTiles.HILL, enviromentObject: '' },
     { terrainType: TerrainTiles.HILL, enviromentObject: '' },
     { terrainType: TerrainTiles.HILL, enviromentObject: '' },
-    { terrainType: TerrainTiles.HILL, enviromentObject:  WeedNames.WEED_1  },
-    { terrainType: TerrainTiles.HILL, enviromentObject:""},
+    { terrainType: TerrainTiles.HILL, enviromentObject: WeedNames.WEED_1 },
+    { terrainType: TerrainTiles.HILL, enviromentObject: '' },
     { terrainType: TerrainTiles.HILL, enviromentObject: '' },
     { terrainType: TerrainTiles.GRASS, enviromentObject: '' },
     { terrainType: TerrainTiles.GRASS, enviromentObject: '' },

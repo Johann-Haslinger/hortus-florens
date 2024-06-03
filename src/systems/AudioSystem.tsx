@@ -1,22 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEntity } from '@leanscope/ecs-engine';
+import { PositionFacet } from '@leanscope/ecs-models';
+import { useEffect, useState } from 'react';
+import { SoundEffectFacet } from '../app/GameFacets';
 import {
   AXE_SOUND_EFFECT,
-  BACKGROUND_MUSIC_1,
   BACKGROUND_MUSIC_2,
   HOE_SOUND_EFFECT,
   PLANT_CROP_SOUND_EFFECT,
   UI_SOUND_EFFECT_1,
-  UI_SOUND_EFFECT_2,
   UI_SOUND_EFFECT_3,
   UI_SOUND_EFFECT_4,
   UI_SOUND_EFFECT_5,
   WATERING_CAN_SOUND_EFFECT,
 } from '../assets/audio';
-import { useEntity } from '@leanscope/ecs-engine';
-import { GameTags, SoundEffects } from '../base/enums';
-import { PositionFacet } from '@leanscope/ecs-models';
 import { PLAYER_START_POSITION } from '../base/constants';
-import { SoundEffectFacet } from '../app/GameFacets';
+import { GameTags, SoundEffects } from '../base/enums';
 
 const handleSelectSoundEffectSrc = (soundEffect: SoundEffects) => {
   switch (soundEffect) {
@@ -49,7 +47,6 @@ const AudioSystem = () => {
   const positionX = playerEntity?.get(PositionFacet)?.props.positionX;
   const positionY = playerEntity?.get(PositionFacet)?.props.positionY;
   const [isPlaying, setIsPlaying] = useState(false);
-  const randomNum = Math.floor(Math.random() * 2) + 1;
 
   useEffect(() => {
     if (positionX !== PLAYER_START_POSITION.x || positionY !== PLAYER_START_POSITION.y) {
@@ -77,7 +74,6 @@ const AudioSystem = () => {
       if (soundEffectSrc) {
         const soundEffectAudio = new Audio(soundEffectSrc);
         if (soundEffect === SoundEffects.CLOSE_INVENTORY) {
-         
         }
         soundEffectAudio.play();
         soundEffectEntity.add(new SoundEffectFacet({ soundEffect: null }));
@@ -85,7 +81,7 @@ const AudioSystem = () => {
     }
   }, [soundEffect]);
 
-  return <></>;
+  return null;
 };
 
 export default AudioSystem;

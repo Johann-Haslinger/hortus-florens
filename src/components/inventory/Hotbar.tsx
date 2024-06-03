@@ -1,17 +1,12 @@
-import { Entity, EntityProps, EntityPropsMapper, useEntities, useEntity } from '@leanscope/ecs-engine';
-import { NameFacet, OrderFacet, Tags, TextTypeFacet } from '@leanscope/ecs-models';
-import { ItemGroupFacet, TitleFacet, TitleProps } from '../../app/GameFacets';
-import tw from 'twin.macro';
 import styled from '@emotion/styled';
-import { useEffect } from 'react';
-import { HOE_ICON_INVENTORY, AXE_ICON_INVENTORY } from '../../assets/items/inventory';
-import { useIsStoryCurrent } from '@leanscope/storyboarding';
-import { ItemGroups, Stories, ToolNames } from '../../base/enums';
+import { Entity, useEntities, useEntity } from '@leanscope/ecs-engine';
+import { OrderFacet, Tags } from '@leanscope/ecs-models';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
+import tw from 'twin.macro';
+import { ItemGroupFacet, TitleFacet } from '../../app/GameFacets';
+import { ItemGroups, ToolNames } from '../../base/enums';
 import { findInventoryIconForItem } from '../../helpers/functions';
-
-// bg-[rgb(189,156,114)]
-// border-[rgb(164,125,95)]
 
 const StyledSelectedIconWrappper = styled.div`
   ${tw`p-1 size-24 bg-[rgb(228,208,171)] border-[6px] backdrop-blur-xl border-[rgb(189,156,114)] rounded-2xl flex items-center justify-center`}
@@ -21,19 +16,18 @@ const StyledValueText = styled.p`
   ${tw` absolute  text-base mt-[3.7rem] ml-[3.7rem] font-bold italic text-white`}
 `;
 
-
 const SelectedItemIcon = (props: { entity?: Entity }) => {
   const { entity } = props;
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
 
-const itemGroup = entity?.get(ItemGroupFacet)?.props.group;
+  const itemGroup = entity?.get(ItemGroupFacet)?.props.group;
   const title = entity?.get(TitleFacet)?.props.title;
   const value = entity ? items.filter((e) => e.get(TitleFacet)?.props.title === title).length : 0;
 
-
   return (
     <StyledSelectedIconWrappper>
-      {entity && findInventoryIconForItem(title as ToolNames,itemGroup as ItemGroups)} {value > 1 && <StyledValueText>{value}</StyledValueText>}
+      {entity && findInventoryIconForItem(title as ToolNames, itemGroup as ItemGroups)}{' '}
+      {value > 1 && <StyledValueText>{value}</StyledValueText>}
     </StyledSelectedIconWrappper>
   );
 };
@@ -47,8 +41,6 @@ const Hotbar = () => {
   const [tools] = useEntities((e) => e.has(ItemGroupFacet) && e.get(ItemGroupFacet)?.props.group === ItemGroups.TOOLS);
   const [selectedItem] = useEntity((e) => e.has(Tags.SELECTED) && e.has(ItemGroupFacet));
   const isHotbarVisible = true;
-
-
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

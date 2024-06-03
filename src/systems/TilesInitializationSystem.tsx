@@ -1,8 +1,7 @@
-import React, { useContext, useEffect } from 'react';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
-import { mapData } from '../components/map/mapData';
-import { EnvironmentObjects } from '../base/enums';
+import { useContext, useEffect } from 'react';
 import { v4 } from 'uuid';
+import { mapData } from '../components/map/mapData';
 
 const TilesInitializationSystem = () => {
   const lsc = useContext(LeanScopeClientContext);
@@ -15,7 +14,7 @@ const TilesInitializationSystem = () => {
             tile.terrainType !== '' &&
             lsc.entities.create({
               positionX: x,
-              positionY:mapData.length -  y,
+              positionY: mapData.length - y,
               positionZ: 0,
 
               type: tile.terrainType,
@@ -34,7 +33,7 @@ const TilesInitializationSystem = () => {
     };
   }, []);
 
-  return <></>;
+  return null;
 };
 
 export default TilesInitializationSystem;

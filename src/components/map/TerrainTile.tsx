@@ -1,95 +1,93 @@
-import { IdentifierProps, PositionFacet, PositionProps, Tags, TextTypeFacet, TextTypeProps } from '@leanscope/ecs-models';
-import { TILE_SIZE, VALID_TERRAIN_TILES } from '../../base/constants';
-import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
+import { Entity, EntityProps, useEntities } from '@leanscope/ecs-engine';
 import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
-import { useEffect, useRef, useState } from 'react';
-import { BufferGeometry, Material, Mesh, MeshBasicMaterial, NormalBufferAttributes, Object3DEventMap } from 'three';
+import { IdentifierProps, PositionFacet, PositionProps, TextTypeFacet, TextTypeProps } from '@leanscope/ecs-models';
+import { Box } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import React from 'react';
+import { Fragment, useRef } from 'react';
+import { useLoader } from 'react-three-fiber';
+import * as THREE from 'three';
+import { BufferGeometry, Material, Mesh, MeshBasicMaterial, NormalBufferAttributes, Object3DEventMap } from 'three';
+import { TileCropFacet, TileCropProps } from '../../app/GameFacets';
+import { FARMLAND_WATERD, WHEAT_CROP_STATE_1, WHEAT_CROP_STATE_2, WHEAT_CROP_STATE_3 } from '../../assets/crops';
 import {
-  GRASS_TILE_1,
-  GRASS_TILE_2,
-  GRASS_TILE_3,
-  GRASS_TILE_4,
-  GRASS_TILE_TL,
-  GRASS_TILE_TR,
-  GRASS_TILE_BL,
-  GRASS_TILE_BR,
-  GRASS_TILE_B,
-  GRASS_TILE_L,
-  GRASS_TILE_R,
-  GRASS_TILE_T,
-  GRASS_TILE_CORNER_TL,
-  GRASS_TILE_CORNER_TR,
-  GRASS_TILE_CORNER_BL,
-  GRASS_TILE_CORNER_BR,
   FARMLAND_TILE,
   FARMLAND_TILE_B,
-  FARMLAND_TILE_BR,
-  FARMLAND_TILE_T,
-  FARMLAND_TILE_L,
-  FARMLAND_TILE_R,
+  FARMLAND_TILE_B_CORNER_TL,
+  FARMLAND_TILE_B_CORNER_TLR,
+  FARMLAND_TILE_B_CORNER_TR,
   FARMLAND_TILE_BL,
-  FARMLAND_TILE_TR,
-  FARMLAND_TILE_TL,
+  FARMLAND_TILE_BL_CORNER_BL,
+  FARMLAND_TILE_BR,
+  FARMLAND_TILE_BR_CORNER_BR,
+  FARMLAND_TILE_CORNER_BL,
+  FARMLAND_TILE_CORNER_BLR,
+  FARMLAND_TILE_CORNER_BR,
+  FARMLAND_TILE_CORNER_TL,
+  FARMLAND_TILE_CORNER_TLBL,
+  FARMLAND_TILE_CORNER_TLBLR,
+  FARMLAND_TILE_CORNER_TLBR,
+  FARMLAND_TILE_CORNER_TLR,
+  FARMLAND_TILE_CORNER_TLRBL,
+  FARMLAND_TILE_CORNER_TLRBLR,
+  FARMLAND_TILE_CORNER_TLRBR,
+  FARMLAND_TILE_CORNER_TR,
+  FARMLAND_TILE_CORNER_TRBL,
+  FARMLAND_TILE_CORNER_TRBLR,
+  FARMLAND_TILE_CORNER_TRBR,
+  FARMLAND_TILE_L,
+  FARMLAND_TILE_L_CORNER_BR,
+  FARMLAND_TILE_L_CORNER_TR,
+  FARMLAND_TILE_L_CORNER_TRBR,
   FARMLAND_TILE_LR,
-  FARMLAND_TILE_TB,
+  FARMLAND_TILE_R,
+  FARMLAND_TILE_R_CORNER_BL,
+  FARMLAND_TILE_R_CORNER_TL,
+  FARMLAND_TILE_R_CORNER_TLBL,
+  FARMLAND_TILE_ROUNDED,
   FARMLAND_TILE_ROUNDED_B,
   FARMLAND_TILE_ROUNDED_L,
   FARMLAND_TILE_ROUNDED_R,
   FARMLAND_TILE_ROUNDED_T,
-  FARMLAND_TILE_ROUNDED,
-  FARMLAND_TILE_CORNER_BL,
-  FARMLAND_TILE_CORNER_BR,
-  FARMLAND_TILE_CORNER_TL,
-  FARMLAND_TILE_CORNER_TR,
-  FARMLAND_TILE_CORNER_TLRBLR,
-  FARMLAND_TILE_CORNER_TLR,
-  FARMLAND_TILE_CORNER_BLR,
-  FARMLAND_TILE_CORNER_TLRBR,
-  FARMLAND_TILE_CORNER_TLBR,
-  FARMLAND_TILE_CORNER_TLBL,
-  FARMLAND_TILE_CORNER_TLBLR,
-  FARMLAND_TILE_CORNER_TRBR,
-  FARMLAND_TILE_CORNER_TRBL,
-  FARMLAND_TILE_BR_CORNER_BR,
-  FARMLAND_TILE_BL_CORNER_BL,
-  FARMLAND_TILE_TR_CORNER_TR,
-  FARMLAND_TILE_TL_CORNER_TL,
-  FARMLAND_TILE_CORNER_TRBLR,
-  FARMLAND_TILE_CORNER_TLRBL,
-  FARMLAND_TILE_L_CORNER_TR,
-  FARMLAND_TILE_L_CORNER_BR,
-  FARMLAND_TILE_L_CORNER_TRBR,
-  FARMLAND_TILE_R_CORNER_TL,
-  FARMLAND_TILE_R_CORNER_BL,
-  FARMLAND_TILE_R_CORNER_TLBL,
+  FARMLAND_TILE_T,
   FARMLAND_TILE_T_CORNER_BL,
-  FARMLAND_TILE_T_CORNER_BR,
   FARMLAND_TILE_T_CORNER_BLR,
-  FARMLAND_TILE_B_CORNER_TL,
-  FARMLAND_TILE_B_CORNER_TR,
-  FARMLAND_TILE_B_CORNER_TLR,
-  FARMLAND_TILE_BLANK,
-  HILL_TILE_TL,
-  HILL_TILE_TR,
+  FARMLAND_TILE_T_CORNER_BR,
+  FARMLAND_TILE_TB,
+  FARMLAND_TILE_TL,
+  FARMLAND_TILE_TL_CORNER_TL,
+  FARMLAND_TILE_TR,
+  FARMLAND_TILE_TR_CORNER_TR,
+  GRASS_TILE_1,
+  GRASS_TILE_2,
+  GRASS_TILE_3,
+  GRASS_TILE_4,
+  GRASS_TILE_B,
+  GRASS_TILE_BL,
+  GRASS_TILE_BR,
+  GRASS_TILE_CORNER_BL,
+  GRASS_TILE_CORNER_BR,
+  GRASS_TILE_CORNER_TL,
+  GRASS_TILE_CORNER_TR,
+  GRASS_TILE_L,
+  GRASS_TILE_R,
+  GRASS_TILE_T,
+  GRASS_TILE_TL,
+  GRASS_TILE_TR,
+  HILL_TILE_B,
   HILL_TILE_BL,
   HILL_TILE_BR,
-  HILL_TILE_T,
-  HILL_TILE_B,
-  HILL_TILE_L,
-  HILL_TILE_R,
-  HILL_TILE_CORNER_TL,
-  HILL_TILE_CORNER_TR,
   HILL_TILE_CORNER_BL,
   HILL_TILE_CORNER_BR,
+  HILL_TILE_CORNER_TL,
+  HILL_TILE_CORNER_TR,
+  HILL_TILE_L,
+  HILL_TILE_R,
+  HILL_TILE_T,
+  HILL_TILE_TL,
+  HILL_TILE_TR,
 } from '../../assets/tiles';
-import { Canvas, useLoader } from 'react-three-fiber';
-import * as THREE from 'three';
-import { Box } from '@react-three/drei';
-import { CropNames, GameTags, SeedNames, TerrainTiles } from '../../base/enums';
-import { TileCropFacet, TileCropProps } from '../../app/GameFacets';
-import { FARMLAND_WATERD, WHEAT_CROP_STATE_1, WHEAT_CROP_STATE_2, WHEAT_CROP_STATE_3 } from '../../assets/crops';
+import { TILE_SIZE, VALID_TERRAIN_TILES } from '../../base/constants';
+import { GameTags, SeedNames, TerrainTiles } from '../../base/enums';
 
 const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string => {
   const { positionX, positionY } = tile.get(PositionFacet)?.props!;
@@ -159,8 +157,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
     return GRASS_TILE_CORNER_TR;
   }
 
-
-
   if (
     rightNeighbor &&
     leftNeighbor &&
@@ -181,7 +177,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
     const bottomLeftNeighborType = bottomLeftNeighbor.get(TextTypeFacet)?.props.type;
     const bottomRightNeighborType = bottomRightNeighbor.get(TextTypeFacet)?.props.type;
 
-
     if (tile.get(TextTypeFacet)?.props.type === TerrainTiles.HILL) {
       if (
         leftNeighborType === TerrainTiles.HILL &&
@@ -189,7 +184,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
         topNeighborType === TerrainTiles.HILL &&
         bottomNeighborType === TerrainTiles.HILL &&
         bottomLeftNeighborType === TerrainTiles.GRASS
-
       ) {
         return HILL_TILE_CORNER_BL;
       }
@@ -199,7 +193,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
         topNeighborType === TerrainTiles.HILL &&
         bottomNeighborType === TerrainTiles.HILL &&
         bottomRightNeighborType === TerrainTiles.GRASS
-
       ) {
         return HILL_TILE_CORNER_BR;
       }
@@ -209,7 +202,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
         topNeighborType === TerrainTiles.HILL &&
         bottomNeighborType === TerrainTiles.HILL &&
         topLeftNeighborType === TerrainTiles.GRASS
-
       ) {
         return HILL_TILE_CORNER_TL;
       }
@@ -219,17 +211,15 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
         topNeighborType === TerrainTiles.HILL &&
         bottomNeighborType === TerrainTiles.HILL &&
         topRightNeighborType === TerrainTiles.GRASS
-
       ) {
         return HILL_TILE_CORNER_TR;
       }
-      
+
       if (
         leftNeighborType === TerrainTiles.GRASS &&
         rightNeighborType === TerrainTiles.HILL &&
         topNeighborType === TerrainTiles.HILL &&
-        bottomNeighborType === TerrainTiles.GRASS 
-
+        bottomNeighborType === TerrainTiles.GRASS
       ) {
         return HILL_TILE_BL;
       }
@@ -238,7 +228,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
         rightNeighborType === TerrainTiles.GRASS &&
         topNeighborType === TerrainTiles.HILL &&
         bottomNeighborType === TerrainTiles.GRASS
-
       ) {
         return HILL_TILE_BR;
       }
@@ -246,8 +235,7 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
         leftNeighborType === TerrainTiles.GRASS &&
         rightNeighborType === TerrainTiles.HILL &&
         topNeighborType === TerrainTiles.GRASS &&
-        bottomNeighborType === TerrainTiles.HILL 
-
+        bottomNeighborType === TerrainTiles.HILL
       ) {
         return HILL_TILE_TL;
       }
@@ -256,7 +244,6 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
         rightNeighborType === TerrainTiles.GRASS &&
         topNeighborType === TerrainTiles.GRASS &&
         bottomNeighborType === TerrainTiles.HILL
-
       ) {
         return HILL_TILE_TR;
       }
@@ -301,9 +288,7 @@ const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string 
       ) {
         return HILL_TILE_R;
       }
-      return  HILL_TILE_B
-     
-
+      return HILL_TILE_B;
     }
 
     if (tile.get(TextTypeFacet)?.props.type === TerrainTiles.GRASS) {
@@ -860,7 +845,7 @@ const selectCropImage = (tileCropName: SeedNames, growthStage: number): string =
 };
 
 const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & EntityProps & TileCropProps) => {
-  const { positionX, positionY, type, entity, tileCropName, growthStage } = props;
+  const { positionX, positionY, entity, tileCropName, growthStage } = props;
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TerrainTiles) || ''));
   const [isWaterd] = useEntityHasTags(entity, GameTags.WATERD);
   const terrainTexture = useLoader(THREE.TextureLoader, selectImageForTileType(entity, tiles));
@@ -870,7 +855,6 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
   const meshRef = useRef<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>(null);
   const materialRef = useRef<MeshBasicMaterial>(null);
   const seedRef = useRef<MeshBasicMaterial>(null);
-  const textureRef = useRef<MeshBasicMaterial>(null);
 
   useFrame(() => {
     if (isWaterd && materialRef.current) {
@@ -891,7 +875,7 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
   });
 
   return (
-    <>
+    <Fragment>
       <Box ref={meshRef} position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
         <meshBasicMaterial
           polygonOffset={true}
@@ -927,7 +911,7 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
           transparent
         />
       </Box>
-    </>
+    </Fragment>
   );
 };
 

@@ -1,18 +1,16 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { PositionFacet, PositionProps, Tags, TextTypeFacet } from '@leanscope/ecs-models';
-import { Entity, EntityProps, useEntities, useEntity } from '@leanscope/ecs-engine';
-import { VALID_TERRAIN_TILES, TILE_SIZE, WALKABLE_TILES, PLAYER_SPEED } from '../../base/constants';
-import { EnvironmentObjects, GameTags, TerrainTiles } from '../../base/enums';
+import { Entity, EntityProps, useEntities } from '@leanscope/ecs-engine';
+import { PositionFacet, PositionProps, TextTypeFacet } from '@leanscope/ecs-models';
 import { Box } from '@react-three/drei';
-import { ILeanScopeClient } from '@leanscope/api-client/interfaces';
-import { LeanScopeClientContext } from '@leanscope/api-client/node';
+import { useFrame } from '@react-three/fiber';
+import { useEffect, useRef } from 'react';
+import { PLAYER_SPEED, TILE_SIZE, VALID_TERRAIN_TILES } from '../../base/constants';
+import { GameTags, TerrainTiles } from '../../base/enums';
 
-const checkCanMoveRight = (playerX: number, playerY: number, tiles: readonly Entity[], lsc: ILeanScopeClient): boolean => {
+const checkCanMoveRight = (playerX: number, playerY: number, tiles: readonly Entity[]): boolean => {
   const playerTile = tiles.find((e) => e.hasTag(GameTags.PLAYER_TILE));
 
   if (playerTile) {
-    const currentTileY = playerTile.get(PositionFacet)?.props.positionY!;
+    // const currentTileY = playerTile.get(PositionFacet)?.props.positionY!;
     const currentTileX = playerTile.get(PositionFacet)?.props.positionX!;
     // const tilesInRow = tiles.filter((tile) => tile.get(PositionFacet)?.props.positionY === currentTileY);
     const tilesInRow = tiles.filter(
@@ -21,12 +19,14 @@ const checkCanMoveRight = (playerX: number, playerY: number, tiles: readonly Ent
         tile.get(PositionFacet)?.props.positionY! + TILE_SIZE / 2 >= playerY,
     );
 
-    const nextTile = tilesInRow.find(
-      (tile) => currentTileX ? tile.get(PositionFacet)?.props.positionX! !== currentTileX && tile.get(PositionFacet)?.props.positionX! > playerX : tile.get(PositionFacet)?.props.positionX! > playerX ,
+    const nextTile = tilesInRow.find((tile) =>
+      currentTileX
+        ? tile.get(PositionFacet)?.props.positionX! !== currentTileX && tile.get(PositionFacet)?.props.positionX! > playerX
+        : tile.get(PositionFacet)?.props.positionX! > playerX,
     );
     // console.log('nextTile', nextTile);
     // console.log("tilesInRow", tilesInRow)
-    if (nextTile && nextTile.get(TextTypeFacet)?.props.type !== "") {
+    if (nextTile && nextTile.get(TextTypeFacet)?.props.type !== '') {
       return true;
     }
   }
@@ -62,7 +62,6 @@ const checkCanMoveLeft = (playerX: number, playerY: number, tiles: readonly Enti
 };
 
 const PlayerSprite = (props: PositionProps & EntityProps) => {
-  const lsc = useContext(LeanScopeClientContext);
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TerrainTiles) || ''));
 
   const { entity, positionX, positionY } = props;
@@ -85,7 +84,7 @@ const PlayerSprite = (props: PositionProps & EntityProps) => {
       if (key === 'a' && checkCanMoveLeft(positionX, positionY, tiles) == true) {
         movementRef.current[0] = -PLAYER_SPEED;
       }
-      if (key === 'd' && checkCanMoveRight(positionX, positionY, tiles, lsc) == true) {
+      if (key === 'd' && checkCanMoveRight(positionX, positionY, tiles) == true) {
         movementRef.current[0] = PLAYER_SPEED;
       }
     };
@@ -103,7 +102,7 @@ const PlayerSprite = (props: PositionProps & EntityProps) => {
     };
 
     const handleKeyPress = () => {
-      if (checkCanMoveRight(positionX, positionY, tiles, lsc) == false) {
+      if (checkCanMoveRight(positionX, positionY, tiles) == false) {
         console.log('cannot move right');
         movementRef.current[0] = 0;
       }

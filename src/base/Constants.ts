@@ -1,10 +1,15 @@
-import { AXE_ICON_INVENTORY, HOE_ICON_INVENTORY } from '../assets/items/inventory';
-import { TileTypes, TerrainTiles, ToolNames, EnvironmentObjects } from './enums';
+import { EnvironmentObjects, TerrainTiles, TileTypes } from './enums';
 
 export const TILE_SIZE = 0.9;
 export const WALKABLE_TILES = [TileTypes.GRASS, TileTypes.DIRT];
 export const VALID_TERRAIN_TILES = [TerrainTiles.WATER, TerrainTiles.DIRT, TerrainTiles.GRASS, TerrainTiles.FARMLAND, TerrainTiles.HILL];
-export const VALID_ENVITONMENT_OBJECTS_TILES = [EnvironmentObjects.TREE, EnvironmentObjects.ROCK, EnvironmentObjects.BUSH, EnvironmentObjects.FLOWER, EnvironmentObjects.WEED];
+export const VALID_ENVITONMENT_OBJECTS_TILES = [
+  EnvironmentObjects.TREE,
+  EnvironmentObjects.ROCK,
+  EnvironmentObjects.BUSH,
+  EnvironmentObjects.FLOWER,
+  EnvironmentObjects.WEED,
+];
 export const TIME_SPEED = 100;
 export const START_TIME = 8;
 export const MAX_TREE_FRUIT_GROWTH_STAGE = 4;

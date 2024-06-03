@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import tw from 'twin.macro';
 import styled from '@emotion/styled';
-import { Entity, EntityProps, EntityPropsMapper, useEntities, useEntity } from '@leanscope/ecs-engine';
-import { ItemGroupFacet, SoundEffectFacet, TitleFacet, TitleProps } from '../../app/GameFacets';
-import { NameFacet, OrderFacet, Tags } from '@leanscope/ecs-models';
-import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
-import { CropNames, FruitNames, ItemGroups, SeedNames, SoundEffects, Stories, ToolNames } from '../../base/enums';
-import { useIsStoryCurrent } from '@leanscope/storyboarding';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
+import { Entity, useEntities, useEntity } from '@leanscope/ecs-engine';
+import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
+import { Tags } from '@leanscope/ecs-models';
+import { useIsStoryCurrent } from '@leanscope/storyboarding';
 import { motion } from 'framer-motion';
-import { AXE_ICON_INVENTORY, HOE_ICON_INVENTORY } from '../../assets/items/inventory';
+import { useContext, useEffect, useRef } from 'react';
+import tw from 'twin.macro';
+import { ItemGroupFacet, SoundEffectFacet, TitleFacet } from '../../app/GameFacets';
+import { CropNames, FruitNames, ItemGroups, SeedNames, SoundEffects, Stories, ToolNames } from '../../base/enums';
 import { findInventoryIconForItem } from '../../helpers/functions';
 
 const StyledImportantItemSlot = styled.div<{ isSelected: boolean }>`
@@ -18,7 +17,6 @@ const StyledImportantItemSlot = styled.div<{ isSelected: boolean }>`
 
 const ImportantItemSlot = (props: { entity?: Entity }) => {
   const { entity } = props;
-  const [isSelected] = useEntityHasTags(entity, Tags.SELECTED);
 
   const handleSelectTool = () => {
     entity?.addTag(Tags.SELECTED);
@@ -36,7 +34,7 @@ const StyledToolSlot = styled.div<{ isSelected: boolean }>`
   ${({ isSelected }) => isSelected && tw`border-[rgb(189,156,114)] border-[3px]`}
 `;
 
-const ToolSlot = (props: { entity?: Entity, soundEffectEntity?: Entity  }) => {
+const ToolSlot = (props: { entity?: Entity; soundEffectEntity?: Entity }) => {
   const { entity, soundEffectEntity } = props;
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
   const [isSelected] = useEntityHasTags(entity, Tags.SELECTED);
@@ -154,11 +152,10 @@ const Inventory = () => {
   useEffect(() => {
     if (isInventoryVisible) {
       soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SoundEffects.OPEN_INVENTORY }));
-    }else { 
+    } else {
       soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SoundEffects.CLOSE_INVENTORY }));
     }
   }, [isInventoryVisible]);
-
 
   return (
     <>

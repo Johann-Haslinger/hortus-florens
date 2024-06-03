@@ -1,4 +1,4 @@
-import { CropNames, FruitNames, ItemGroups, SeedNames, SoundEffects, TreeNames } from '../base/enums';
+import { FruitNames, ItemGroups, SeedNames, SoundEffects } from '../base/enums';
 import { Facet } from '../base/facet';
 
 export interface TypeProps {
@@ -87,7 +87,7 @@ export interface SoundEffectProps {
   soundEffect: SoundEffects | null;
 }
 
-export class SoundEffectFacet extends Facet<SoundEffectProps>{
+export class SoundEffectFacet extends Facet<SoundEffectProps> {
   constructor(props: SoundEffectProps) {
     super(props);
   }

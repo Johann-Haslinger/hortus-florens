@@ -1,13 +1,13 @@
+import { Canvas } from '@react-three/fiber';
 import { PropsWithChildren } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
 import { NoToneMapping } from 'three';
 
 const FullScreenCanvas: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <Canvas
-      gl={{ antialias: true, toneMapping: NoToneMapping, }}
+      gl={{ antialias: true, toneMapping: NoToneMapping }}
       linear
-     shadows={"soft"}
+      shadows={'soft'}
       style={{
         backgroundColor: 'rgb(144,206,187)',
         width: '100%',

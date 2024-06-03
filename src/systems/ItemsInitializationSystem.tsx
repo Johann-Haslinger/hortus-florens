@@ -1,13 +1,12 @@
-import React from 'react';
 import { EntityCreator } from '@leanscope/ecs-engine';
-import { IdentifierFacet, OrderFacet, Tags, TextTypeFacet } from '@leanscope/ecs-models';
+import { IdentifierFacet, OrderFacet, Tags } from '@leanscope/ecs-models';
+import { v4 } from 'uuid';
 import { ItemGroupFacet, TitleFacet } from '../app/GameFacets';
 import { CropNames, FruitNames, ItemGroups, SeedNames, ToolNames } from '../base/enums';
-import { v4 } from 'uuid';
 
 const ItemsInitializationSystem = () => {
   return (
-    <>
+    <div>
       <EntityCreator
         facets={[
           new IdentifierFacet({ guid: v4() }),
@@ -67,7 +66,7 @@ const ItemsInitializationSystem = () => {
         ]}
         tags={[]}
       />
-       <EntityCreator
+      <EntityCreator
         facets={[
           new IdentifierFacet({ guid: v4() }),
           new ItemGroupFacet({ group: ItemGroups.FRUITS }),
@@ -75,7 +74,7 @@ const ItemsInitializationSystem = () => {
         ]}
         tags={[]}
       />
-    </>
+    </div>
   );
 };
 

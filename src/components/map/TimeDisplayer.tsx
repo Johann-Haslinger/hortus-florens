@@ -1,7 +1,6 @@
-import React from 'react';
-import tw from 'twin.macro';
 import styled from '@emotion/styled';
 import { useEntity } from '@leanscope/ecs-engine';
+import tw from 'twin.macro';
 import { TimeFacet } from '../../app/GameFacets';
 
 enum DAY_TIME_COLORS {
@@ -29,7 +28,19 @@ const getDayTimeColor = (time: number) => {
 };
 
 const getDayTimeOpcity = (time: number) =>
-time >=  17 && time < 18 ? (time - 17 )/ 1.4 : time >= 18  && time < 19 ? 1 / 1.4 : time >= 19 && time < 20 ? 1 - ((time -19 )/ 1.4)  :  time >= 20 ? (time - 20) / 5 : time > 4 && time <= 6 ? 0.8 - (time - 4) / 2 : time <= 4 ? 0.8 : 0;
+  time >= 17 && time < 18
+    ? (time - 17) / 1.4
+    : time >= 18 && time < 19
+    ? 1 / 1.4
+    : time >= 19 && time < 20
+    ? 1 - (time - 19) / 1.4
+    : time >= 20
+    ? (time - 20) / 5
+    : time > 4 && time <= 6
+    ? 0.8 - (time - 4) / 2
+    : time <= 4
+    ? 0.8
+    : 0;
 
 const TimeDisplayer = () => {
   const [timeEntity] = useEntity((e) => e.has(TimeFacet));
@@ -38,10 +49,12 @@ const TimeDisplayer = () => {
   const timeColor = getDayTimeColor(currentTime || 0);
 
   return (
-    <>
+    <div>
       <StyledScreenOverlay color={timeColor} opcity={getDayTimeOpcity(currentTime)} />
-      <StyledTimeDisplayer>Time: {Math.round(currentTime)}, Day: {currentDay} </StyledTimeDisplayer>
-    </>
+      <StyledTimeDisplayer>
+        Time: {Math.round(currentTime)}, Day: {currentDay}{' '}
+      </StyledTimeDisplayer>
+    </div>
   );
 };
 

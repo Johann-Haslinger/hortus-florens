@@ -1,11 +1,10 @@
-import React from 'react';
 import { EntityCreator } from '@leanscope/ecs-engine';
 import { IdentifierFacet, StoryFacet, Tags } from '@leanscope/ecs-models';
 import { Stories } from '../base/enums';
 
 const StoryInitializationSystem = () => {
   return (
-    <>
+    <div>
       <EntityCreator
         facetClasses={[StoryFacet]}
         facets={[
@@ -34,7 +33,7 @@ const StoryInitializationSystem = () => {
           }),
         ]}
       />
-    </>
+    </div>
   );
 };
 

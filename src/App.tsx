@@ -1,17 +1,16 @@
-import React from 'react';
-import Map from './components/map/Map';
-import ItemsInitializationSystem from './systems/ItemsInitializationSystem';
-import PlayerInitializationSystem from './systems/PlayerInitializationSystem';
-import TilesInitializationSystem from './systems/TilesInitializationSystem';
 import Hotbar from './components/inventory/Hotbar';
 import Inventory from './components/inventory/Inventory';
-import StoryInitializationSystem from './systems/StoryInitializationSystem';
+import Map from './components/map/Map';
 import GameEntitiesInitializationSystem from './systems/GameEntitiesInitializationSystem';
+import ItemsInitializationSystem from './systems/ItemsInitializationSystem';
+import PlayerInitializationSystem from './systems/PlayerInitializationSystem';
+import StoryInitializationSystem from './systems/StoryInitializationSystem';
+import TilesInitializationSystem from './systems/TilesInitializationSystem';
 
 function App() {
   return (
-    <>
-     <PlayerInitializationSystem />
+    <div>
+      <PlayerInitializationSystem />
       <GameEntitiesInitializationSystem />
       <StoryInitializationSystem />
       <ItemsInitializationSystem />
@@ -19,7 +18,7 @@ function App() {
       <Hotbar />
       <Inventory />
       <Map />
-    </>
+    </div>
   );
 }
 

@@ -1,15 +1,13 @@
-import { EntityProps } from '@leanscope/ecs-engine';
-import { IdentifierProps, TextTypeProps, PositionProps } from '@leanscope/ecs-models';
-import React, { useRef } from 'react';
-import { useLoader, useFrame } from 'react-three-fiber';
-import { Group, Object3DEventMap } from 'three';
-import { TreeFruitProps, TreeFruitFacet, TitleProps } from '../../../app/GameFacets';
-import { TREE_DEAD_TILE, WEED_TILE_1, WEED_TILE_2 } from '../../../assets/environmentObjects';
-import { TILE_SIZE } from '../../../base/constants';
-import { EnvironmentObjects, GameTags, WeedNames } from '../../../base/enums';
-import { findEnvotonmentObjectSizeArgs } from '../../../helpers/functions';
+import { IdentifierProps, PositionProps, TextTypeProps } from '@leanscope/ecs-models';
 import { Box } from '@react-three/drei';
+import { useRef } from 'react';
+import { useLoader } from 'react-three-fiber';
 import * as THREE from 'three';
+import { TitleProps } from '../../../app/GameFacets';
+import { WEED_TILE_1, WEED_TILE_2 } from '../../../assets/environmentObjects';
+import { TILE_SIZE } from '../../../base/constants';
+import { EnvironmentObjects, WeedNames } from '../../../base/enums';
+import { findEnvotonmentObjectSizeArgs } from '../../../helpers/functions';
 
 const findWeedTexture = (weed: WeedNames) => {
   switch (weed) {

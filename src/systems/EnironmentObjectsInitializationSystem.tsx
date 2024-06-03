@@ -1,12 +1,12 @@
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
-import { Entity, EntityCreator } from '@leanscope/ecs-engine';
+import { Entity } from '@leanscope/ecs-engine';
 import { IdentifierFacet, PositionFacet, TextTypeFacet } from '@leanscope/ecs-models';
-import React, { useContext, useEffect } from 'react';
-import { EnvironmentObjects, FlowerNames, FruitNames, GameTags, RockNames, TreeNames, WeedNames } from '../base/enums';
+import { useContext, useEffect } from 'react';
 import { v4 } from 'uuid';
 import { TitleFacet, TreeFruitFacet } from '../app/GameFacets';
-import { mapData } from '../components/map/mapData';
 import { MAX_TREE_FRUIT_GROWTH_STAGE } from '../base/constants';
+import { EnvironmentObjects, FlowerNames, FruitNames, RockNames, TreeNames, WeedNames } from '../base/enums';
+import { mapData } from '../components/map/mapData';
 
 const EnironmentObjectsInitializationSystem = () => {
   const lsc = useContext(LeanScopeClientContext);
@@ -38,7 +38,7 @@ const EnironmentObjectsInitializationSystem = () => {
             }
             if (tile.enviromentObject === WeedNames.WEED_1 || tile.enviromentObject === WeedNames.WEED_2) {
               newntity.add(new TextTypeFacet({ type: EnvironmentObjects.WEED }));
-              newntity.add(new TitleFacet({ title:tile.enviromentObject}));
+              newntity.add(new TitleFacet({ title: tile.enviromentObject }));
             }
           }
         });
@@ -54,7 +54,7 @@ const EnironmentObjectsInitializationSystem = () => {
     };
   }, []);
 
-  return <></>;
+  return null;
 };
 
 export default EnironmentObjectsInitializationSystem;

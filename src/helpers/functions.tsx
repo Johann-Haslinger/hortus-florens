@@ -7,7 +7,7 @@ import {
   WHEAT_SEED_ICON_INVENTORY,
 } from '../assets/items/inventory';
 import { TILE_SIZE } from '../base/constants';
-import { CropNames, EnvironmentObjects, FruitNames, ItemGroups, OtherItemNames, SeedNames, ToolNames, WeedNames } from '../base/enums';
+import { CropNames, EnvironmentObjects, FruitNames, ItemGroups, OtherItemNames, SeedNames, ToolNames } from '../base/enums';
 
 export const findInventoryIconForItem = (
   itemName: ToolNames | SeedNames | CropNames | FruitNames | OtherItemNames,
@@ -58,7 +58,6 @@ export const findInventoryIconForItem = (
       return null;
   }
 };
-
 
 export const findEnvotonmentObjectSizeArgs = (object: EnvironmentObjects): [number, number, number] => {
   switch (object) {
