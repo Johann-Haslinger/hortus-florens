@@ -24,7 +24,7 @@ const ImportantItemSlot = (props: { entity?: Entity }) => {
 
   return (
     <StyledImportantItemSlot onClick={handleSelectTool} isSelected={false}>
-      {entity && <>{entity.get(TitleFacet)?.props.title}</>}
+      {entity && entity.get(TitleFacet)?.props.title}
     </StyledImportantItemSlot>
   );
 };
@@ -51,7 +51,7 @@ const ToolSlot = (props: { entity?: Entity; soundEffectEntity?: Entity }) => {
 
   return (
     <StyledToolSlot onClick={handleSelectTool} isSelected={isSelected}>
-      {entity && <>{findInventoryIconForItem(entity.get(TitleFacet)?.props.title as ToolNames, ItemGroups.TOOLS)}</>}
+      {entity && findInventoryIconForItem(entity.get(TitleFacet)?.props.title as ToolNames, ItemGroups.TOOLS)}
     </StyledToolSlot>
   );
 };
@@ -88,7 +88,7 @@ const NormalItem = (props: { entity?: Entity; soundEffectEntity?: Entity }) => {
 
   return (
     <StyledNormalItem onClick={handleSelectTool} isSelected={isSelected && entity !== undefined}>
-      {entity && <>{findInventoryIconForItem(title as SeedNames | CropNames | FruitNames, itemGroup as ItemGroups)}</>}
+      {entity && findInventoryIconForItem(title as SeedNames | CropNames | FruitNames, itemGroup as ItemGroups)}
       {value > 1 && <StyledValueText isSelected={isSelected}>{value}</StyledValueText>}
     </StyledNormalItem>
   );
@@ -158,7 +158,7 @@ const Inventory = () => {
   }, [isInventoryVisible]);
 
   return (
-    <>
+    <div>
       <StyledBackgroundDimmer isVisible={isInventoryVisible} />
       <StyledInventoryPositioner>
         <motion.div
@@ -185,7 +185,7 @@ const Inventory = () => {
           </StyledInevntoryContainer>
         </motion.div>
       </StyledInventoryPositioner>
-    </>
+    </div>
   );
 };
 

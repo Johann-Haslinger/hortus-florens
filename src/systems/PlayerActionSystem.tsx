@@ -258,7 +258,7 @@ const PlayerActionSystem = () => {
     };
   }, [selectedItem, playerTile]);
 
-  return <></>;
+  return null;
 };
 
 export default PlayerActionSystem;
