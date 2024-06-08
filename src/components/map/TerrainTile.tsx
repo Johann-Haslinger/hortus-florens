@@ -87,7 +87,7 @@ import {
   HILL_TILE_TR,
 } from '../../assets/tiles';
 import { TILE_SIZE, VALID_TERRAIN_TILES } from '../../base/constants';
-import { GameTags, SeedNames, TerrainTiles } from '../../base/enums';
+import { AdditionalTags, SeedNames, TerrainTiles } from '../../base/enums';
 
 const selectImageForTileType = (tile: Entity, tiles: readonly Entity[]): string => {
   const { positionX, positionY } = tile.get(PositionFacet)?.props!;
@@ -847,7 +847,7 @@ const selectCropImage = (tileCropName: SeedNames, growthStage: number): string =
 const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & EntityProps & TileCropProps) => {
   const { positionX, positionY, entity, tileCropName, growthStage } = props;
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TerrainTiles) || ''));
-  const [isWaterd] = useEntityHasTags(entity, GameTags.WATERD);
+  const [isWaterd] = useEntityHasTags(entity, AdditionalTags.WATERD);
   const terrainTexture = useLoader(THREE.TextureLoader, selectImageForTileType(entity, tiles));
   const waterdFarmlandTexture = useLoader(THREE.TextureLoader, FARMLAND_WATERD);
 

@@ -16,5 +16,5 @@ export const MAX_TREE_FRUIT_GROWTH_STAGE = 4;
 export const MAX_CROP_GROWTH_STAGE = 3;
 export const INITIAL_CROP_GROWTH_STAGE = 2;
 export const INITIAL_FRUIT_GROWTH_STAGE = 1;
-export const PLAYER_SPEED = 0.13;
+export const PLAYER_SPEED = 0.2;
 export const PLAYER_START_POSITION = { x: 12, y: 4 };

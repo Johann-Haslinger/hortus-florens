@@ -13,10 +13,10 @@ import {
   TILE_SIZE,
 } from '../base/constants';
 import {
+  AdditionalTags,
   CropNames,
   EnvironmentObjects,
   FruitNames,
-  GameTags,
   ItemGroups,
   OtherItemNames,
   SeedNames,
@@ -35,7 +35,7 @@ const handleHoeUse = (playerTile: Entity | undefined, soundEffectEntity: Entity)
 const handleWateringCanUse = (playerTile: Entity | undefined, soundEffectEntity: Entity) => {
   if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TerrainTiles.FARMLAND) {
     soundEffectEntity.add(new SoundEffectFacet({ soundEffect: SoundEffects.WATERING_CAN }));
-    playerTile.addTag(GameTags.WATERD);
+    playerTile.addTag(AdditionalTags.WATERD);
   }
 };
 
@@ -57,11 +57,11 @@ const handleAxeUse = (lsc: ILeanScopeClient, soundEffectEntity: Entity) => {
 
     if (treeEntity) {
       soundEffectEntity.add(new SoundEffectFacet({ soundEffect: SoundEffects.AXE }));
-      if (treeEntity.hasTag(GameTags.HITED)) {
+      if (treeEntity.hasTag(AdditionalTags.HITED)) {
         treeEntity.remove(TreeFruitFacet);
-        treeEntity.addTag(GameTags.CUT);
+        treeEntity.addTag(AdditionalTags.CUT);
       } else {
-        treeEntity.addTag(GameTags.HITED);
+        treeEntity.addTag(AdditionalTags.HITED);
       }
     }
   }
@@ -131,9 +131,9 @@ const handleTryReapCrop = (playerTile: Entity | undefined, lsc: ILeanScopeClient
 };
 
 const removeHits = (lsc: ILeanScopeClient) => {
-  const hitedTrees = lsc.engine.entities.filter((e) => e.hasTag(GameTags.HITED));
+  const hitedTrees = lsc.engine.entities.filter((e) => e.hasTag(AdditionalTags.HITED));
   hitedTrees.forEach((tree) => {
-    tree.removeTag(GameTags.HITED);
+    tree.removeTag(AdditionalTags.HITED);
   });
 };
 
@@ -202,7 +202,7 @@ const handleTryPickUpWeeds = (playerTile: Entity | undefined, lsc: ILeanScopeCli
 
 const PlayerActionSystem = () => {
   const lsc = useContext(LeanScopeClientContext);
-  const [playerTile] = useEntity((e) => e.has(PositionFacet) && e.has(GameTags.PLAYER_TILE));
+  const [playerTile] = useEntity((e) => e.has(PositionFacet) && e.has(AdditionalTags.PLAYER_TILE));
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
   const [soundEffectEntity] = useEntity((e) => e.has(SoundEffectFacet));
 

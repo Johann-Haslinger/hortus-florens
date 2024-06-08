@@ -9,7 +9,7 @@ import { TreeFruitFacet, TreeFruitProps } from '../../../app/GameFacets';
 import { TREE_DEAD_TILE, TREE_TILE } from '../../../assets/environmentObjects';
 import { TREE_FRUIT_APPLE } from '../../../assets/environmentObjects/fruits';
 import { TILE_SIZE } from '../../../base/constants';
-import { EnvironmentObjects, FruitNames, GameTags } from '../../../base/enums';
+import { AdditionalTags, EnvironmentObjects, FruitNames } from '../../../base/enums';
 import { findEnvotonmentObjectSizeArgs } from '../../../helpers/functions';
 
 const findFruitTexture = (fruit: FruitNames) => {
@@ -31,7 +31,7 @@ const TreeTile = (props: IdentifierProps & TextTypeProps & PositionProps & Entit
 
   useFrame(() => {
     if (type == EnvironmentObjects.TREE) {
-      if (entity.hasTag(GameTags.CUT)) {
+      if (entity.hasTag(AdditionalTags.CUT)) {
         meshRef.current!.map = cutTreeTexture;
       } else {
         meshRef.current!.map = tileTexture;

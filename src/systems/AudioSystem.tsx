@@ -14,7 +14,7 @@ import {
   WATERING_CAN_SOUND_EFFECT,
 } from '../assets/audio';
 import { PLAYER_START_POSITION } from '../base/constants';
-import { GameTags, SoundEffects } from '../base/enums';
+import { AdditionalTags, SoundEffects } from '../base/enums';
 
 const handleSelectSoundEffectSrc = (soundEffect: SoundEffects) => {
   switch (soundEffect) {
@@ -43,7 +43,7 @@ const AudioSystem = () => {
   const [soundEffectEntity] = useEntity((e) => e.has(SoundEffectFacet));
   const soundEffect = soundEffectEntity?.get(SoundEffectFacet)?.props.soundEffect;
 
-  const [playerEntity] = useEntity((e) => e.hasTag(GameTags.PLAYER));
+  const [playerEntity] = useEntity((e) => e.hasTag(AdditionalTags.PLAYER));
   const positionX = playerEntity?.get(PositionFacet)?.props.positionX;
   const positionY = playerEntity?.get(PositionFacet)?.props.positionY;
   const [isPlaying, setIsPlaying] = useState(false);

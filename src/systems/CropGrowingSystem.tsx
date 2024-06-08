@@ -1,7 +1,7 @@
 import { useEntities, useEntity } from '@leanscope/ecs-engine';
 import { useEffect } from 'react';
 import { TileCropFacet, TimeFacet } from '../app/GameFacets';
-import { GameTags } from '../base/enums';
+import { AdditionalTags } from '../base/enums';
 
 const CropGrowingSystem = () => {
   const [timeEntity] = useEntity((e) => e.has(TimeFacet));
@@ -10,10 +10,10 @@ const CropGrowingSystem = () => {
 
   const handleIncreaseGrowthStage = () => {
     tileEntitiesWithCrops
-      .filter((e) => e.hasTag(GameTags.WATERD))
+      .filter((e) => e.hasTag(AdditionalTags.WATERD))
       .forEach((entity) => {
         if (entity.get(TileCropFacet)?.props.growthStage && entity.get(TileCropFacet)!.props.growthStage < 3) {
-          entity.remove(GameTags.WATERD);
+          entity.remove(AdditionalTags.WATERD);
           entity.add(
             new TileCropFacet({
               growthStage: entity.get(TileCropFacet)!.props.growthStage + 1,

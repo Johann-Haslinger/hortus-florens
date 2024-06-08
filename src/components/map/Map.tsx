@@ -8,9 +8,8 @@ import { EnvironmentObjects, TerrainTiles } from '../../base/enums';
 import AudioSystem from '../../systems/AudioSystem';
 import CropGrowingSystem from '../../systems/CropGrowingSystem';
 import EnironmentObjectsInitializationSystem from '../../systems/EnironmentObjectsInitializationSystem';
-import PlayerActionSystem from '../../systems/PlayerActionSystem';
 import TimeCicleSystem from '../../systems/TimeCicleSystem';
-import PlayerSprite from '../player/PlayerSprite';
+import Player from '../player/Player';
 import TreeTile from './eviromentObjects/TreeTile';
 import WeedTile from './eviromentObjects/WeedTile';
 import FullScreenCanvas from './FullscreenCanvas';
@@ -28,7 +27,7 @@ const Map = () => {
       <CropGrowingSystem />
       <TimeCicleSystem />
       <TimeDisplayer />
-      <PlayerActionSystem />
+
       <AudioSystem />
 
       <FullScreenCanvas>
@@ -51,7 +50,7 @@ const Map = () => {
         <EntityPropsMapper
           query={(e) => e.get(TextTypeFacet)?.props.type === 'player'}
           get={[[TextTypeFacet, PositionFacet], []]}
-          onMatch={PlayerSprite}
+          onMatch={Player}
         />
       </FullScreenCanvas>
     </StyledMapContainer>

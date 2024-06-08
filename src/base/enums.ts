@@ -4,7 +4,7 @@ export enum Stories {
   OBSERVING_INVENTORY = '4cd69f91-45ec-4871-9d96-be8ea01d0c2f',
 }
 
-export enum GameTags {
+export enum AdditionalTags {
   WATERD = 'watered',
   CUT = 'cut',
   PLAYER = 'player',
@@ -19,7 +19,7 @@ export enum ToolNames {
   WATERING_CAN = 'watering_can',
 }
 
-export enum CropNames {  
+export enum CropNames {
   WHEAT = 'wheat',
   CARROT = 'carrot',
   POTATO = 'potato',
@@ -58,9 +58,8 @@ export enum ItemGroups {
   SEEDS = 'seeds',
   FRUITS = 'fruits',
   OTHER = 'other',
-  IMPORTANT_ITEMS = 'important_items', 
+  IMPORTANT_ITEMS = 'important_items',
 }
-
 
 export enum TerrainTiles {
   WATER = 'water',
@@ -77,7 +76,7 @@ export enum TileTypes {
   HILL = 'hill',
 }
 
-export enum EnvironmentObjects  {
+export enum EnvironmentObjects {
   TREE = 'tree',
   WEED = 'weed',
   FLOWER = 'flower',
@@ -105,11 +104,10 @@ export enum OtherItemNames {
 export enum SoundEffects {
   AXE = 'axe',
   HOE = 'hoe',
-  WATERING_CAN = 'watering_can',    
+  WATERING_CAN = 'watering_can',
   ITEM_SELECT = 'item_select',
   ITEM_COLLECT = 'item_collect',
   OPEN_INVENTORY = 'open_inventory',
   CLOSE_INVENTORY = 'close_inventory',
   PLANT_SEED = 'plant_seed',
-
 }
