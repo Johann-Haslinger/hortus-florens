@@ -1,12 +1,11 @@
-import { useContext, useEffect } from 'react';
-import { useSelectedItem } from '../hooks/useSelectedItem';
 import { ILeanScopeClient } from '@leanscope/api-client/interfaces';
-import { Entity, useEntity } from '@leanscope/ecs-engine';
-import { TextTypeFacet, PositionFacet } from '@leanscope/ecs-models';
-import { SoundEffectFacet, HealthFacet, TreeFruitFacet } from '../app/GameFacets';
-import { TILE_SIZE } from '../base/constants';
-import { TerrainTiles, SoundEffects, AdditionalTags, EnvironmentObjects, ToolNames } from '../base/enums';
 import { LeanScopeClientContext } from '@leanscope/api-client/node';
+import { Entity, useEntity } from '@leanscope/ecs-engine';
+import { PositionFacet, TextTypeFacet } from '@leanscope/ecs-models';
+import { useContext, useEffect } from 'react';
+import { SoundEffectFacet, TreeFruitFacet } from '../app/GameFacets';
+import { AdditionalTags, EnvironmentObjects, SoundEffects, TerrainTiles, ToolNames } from '../base/enums';
+import { useSelectedItem } from '../hooks/useSelectedItem';
 
 const handleHoeUse = (playerTile: Entity | undefined, soundEffectEntity: Entity) => {
   if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TerrainTiles.GRASS) {
@@ -23,28 +22,31 @@ const handleWateringCanUse = (playerTile: Entity | undefined, soundEffectEntity:
 };
 
 const handleAxeUse = (lsc: ILeanScopeClient, soundEffectEntity: Entity) => {
-  const treeEntities = lsc.engine.entities.filter((e) => e.get(TextTypeFacet)?.props.type === EnvironmentObjects.TREE);
-  const playerEntity = lsc.engine.entities.find((e) => e.has(HealthFacet) && e.has(PositionFacet));
-  const positionX = playerEntity?.get(PositionFacet)?.props.positionX;
-  const positionY = playerEntity?.get(PositionFacet)?.props.positionY;
+  const collidingWithPlayerTree = lsc.engine.entities.find(
+    (e) => e.has(AdditionalTags.COLLIDING_WITH_PLAYER) && e.get(TextTypeFacet)?.props.type === EnvironmentObjects.TREE,
+  );
 
-  if (positionX && positionY) {
-    const treeEntity = treeEntities.find((tree) => {
-      const treeLeft = tree.get(PositionFacet)?.props.positionX! - TILE_SIZE;
-      const treeRight = tree.get(PositionFacet)?.props.positionX! + TILE_SIZE;
-      const treeTop = tree.get(PositionFacet)?.props.positionY! - TILE_SIZE * 2;
-      const treeBottom = tree.get(PositionFacet)?.props.positionY! + TILE_SIZE;
+  if (collidingWithPlayerTree) {
+    soundEffectEntity.add(new SoundEffectFacet({ soundEffect: SoundEffects.AXE }));
+    if (collidingWithPlayerTree.hasTag(AdditionalTags.HITED)) {
+      collidingWithPlayerTree.remove(TreeFruitFacet);
+      collidingWithPlayerTree.addTag(AdditionalTags.CUT);
+    } else {
+      collidingWithPlayerTree.addTag(AdditionalTags.HITED);
+    }
 
-      return positionX >= treeLeft && positionX <= treeRight && positionY >= treeTop && positionY <= treeBottom;
-    });
+    const treeFruitProps = collidingWithPlayerTree?.get(TreeFruitFacet)?.props;
 
-    if (treeEntity) {
-      soundEffectEntity.add(new SoundEffectFacet({ soundEffect: SoundEffects.AXE }));
-      if (treeEntity.hasTag(AdditionalTags.HITED)) {
-        treeEntity.remove(TreeFruitFacet);
-        treeEntity.addTag(AdditionalTags.CUT);
-      } else {
-        treeEntity.addTag(AdditionalTags.HITED);
+    if (treeFruitProps) {
+      const { growthStage, fruitName } = treeFruitProps;
+      if (growthStage === 4) {
+        collidingWithPlayerTree.add(new TreeFruitFacet({ growthStage: 0, fruitName }));
+
+        for (let i = 0; i < 3; i++) {
+          const newWorldAppleItems = new Entity();
+          lsc.engine.addEntity(newWorldAppleItems);
+        
+        }
       }
     }
   }

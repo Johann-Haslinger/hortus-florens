@@ -18,3 +18,4 @@ export const INITIAL_CROP_GROWTH_STAGE = 2;
 export const INITIAL_FRUIT_GROWTH_STAGE = 1;
 export const PLAYER_SPEED = 0.2;
 export const PLAYER_START_POSITION = { x: 12, y: 4 };
+export const PLAYER_SIZE = { width: TILE_SIZE / 2, height: TILE_SIZE / 2 };

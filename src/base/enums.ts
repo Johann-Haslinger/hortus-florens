@@ -11,6 +11,7 @@ export enum AdditionalTags {
   GAME_OBJECT = 'game_object',
   HITED = 'hited',
   PLAYER_TILE = 'player_tile',
+  COLLIDING_WITH_PLAYER = 'colliding_with_player',
 }
 
 export enum ToolNames {

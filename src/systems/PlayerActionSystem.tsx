@@ -4,28 +4,19 @@ import { Entity, useEntities, useEntity } from '@leanscope/ecs-engine';
 import { IdentifierFacet, PositionFacet, Tags, TextTypeFacet } from '@leanscope/ecs-models';
 import { useContext, useEffect } from 'react';
 import { v4 } from 'uuid';
-import { HealthFacet, ItemGroupFacet, SoundEffectFacet, TileCropFacet, TitleFacet, TreeFruitFacet } from '../app/GameFacets';
-import {
-  INITIAL_CROP_GROWTH_STAGE,
-  INITIAL_FRUIT_GROWTH_STAGE,
-  MAX_CROP_GROWTH_STAGE,
-  MAX_TREE_FRUIT_GROWTH_STAGE,
-  TILE_SIZE,
-} from '../base/constants';
+import { ItemGroupFacet, SoundEffectFacet, TileCropFacet, TitleFacet } from '../app/GameFacets';
+import { INITIAL_CROP_GROWTH_STAGE, MAX_CROP_GROWTH_STAGE } from '../base/constants';
 import {
   AdditionalTags,
   CropNames,
   EnvironmentObjects,
-  FruitNames,
   ItemGroups,
   OtherItemNames,
   SeedNames,
   SoundEffects,
   TerrainTiles,
-  ToolNames,
 } from '../base/enums';
 import { useSelectedItem } from '../hooks/useSelectedItem';
-
 
 const handleSeedUse = (
   playerTile: Entity | undefined,
@@ -71,45 +62,6 @@ const removeHits = (lsc: ILeanScopeClient) => {
   hitedTrees.forEach((tree) => {
     tree.removeTag(AdditionalTags.HITED);
   });
-};
-
-const handleTryReapFruit = (selectedTool: ToolNames, lsc: ILeanScopeClient): boolean => {
-  const treeEntities = lsc.engine.entities.filter((e) => e.get(TextTypeFacet)?.props.type === EnvironmentObjects.TREE);
-  const playerEntity = lsc.engine.entities.find((e) => e.has(HealthFacet) && e.has(PositionFacet));
-  const positionX = playerEntity?.get(PositionFacet)?.props.positionX;
-  const positionY = playerEntity?.get(PositionFacet)?.props.positionY;
-
-  if (positionX && positionY) {
-    const treeEntity = treeEntities.find((tree) => {
-      const treeLeft = tree.get(PositionFacet)?.props.positionX! - TILE_SIZE;
-      const treeRight = tree.get(PositionFacet)?.props.positionX! + TILE_SIZE;
-      const treeTop = tree.get(PositionFacet)?.props.positionY! - TILE_SIZE * 2;
-      const treeBottom = tree.get(PositionFacet)?.props.positionY! + TILE_SIZE;
-
-      return positionX >= treeLeft && positionX <= treeRight && positionY >= treeTop && positionY <= treeBottom;
-    });
-
-    if (treeEntity && treeEntity.get(TreeFruitFacet)?.props.growthStage === MAX_TREE_FRUIT_GROWTH_STAGE) {
-      switch (treeEntity.get(TreeFruitFacet)?.props.fruitName) {
-        case FruitNames.APPLE:
-          for (let i = 0; i < 3; i++) {
-            const appleItemEntity = new Entity();
-            lsc.engine.addEntity(appleItemEntity);
-            appleItemEntity.addComponent(new IdentifierFacet({ guid: v4() }));
-            appleItemEntity.addComponent(new TitleFacet({ title: FruitNames.APPLE }));
-            appleItemEntity.addComponent(new ItemGroupFacet({ group: ItemGroups.FRUITS }));
-          }
-          break;
-
-        default:
-          break;
-      }
-
-      treeEntity.add(new TreeFruitFacet({ growthStage: INITIAL_FRUIT_GROWTH_STAGE, fruitName: FruitNames.APPLE }));
-      if (selectedTool !== ToolNames.AXE) return true;
-    }
-  }
-  return false;
 };
 
 const handleTryPickUpWeeds = (playerTile: Entity | undefined, lsc: ILeanScopeClient): boolean => {
@@ -163,9 +115,7 @@ const PlayerActionSystem = () => {
         if (handleTryReapCrop(playerTile, lsc)) {
           return;
         }
-        if (handleTryReapFruit(selectedItemName as ToolNames, lsc)) {
-          return;
-        }
+
         switch (selectedItemGroup) {
           case ItemGroups.SEEDS:
             handleSeedUse(playerTile, selectedItemName as SeedNames, handleRemoveSelectedItem, soundEffectEntity);

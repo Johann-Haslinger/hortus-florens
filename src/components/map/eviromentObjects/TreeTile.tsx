@@ -11,6 +11,7 @@ import { TREE_FRUIT_APPLE } from '../../../assets/environmentObjects/fruits';
 import { TILE_SIZE } from '../../../base/constants';
 import { AdditionalTags, EnvironmentObjects, FruitNames } from '../../../base/enums';
 import { findEnvotonmentObjectSizeArgs } from '../../../helpers/functions';
+import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
 
 const findFruitTexture = (fruit: FruitNames) => {
   switch (fruit) {
@@ -28,6 +29,7 @@ const TreeTile = (props: IdentifierProps & TextTypeProps & PositionProps & Entit
   const fruitTexture = useLoader(THREE.TextureLoader, findFruitTexture(fruitName));
   const meshRef = useRef<THREE.MeshBasicMaterial>(null);
   const fruitRef = useRef<Group<Object3DEventMap>>(null);
+  const [isCollidingWithPlayer] = useEntityHasTags(entity, AdditionalTags.COLLIDING_WITH_PLAYER)
 
   useFrame(() => {
     if (type == EnvironmentObjects.TREE) {
@@ -61,6 +63,7 @@ const TreeTile = (props: IdentifierProps & TextTypeProps & PositionProps & Entit
           ref={meshRef}
           map={tileTexture}
           transparent
+          color={isCollidingWithPlayer ? 'red' : 'white'}
         />
       </Box>
 

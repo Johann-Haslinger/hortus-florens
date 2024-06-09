@@ -15,7 +15,7 @@ const Player = (props: PositionProps & EntityProps) => {
       <PlayerActionSystem />
       <PlayerToolUseSystem />
 
-      <Box args={[TILE_SIZE / 2, TILE_SIZE / 2, 0]} position={[positionX, positionY, 0]}>
+      <Box args={[TILE_SIZE / 2, TILE_SIZE / 2, 0]} position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]}>
         <meshBasicMaterial depthTest={true} transparent color={'black'} />
       </Box>
     </group>

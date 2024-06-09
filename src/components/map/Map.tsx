@@ -9,6 +9,7 @@ import AudioSystem from '../../systems/AudioSystem';
 import CropGrowingSystem from '../../systems/CropGrowingSystem';
 import EnironmentObjectsInitializationSystem from '../../systems/EnironmentObjectsInitializationSystem';
 import TimeCicleSystem from '../../systems/TimeCicleSystem';
+import TreeCollisionDetector from '../../systems/TreeCollisionDetector';
 import Player from '../player/Player';
 import TreeTile from './eviromentObjects/TreeTile';
 import WeedTile from './eviromentObjects/WeedTile';
@@ -25,6 +26,7 @@ const Map = () => {
       <EnironmentObjectsInitializationSystem />
       <CropGrowingSystem />
       <TimeCicleSystem />
+      <TreeCollisionDetector />
       {/* <TimeDisplayer /> */}
 
       <AudioSystem />
