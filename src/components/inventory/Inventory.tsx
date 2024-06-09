@@ -94,44 +94,11 @@ const NormalItem = (props: { entity?: Entity; soundEffectEntity?: Entity }) => {
   );
 };
 
-const StyledInventoryPositioner = styled.div`
-  ${tw`fixed  z-[500] top-1/2 transform -translate-x-1/2 -translate-y-1/2 left-1/2`}
-`;
-const StyledInevntoryContainer = styled.div`
-  ${tw`w-fit shadow-2xl flex shadow-[rgba(164,125,95,0.41)] h-fit    p-2.5    bg-[rgb(228,208,171)]    rounded-3xl`}
-`;
-
-const StyledBackgroundDimmer = styled.div<{ isVisible: boolean }>`
-  ${({ isVisible }) => (isVisible ? tw`opacity-25` : tw`opacity-0`)}
-  ${tw`fixed top-0 transition-all left-0 w-full h-full bg-black  z-[400]`}
-`;
-
-const StyledNormalItemsGrid = styled.div`
-  ${tw`grid h-fit mx-1.5 py-1.5 w-fit grid-cols-3`}
-`;
-
-const StyledToolsGrid = styled.div`
-  ${tw`h-fit py-0.5 w-fit `}
-`;
-
-const Inventory = () => {
+const useInventoryRef = () => {
   const lsc = useContext(LeanScopeClientContext);
   const isInventoryVisible = useIsStoryCurrent(Stories.OBSERVING_INVENTORY);
-  const inventoryRef = useRef<HTMLDivElement>(null);
-  const [toolItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ItemGroups.TOOLS);
-  const [normalItems] = useEntities(
-    (e) =>
-      e.has(ItemGroupFacet) &&
-      e.get(ItemGroupFacet)?.props.group !== ItemGroups.TOOLS &&
-      e.get(ItemGroupFacet)?.props.group !== ItemGroups.IMPORTANT_ITEMS,
-  );
-  const [importantItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ItemGroups.IMPORTANT_ITEMS);
-  const filteredItems = normalItems.filter((entity, index, self) => {
-    const title = entity?.get(TitleFacet)?.props.title;
-    const itemGroup = entity?.get(ItemGroupFacet)?.props.group;
-    return self.findIndex((e) => e?.get(TitleFacet)?.props.title === title && e.get(ItemGroupFacet)?.props.group == itemGroup) === index;
-  });
   const [soundEffectEntity] = useEntity((e) => e.has(SoundEffectFacet));
+  const inventoryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -156,6 +123,47 @@ const Inventory = () => {
       soundEffectEntity?.add(new SoundEffectFacet({ soundEffect: SoundEffects.CLOSE_INVENTORY }));
     }
   }, [isInventoryVisible]);
+
+  return inventoryRef;
+};
+
+const StyledInventoryPositioner = styled.div`
+  ${tw`fixed  z-[500] top-1/2 transform -translate-x-1/2 -translate-y-1/2 left-1/2`}
+`;
+const StyledInevntoryContainer = styled.div`
+  ${tw`w-fit shadow-2xl flex shadow-[rgba(164,125,95,0.41)] h-fit    p-2.5    bg-[rgb(228,208,171)]    rounded-3xl`}
+`;
+
+const StyledBackgroundDimmer = styled.div<{ isVisible: boolean }>`
+  ${({ isVisible }) => (isVisible ? tw`opacity-25` : tw`opacity-0`)}
+  ${tw`fixed top-0 transition-all left-0 w-full h-full bg-black  z-[400]`}
+`;
+
+const StyledNormalItemsGrid = styled.div`
+  ${tw`grid h-fit mx-1.5 py-1.5 w-fit grid-cols-3`}
+`;
+
+const StyledToolsGrid = styled.div`
+  ${tw`h-fit py-0.5 w-fit `}
+`;
+
+const Inventory = () => {
+  const isInventoryVisible = useIsStoryCurrent(Stories.OBSERVING_INVENTORY);
+  const [toolItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ItemGroups.TOOLS);
+  const [normalItems] = useEntities(
+    (e) =>
+      e.has(ItemGroupFacet) &&
+      e.get(ItemGroupFacet)?.props.group !== ItemGroups.TOOLS &&
+      e.get(ItemGroupFacet)?.props.group !== ItemGroups.IMPORTANT_ITEMS,
+  );
+  const [importantItems] = useEntities((e) => e.get(ItemGroupFacet)?.props.group === ItemGroups.IMPORTANT_ITEMS);
+  const filteredItems = normalItems.filter((entity, index, self) => {
+    const title = entity?.get(TitleFacet)?.props.title;
+    const itemGroup = entity?.get(ItemGroupFacet)?.props.group;
+    return self.findIndex((e) => e?.get(TitleFacet)?.props.title === title && e.get(ItemGroupFacet)?.props.group == itemGroup) === index;
+  });
+  const [soundEffectEntity] = useEntity((e) => e.has(SoundEffectFacet));
+  const inventoryRef = useInventoryRef();
 
   return (
     <div>

@@ -2,11 +2,9 @@ import { Entity, EntityProps, useEntities } from '@leanscope/ecs-engine';
 import { useEntityHasTags } from '@leanscope/ecs-engine/react-api/hooks/useEntityComponents';
 import { IdentifierProps, PositionFacet, PositionProps, TextTypeFacet, TextTypeProps } from '@leanscope/ecs-models';
 import { Box } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
-import { Fragment, useRef } from 'react';
+import { Fragment } from 'react';
 import { useLoader } from 'react-three-fiber';
 import * as THREE from 'three';
-import { BufferGeometry, Material, Mesh, MeshBasicMaterial, NormalBufferAttributes, Object3DEventMap } from 'three';
 import { TileCropFacet, TileCropProps } from '../../app/GameFacets';
 import { FARMLAND_WATERD, WHEAT_CROP_STATE_1, WHEAT_CROP_STATE_2, WHEAT_CROP_STATE_3 } from '../../assets/crops';
 import {
@@ -847,36 +845,15 @@ const selectCropImage = (tileCropName: SeedNames, growthStage: number): string =
 const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & EntityProps & TileCropProps) => {
   const { positionX, positionY, entity, tileCropName, growthStage } = props;
   const [tiles] = useEntities((e) => VALID_TERRAIN_TILES.includes((e.get(TextTypeFacet)?.props.type as TerrainTiles) || ''));
-  const [isWaterd] = useEntityHasTags(entity, AdditionalTags.WATERD);
+  const [isTileWaterd] = useEntityHasTags(entity, AdditionalTags.WATERD);
   const terrainTexture = useLoader(THREE.TextureLoader, selectImageForTileType(entity, tiles));
   const waterdFarmlandTexture = useLoader(THREE.TextureLoader, FARMLAND_WATERD);
-
+  const hasTileCrop = entity.has(TileCropFacet);
   const seedTexture = useLoader(THREE.TextureLoader, selectCropImage(tileCropName as SeedNames, growthStage));
-  const meshRef = useRef<Mesh<BufferGeometry<NormalBufferAttributes>, Material | Material[], Object3DEventMap>>(null);
-  const materialRef = useRef<MeshBasicMaterial>(null);
-  const seedRef = useRef<MeshBasicMaterial>(null);
-
-  useFrame(() => {
-    if (isWaterd && materialRef.current) {
-      materialRef.current.opacity = 1;
-    } else if (materialRef.current) {
-      materialRef.current.opacity = 0;
-    }
-    if (seedRef.current && materialRef.current && entity.get(TileCropFacet)?.props.tileCropName) {
-      seedRef.current.opacity = 1;
-    } else if (seedRef.current && materialRef.current) {
-      seedRef.current.opacity = 0;
-    }
-    // if (entity.has(GAME_TAGS.PLAYER_TILE) && materialRef.current) {
-    //   materialRef.current.opacity =1
-    //   materialRef.current.color = new THREE.Color(0x00ff00);
-
-    // }
-  });
 
   return (
     <Fragment>
-      <Box ref={meshRef} position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
+      <Box position={[positionX * TILE_SIZE, positionY * TILE_SIZE, 0]} args={[TILE_SIZE, TILE_SIZE, 0]}>
         <meshBasicMaterial
           polygonOffset={true}
           alphaTest={1}
@@ -895,7 +872,7 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
           clipShadows={false}
           premultipliedAlpha={true}
           map={waterdFarmlandTexture}
-          ref={materialRef}
+          opacity={isTileWaterd ? 1 : 0}
           transparent
         />
       </Box>
@@ -906,7 +883,7 @@ const TerrainTile = (props: IdentifierProps & TextTypeProps & PositionProps & En
           depthWrite={false}
           clipShadows={false}
           premultipliedAlpha={true}
-          ref={seedRef}
+          opacity={hasTileCrop ? 1 : 0}
           map={seedTexture}
           transparent
         />

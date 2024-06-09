@@ -24,72 +24,8 @@ import {
   TerrainTiles,
   ToolNames,
 } from '../base/enums';
+import { useSelectedItem } from '../hooks/useSelectedItem';
 
-const handleHoeUse = (playerTile: Entity | undefined, soundEffectEntity: Entity) => {
-  if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TerrainTiles.GRASS) {
-    soundEffectEntity.add(new SoundEffectFacet({ soundEffect: SoundEffects.HOE }));
-    playerTile.add(new TextTypeFacet({ type: TerrainTiles.FARMLAND }));
-  }
-};
-
-const handleWateringCanUse = (playerTile: Entity | undefined, soundEffectEntity: Entity) => {
-  if (playerTile && playerTile.get(TextTypeFacet)?.props.type === TerrainTiles.FARMLAND) {
-    soundEffectEntity.add(new SoundEffectFacet({ soundEffect: SoundEffects.WATERING_CAN }));
-    playerTile.addTag(AdditionalTags.WATERD);
-  }
-};
-
-const handleAxeUse = (lsc: ILeanScopeClient, soundEffectEntity: Entity) => {
-  const treeEntities = lsc.engine.entities.filter((e) => e.get(TextTypeFacet)?.props.type === EnvironmentObjects.TREE);
-  const playerEntity = lsc.engine.entities.find((e) => e.has(HealthFacet) && e.has(PositionFacet));
-  const positionX = playerEntity?.get(PositionFacet)?.props.positionX;
-  const positionY = playerEntity?.get(PositionFacet)?.props.positionY;
-
-  if (positionX && positionY) {
-    const treeEntity = treeEntities.find((tree) => {
-      const treeLeft = tree.get(PositionFacet)?.props.positionX! - TILE_SIZE;
-      const treeRight = tree.get(PositionFacet)?.props.positionX! + TILE_SIZE;
-      const treeTop = tree.get(PositionFacet)?.props.positionY! - TILE_SIZE * 2;
-      const treeBottom = tree.get(PositionFacet)?.props.positionY! + TILE_SIZE;
-
-      return positionX >= treeLeft && positionX <= treeRight && positionY >= treeTop && positionY <= treeBottom;
-    });
-
-    if (treeEntity) {
-      soundEffectEntity.add(new SoundEffectFacet({ soundEffect: SoundEffects.AXE }));
-      if (treeEntity.hasTag(AdditionalTags.HITED)) {
-        treeEntity.remove(TreeFruitFacet);
-        treeEntity.addTag(AdditionalTags.CUT);
-      } else {
-        treeEntity.addTag(AdditionalTags.HITED);
-      }
-    }
-  }
-};
-
-const handleToolUse = (
-  playerTile: Entity | undefined,
-  toolName: ToolNames,
-  lsc: ILeanScopeClient,
-  soundEffectEntity: Entity | undefined,
-) => {
-  if (soundEffectEntity) {
-    switch (toolName) {
-      case ToolNames.HOE:
-        handleHoeUse(playerTile, soundEffectEntity);
-        break;
-      case ToolNames.WATERING_CAN:
-        handleWateringCanUse(playerTile, soundEffectEntity);
-        break;
-      case ToolNames.AXE:
-        handleAxeUse(lsc, soundEffectEntity);
-        break;
-
-      default:
-        break;
-    }
-  }
-};
 
 const handleSeedUse = (
   playerTile: Entity | undefined,
@@ -205,10 +141,7 @@ const PlayerActionSystem = () => {
   const [playerTile] = useEntity((e) => e.has(PositionFacet) && e.has(AdditionalTags.PLAYER_TILE));
   const [items] = useEntities((e) => e.has(ItemGroupFacet));
   const [soundEffectEntity] = useEntity((e) => e.has(SoundEffectFacet));
-
-  const [selectedItem] = useEntity((e) => e.has(ItemGroupFacet) && e.hasTag(Tags.SELECTED));
-  const selectedItemName = selectedItem?.get(TitleFacet)?.props.title;
-  const selectedItemGroup = selectedItem?.get(ItemGroupFacet)?.props.group;
+  const { selectedItemName, selectedItemGroup, selectedItem } = useSelectedItem();
 
   const handleRemoveSelectedItem = (itemTitle: SeedNames) => {
     const sameItems = items.filter((item) => item.get(TitleFacet)?.props.title === itemTitle);
@@ -234,9 +167,6 @@ const PlayerActionSystem = () => {
           return;
         }
         switch (selectedItemGroup) {
-          case ItemGroups.TOOLS:
-            handleToolUse(playerTile, selectedItemName as ToolNames, lsc, soundEffectEntity);
-            break;
           case ItemGroups.SEEDS:
             handleSeedUse(playerTile, selectedItemName as SeedNames, handleRemoveSelectedItem, soundEffectEntity);
             break;
